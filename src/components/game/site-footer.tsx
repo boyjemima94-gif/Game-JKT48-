@@ -75,6 +75,22 @@ export default function SiteFooter() {
               </li>
               <li>
                 <a
+                  href="#bukti"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Loker Bukti
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#tuduhan"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Tuduhan Akhir
+                </a>
+              </li>
+              <li>
+                <a
                   href="#stamp"
                   className="text-noir-paper/70 hover:text-noir-brass transition-colors"
                 >

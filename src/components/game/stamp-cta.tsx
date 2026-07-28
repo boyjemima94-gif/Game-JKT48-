@@ -67,13 +67,19 @@ export default function StampCta() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="font-stamp text-[10px] tracking-[0.4em] text-noir-brass uppercase">
+          <span className="font-stamp text-xs sm:text-sm tracking-[0.4em] text-noir-brass uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
             · Panggilan Terakhir ·
           </span>
-          <h2 className="font-stamp text-3xl sm:text-5xl font-black text-noir-paper mt-3 mb-4">
+          <h2
+            className="font-stamp text-4xl sm:text-6xl font-black text-noir-paper mt-3 mb-4"
+            style={{
+              textShadow:
+                "0 0 30px rgba(255,179,71,0.3), 0 4px 16px rgba(0,0,0,0.9), 2px 2px 0 rgba(0,0,0,0.6)",
+            }}
+          >
             MASUKI TEATER
           </h2>
-          <p className="font-typewriter text-sm text-noir-paper/60 max-w-lg mx-auto mb-12">
+          <p className="font-typewriter text-sm sm:text-base text-noir-paper/85 max-w-lg mx-auto mb-12">
             Tekan cap untuk menandatangani kontrak detektif. Suara gemerisik
             kertas akan menemanimu memasuki dunia ini.
           </p>

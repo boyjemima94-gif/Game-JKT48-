@@ -248,11 +248,26 @@ export default function ConspiracyBoard() {
                             : "sepia(0.4) contrast(1.05) brightness(0.85)",
                         }}
                       />
-                      {/* redacted bars when not active */}
+                      {/* censored redaction bars when not active — intentional CLASSIFIED look */}
                       <div
-                        className="absolute inset-x-0 top-1/3 h-3 bg-noir-ink/70 transition-opacity duration-300"
-                        style={{ opacity: active ? 0 : 0.6 }}
-                      />
+                        className="absolute inset-x-0 top-[38%] transition-opacity duration-300 pointer-events-none"
+                        style={{ opacity: active ? 0 : 1 }}
+                      >
+                        <div className="bg-noir-ink px-1 py-0.5">
+                          <p className="font-stamp text-[7px] sm:text-[8px] tracking-[0.3em] text-noir-crimson text-center font-bold leading-tight">
+                            ✖ TERSENSOR ✖
+                          </p>
+                        </div>
+                      </div>
+                      {/* classified corner stamp when not active */}
+                      <div
+                        className="absolute top-1 left-1 px-1 py-0.5 bg-noir-crimson/90 transition-opacity duration-300 pointer-events-none"
+                        style={{ opacity: active ? 0 : 1 }}
+                      >
+                        <p className="font-stamp text-[6px] sm:text-[7px] tracking-widest text-noir-paper font-bold">
+                          RAHASIA
+                        </p>
+                      </div>
                     </div>
                     {/* caption */}
                     <p className="font-typewriter text-[9px] sm:text-[10px] text-noir-paper-ink text-center mt-1 truncate px-1">

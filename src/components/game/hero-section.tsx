@@ -115,8 +115,8 @@ export default function HeroSection() {
                     }}
                   />
                   {/* frame label */}
-                  <div className="absolute bottom-0 inset-x-0 bg-noir-ink/85 px-2 py-1 border-t border-noir-brass/40">
-                    <p className="font-stamp text-[9px] sm:text-[10px] tracking-widest text-noir-paper truncate">
+                  <div className="absolute bottom-0 inset-x-0 bg-noir-ink/95 px-2 py-1.5 border-t-2 border-noir-brass/60">
+                    <p className="font-stamp text-[10px] sm:text-xs tracking-widest text-noir-brass font-bold truncate drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
                       {s.codename}
                     </p>
                   </div>
@@ -184,10 +184,10 @@ export default function HeroSection() {
             </a>
             <a
               href="#berkas"
-              className="group inline-flex items-center gap-2 px-6 py-3 font-typewriter text-sm text-noir-paper/80 hover:text-noir-brass transition-colors"
+              className="group relative inline-flex items-center gap-2 px-6 py-3 font-typewriter text-sm text-noir-paper border border-noir-brass/40 hover:border-noir-brass hover:bg-noir-brass/10 transition-all"
             >
-              <span>Buka Berkas Kasus</span>
-              <span className="transition-transform group-hover:translate-y-1">↓</span>
+              <span className="font-stamp tracking-widest text-noir-brass group-hover:text-noir-tungsten transition-colors">Buka Berkas Kasus</span>
+              <span className="text-noir-brass transition-transform group-hover:translate-y-1">↓</span>
             </a>
           </div>
         </div>
@@ -195,10 +195,10 @@ export default function HeroSection() {
 
       {/* Scroll hint */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
-        <span className="font-typewriter text-[10px] tracking-[0.3em] text-noir-paper/40 uppercase">
+        <span className="font-typewriter text-[11px] tracking-[0.4em] text-noir-brass/80 uppercase drop-shadow-[0_1px_3px_rgba(0,0,0,1)]">
           Selidiki
         </span>
-        <div className="w-px h-10 bg-gradient-to-b from-noir-brass/60 to-transparent animate-pulse" />
+        <div className="w-px h-12 bg-gradient-to-b from-noir-brass via-noir-brass/50 to-transparent animate-pulse" />
       </div>
 
       {/* Flicker-driven light spill on edges */}

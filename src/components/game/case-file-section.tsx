@@ -199,13 +199,19 @@ export default function CaseFileSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="font-stamp text-[10px] tracking-[0.4em] text-noir-brass uppercase">
+          <span className="font-stamp text-xs tracking-[0.4em] text-noir-brass uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
             · Berkas Terklasifikasi ·
           </span>
-          <h2 className="font-stamp text-3xl sm:text-5xl font-black text-noir-paper mt-3 mb-3">
+          <h2
+            className="font-stamp text-3xl sm:text-5xl font-black text-noir-paper mt-3 mb-3"
+            style={{
+              textShadow:
+                "0 0 24px rgba(255,179,71,0.25), 0 4px 12px rgba(0,0,0,0.9)",
+            }}
+          >
             BUKA BERKAS KASUS
           </h2>
-          <p className="font-typewriter text-sm text-noir-paper/60 max-w-lg mx-auto">
+          <p className="font-typewriter text-sm sm:text-base text-noir-paper/85 max-w-lg mx-auto">
             Setiap ampas kertas menyimpan kebenaran yang berbeda. Balik untuk
             mengungkap kronologi, petunjuk, dan status penyelidikan.
           </p>
@@ -219,12 +225,12 @@ export default function CaseFileSection() {
         </div>
 
         {/* desk label */}
-        <div className="mt-12 flex items-center justify-center gap-3 text-noir-paper/40">
-          <div className="h-px w-12 bg-noir-paper/20" />
-          <span className="font-typewriter text-[10px] tracking-[0.3em] uppercase">
+        <div className="mt-12 flex items-center justify-center gap-3 text-noir-brass/70">
+          <div className="h-px w-12 bg-noir-brass/40" />
+          <span className="font-typewriter text-[11px] tracking-[0.35em] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
             Meja Detektif · Lantai 2
           </span>
-          <div className="h-px w-12 bg-noir-paper/20" />
+          <div className="h-px w-12 bg-noir-brass/40" />
         </div>
       </div>
     </section>

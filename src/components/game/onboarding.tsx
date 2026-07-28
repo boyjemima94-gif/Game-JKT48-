@@ -53,7 +53,7 @@ export default function Onboarding() {
     },
     {
       title: "Cara Selidiki",
-      body: "Balik berkas kasus untuk membaca kronologi. Klik tersangka di papan benang merah untuk membuka dosir. Tekan cap untuk bergabung.",
+      body: "Balik berkas kasus untuk membaca kronologi. Klik tersangka di papan benang merah. Periksa bukti di loker — setiap bukti tercatat di buku catatan. Lalu tuduh pelakunya.",
       cta: "Mulai",
     },
   ];

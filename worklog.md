@@ -253,3 +253,61 @@ Unresolved issues / risks:
 - Timeline shuffle is deterministic per session but not truly random — acceptable for a puzzle.
 - Victim portrait is an SVG silhouette (victim is fictional) — intentional design choice.
 - The game-state localStorage now stores more data; reset clears all. Verified.
+
+---
+Task ID: 4
+Agent: main-orchestrator (cron webDevReview round 3)
+Task: QA testing, hero CTA polish, and major feature expansion (Case Intro cinematic, Detective Performance Score, Keyboard Help overlay).
+
+Work Log:
+- Read worklog.md (Tasks 0-3). Project stable with full investigation loop: hero, briefing, case files, conspiracy board (+interrogation), victim profile, evidence locker, timeline puzzle, accusation finale, stamp CTA, notebook, progress HUD, ambient beams.
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. VLM analysis of hero found CTA button could "pop" more.
+- Polished hero CTA button (`hero-section.tsx`):
+  - Added golden glow shadow that pulses with lamp flicker (box-shadow tied to flicker state)
+  - Added animated sheen sweep on hover (white gradient translates across button)
+  - Added arrow icon (→) that translates on hover
+  - Added hover lift (-translate-y-0.5) + brighter shadow on hover
+  - Secondary CTA also gets hover lift
+- Built `src/components/game/case-intro.tsx` — cinematic narrative bridge (Hero → Briefing):
+  - Scroll-driven parallax using framer-motion useScroll/useTransform (background + fog layers move at different speeds)
+  - "TIGA BELAS OKTOBER" title with crimson glow text-shadow
+  - 3 story beats (23:17, 23:32, 23:45) alternating left/right with staggered entrance animations
+  - Each beat: large timestamp (crimson/brass with glow), location label, story card with border accent + inner glow + quote marks
+  - Connecting vertical lines between beats
+  - "Penyelidikan dimulai" closing badge + scroll hint
+- Built `src/components/game/detective-score.tsx` — post-accusation performance rating:
+  - Only renders when accusation !== null (appears after accusation finale)
+  - Calculates stats from game state: accuracy (correct=100%), thoroughness (clues/total), interrogation (suspects/total), timeline (solved=100%)
+  - Weighted overall score (0-100) → rank S/A/B/C/D with labels (Detektif Legendaris/Senior/Kompeten/Pemula/Magang)
+  - Rank stamp: circular border-4 stamp with spring-animated entrance (scale+rotate), inner ring, glow
+  - 4 animated stat bars (Akurasi Tuduhan, Kelengkapan Bukti, Interogasi, Linimasa) with gradient fills + staggered width animation
+  - 4-cell stats grid (evidence examined, suspects interrogated, clues found, timeline status)
+  - Verdict badge (★ KASUS TERPECAHKAN ★ / ✖ KASUS TERTUNDIN) with date
+  - "↻ MAIN LAGI" reset + "↑ KEMBALI KE ATAS" navigation
+- Built `src/components/game/keyboard-help.tsx` — floating help overlay:
+  - "?" button (top-right) opens modal listing keyboard shortcuts (N, Esc, M, ?)
+  - Toggle with "?" key, close with Esc
+  - Paper-textured modal with kbd-styled key badges
+- Updated `src/app/page.tsx` — new section order: Hero → CaseIntro → Briefing → [dividers] → CaseFiles → ConspiracyBoard → VictimProfile → EvidenceLocker → Timeline → AccusationFinale → DetectiveScore → StampCta → Footer. Added KeyboardHelp.
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- Hero CTA polish verified by VLM: "distinct warm golden-yellow glow", "arrow icon", "popping appearance" — confirmed.
+- Case Intro verified by VLM: "TIGA BELAS OKTOBER title", "story beat with 23:17 timestamp", "strong atmospheric noir-mystery feel", "clean and professional" — confirmed.
+- Detective Score verified by VLM: rank "C" stamp, "Detektif Pemula" label, "46/100" score, 4 stat bars (Akurasi 100%, Bukti 17%, Interogasi 0%, Linimasa 0%), stats grid — all confirmed working.
+- Keyboard Help verified: "PEMBANTU KIBOR" heading, shortcuts listed, opens with "?" key.
+
+Stage Summary:
+- Hero CTA polished with flicker-synced glow + animated sheen + hover micro-interactions.
+- 3 major new features added and tested:
+  ✓ Case Intro — cinematic parallax narrative bridge with 3 story beats
+  ✓ Detective Performance Score — post-accusation rating with rank stamp, stat bars, stats grid, verdict
+  ✓ Keyboard Help — floating "?" overlay listing all shortcuts
+- Game now has a complete narrative arc: Hero → Case Intro (story) → Briefing (terminal) → Investigation (cases/board/victim/evidence/timeline) → Accusation → Score → Stamp CTA.
+- The Detective Score gives players a reason to replay (improve rank by interrogating more, solving timeline, finding all clues).
+
+Unresolved issues / risks:
+- Full-page screenshot timed out (page is now very long with many sections) — not a bug, just a testing limitation.
+- Detective Score appears between Accusation and Stamp CTA; if user scrolls past it they'll see the stamp. This is fine — score is the "ending" and stamp is the "join" CTA.
+- Evidence cross-referencing (present evidence during interrogation to catch lies) was planned but deferred — would require significant data model changes. Left for a future round.

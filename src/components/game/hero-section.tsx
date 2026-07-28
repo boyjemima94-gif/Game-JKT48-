@@ -177,14 +177,25 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <a
               href="#stamp"
-              className="group relative px-8 py-3 font-stamp text-sm tracking-[0.2em] uppercase text-noir-ink bg-noir-brass hover:bg-noir-tungsten transition-colors shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
+              className="group relative px-8 py-3.5 font-stamp text-sm tracking-[0.2em] uppercase text-noir-ink bg-noir-brass hover:bg-noir-tungsten transition-all shadow-[0_8px_24px_rgba(201,163,90,0.45),0_0_0_1px_rgba(201,163,90,0.6)] hover:shadow-[0_12px_32px_rgba(255,203,122,0.6),0_0_0_2px_rgba(255,203,122,0.8)] hover:-translate-y-0.5"
+              style={{
+                boxShadow: `0 8px 24px rgba(201,163,90,${0.3 + flicker * 0.25})`,
+              }}
             >
-              <span className="relative z-10">Bergabung dalam Game</span>
-              <span className="absolute inset-0 bg-noir-tungsten opacity-0 group-hover:opacity-30 transition-opacity" />
+              {/* animated sheen */}
+              <span className="absolute inset-0 overflow-hidden">
+                <span
+                  className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 group-hover:translate-x-[400%] transition-transform duration-700"
+                />
+              </span>
+              <span className="relative z-10 flex items-center gap-2">
+                Bergabung dalam Game
+                <span className="text-noir-ink/70 group-hover:translate-x-1 transition-transform">→</span>
+              </span>
             </a>
             <a
               href="#berkas"
-              className="group relative inline-flex items-center gap-2 px-6 py-3 font-typewriter text-sm text-noir-paper border border-noir-brass/40 hover:border-noir-brass hover:bg-noir-brass/10 transition-all"
+              className="group relative inline-flex items-center gap-2 px-6 py-3.5 font-typewriter text-sm text-noir-paper border border-noir-brass/40 hover:border-noir-brass hover:bg-noir-brass/10 transition-all hover:-translate-y-0.5"
             >
               <span className="font-stamp tracking-widest text-noir-brass group-hover:text-noir-tungsten transition-colors">Buka Berkas Kasus</span>
               <span className="text-noir-brass transition-transform group-hover:translate-y-1">↓</span>

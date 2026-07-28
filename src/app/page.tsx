@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/game/hero-section";
+import CaseIntro from "@/components/game/case-intro";
 import BriefingSection from "@/components/game/briefing-section";
 import CaseFileSection from "@/components/game/case-file-section";
 import ConspiracyBoard from "@/components/game/conspiracy-board";
@@ -9,6 +10,7 @@ import VictimProfile from "@/components/game/victim-profile";
 import EvidenceLocker from "@/components/game/evidence-locker";
 import TimelineSection from "@/components/game/timeline-section";
 import AccusationFinale from "@/components/game/accusation-finale";
+import DetectiveScore from "@/components/game/detective-score";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -36,6 +38,10 @@ const ProgressHud = dynamic(
   () => import("@/components/game/progress-hud"),
   { ssr: false }
 );
+const KeyboardHelp = dynamic(
+  () => import("@/components/game/keyboard-help"),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
@@ -44,12 +50,14 @@ export default function Home() {
       <MagnifierCursor />
       <AtmosphereOverlay />
       <ProgressHud />
+      <KeyboardHelp />
       <Onboarding />
       <AudioToggle />
       <DetectiveNotebook />
 
       <main className="relative z-10 flex-1">
         <HeroSection />
+        <CaseIntro />
         <BriefingSection />
         <SectionDivider variant="file" label="Arsip Kasus" />
         <CaseFileSection />
@@ -63,6 +71,7 @@ export default function Home() {
         <TimelineSection />
         <SectionDivider variant="stamp" label="Putusan" />
         <AccusationFinale />
+        <DetectiveScore />
         <StampCta />
       </main>
 

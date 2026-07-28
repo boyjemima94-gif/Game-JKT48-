@@ -368,6 +368,20 @@
   100% { transform: translate(2%, -1%); }
 }
 
+/* ============ Ambient beams ============ */
+@keyframes beam-drift-a {
+  0% { transform: rotate(15deg) translateX(-10%); opacity: 0.03; }
+  100% { transform: rotate(20deg) translateX(15%); opacity: 0.06; }
+}
+@keyframes beam-drift-b {
+  0% { transform: rotate(-12deg) translateX(10%); opacity: 0.02; }
+  100% { transform: rotate(-18deg) translateX(-12%); opacity: 0.05; }
+}
+@keyframes beam-pulse {
+  0%, 100% { opacity: 0.02; transform: translate(-50%, 0) scale(1); }
+  50% { opacity: 0.04; transform: translate(-50%, 0) scale(1.15); }
+}
+
 /* ============ Vignette ============ */
 .scene-vignette::before {
   content: "";

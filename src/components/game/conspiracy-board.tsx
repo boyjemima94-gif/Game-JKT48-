@@ -3,12 +3,16 @@
 import { useState, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { SUSPECTS, THREAD_LINKS } from "@/lib/suspects";
+import { useGame } from "@/lib/game-store";
 import { playClick, playPaperRustle } from "@/lib/audio";
+import InterrogationModal from "./interrogation-modal";
 
 export default function ConspiracyBoard() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [interrogatingId, setInterrogatingId] = useState<string | null>(null);
   const boardRef = useRef<HTMLDivElement | null>(null);
+  const interrogatedSuspects = useGame((s) => s.interrogatedSuspects);
 
   const suspectById = useMemo(
     () => Object.fromEntries(SUSPECTS.map((s) => [s.id, s])),
@@ -354,6 +358,29 @@ export default function ConspiracyBoard() {
                       <p className="font-typewriter text-xs italic text-noir-paper-ink/70 mt-3 border-l-2 border-noir-crimson pl-3">
                         &ldquo;{s.quote}&rdquo; <span className="not-italic">{s.signature}</span>
                       </p>
+                      {/* interrogation CTA */}
+                      <div className="mt-4 flex flex-wrap items-center gap-3">
+                        <button
+                          onClick={() => {
+                            playClick();
+                            setInterrogatingId(s.id);
+                          }}
+                          data-cursor-active
+                          className="inline-flex items-center gap-2 px-4 py-2 font-stamp text-[11px] tracking-widest uppercase text-noir-ink bg-noir-brass hover:bg-noir-tungsten transition-colors shadow-md"
+                        >
+                          <span>🗣️ Interogasi</span>
+                          {interrogatedSuspects[s.id] && (
+                            <span className="font-typewriter text-[9px] text-noir-crimson font-bold">
+                              ✓
+                            </span>
+                          )}
+                        </button>
+                        {interrogatedSuspects[s.id] && (
+                          <span className="font-typewriter text-[10px] text-noir-paper-ink/60">
+                            Sudah diinterogasi — pernyataan tercatat di buku.
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
@@ -366,6 +393,11 @@ export default function ConspiracyBoard() {
           )}
         </div>
       </div>
+
+      <InterrogationModal
+        suspectId={interrogatingId}
+        onClose={() => setInterrogatingId(null)}
+      />
     </section>
   );
 }

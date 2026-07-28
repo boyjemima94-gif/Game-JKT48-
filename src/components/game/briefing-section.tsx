@@ -93,9 +93,40 @@ export default function BriefingSection() {
             <span className="w-3 h-3 rounded-full bg-noir-crimson/80" />
             <span className="w-3 h-3 rounded-full bg-noir-brass/80" />
             <span className="w-3 h-3 rounded-full bg-green-600/60" />
-            <span className="ml-3 font-typewriter text-[10px] tracking-widest text-noir-paper/50">
+            <span className="ml-3 font-typewriter text-[11px] tracking-widest text-noir-brass/80 drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
               teatro@detective:~/kasus/JKT-48-001
             </span>
+            {/* skip / replay control */}
+            {visibleLines < BRIEFING_LINES.length ? (
+              <button
+                onClick={() => {
+                  playClick();
+                  setVisibleLines(BRIEFING_LINES.length);
+                  setTyped("");
+                }}
+                data-cursor-active
+                aria-label="Lewati animasi ketik"
+                className="ml-auto font-stamp text-[10px] tracking-widest text-noir-paper/50 hover:text-noir-brass transition-colors px-2 py-0.5 border border-noir-paper/20 hover:border-noir-brass/60"
+              >
+                ⏭ LEWATI
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  playClick();
+                  setVisibleLines(0);
+                  setTyped("");
+                  setStarted(false);
+                  // re-trigger via observer on next tick
+                  requestAnimationFrame(() => setStarted(true));
+                }}
+                data-cursor-active
+                aria-label="Putar ulang briefing"
+                className="ml-auto font-stamp text-[10px] tracking-widest text-noir-paper/50 hover:text-noir-brass transition-colors px-2 py-0.5 border border-noir-paper/20 hover:border-noir-brass/60"
+              >
+                ↻ ULANG
+              </button>
+            )}
           </div>
 
           {/* terminal body */}
@@ -163,7 +194,7 @@ export default function BriefingSection() {
         </motion.div>
 
         {/* flavor footer */}
-        <p className="text-center font-typewriter text-[10px] text-noir-paper/30 mt-4 tracking-widest">
+        <p className="text-center font-typewriter text-[11px] text-noir-brass/60 mt-4 tracking-widest drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
           · Transmisi terenkripsi · Jangan dibagikan ·
         </p>
       </div>

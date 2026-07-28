@@ -98,7 +98,7 @@ export default function AccusationFinale() {
                   <div className="text-center px-6">
                     <div className="text-5xl mb-3">🔒</div>
                     <p className="font-stamp text-sm tracking-widest text-noir-brass mb-1">
-      TERTUTUK — PERLU LEBIH BANYIK PETUNJUK
+      TERTUTUP — PERLU LEBIH BANYAK PETUNJUK
                     </p>
                     <p className="font-typewriter text-xs text-noir-paper/70">
                       Petunjuk terkumpul: {clues.length} / 3 minimum

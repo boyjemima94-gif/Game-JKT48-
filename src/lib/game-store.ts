@@ -137,6 +137,145 @@ export const CLUE_DEFS: Record<string, Omit<Clue, "foundAt">> = {
     source: "Loker Bukti #6",
     glyph: "🧬",
   },
+  // Interrogation statements — recorded during suspect interrogation
+  "stmt-oline-alibi": {
+    id: "stmt-oline-alibi",
+    title: "Pernyataan Oline: Alibi",
+    description: "Mengaku latihan solo tanpa saksi — tidak terverifikasi.",
+    suspectId: "oline",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-oline-motive": {
+    id: "stmt-oline-motive",
+    title: "Pernyataan Oline: Motif",
+    description: "Menyangkal motif posisi center — terdengar berbohong.",
+    suspectId: "oline",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-oline-hair": {
+    id: "stmt-oline-hair",
+    title: "Pernyataan Oline: Rambut",
+    description: "Menyangkal rambut di TKP — terdengar panik.",
+    suspectId: "oline",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-oline-cath": {
+    id: "stmt-oline-cath",
+    title: "Oline melihat Catherina berdebat",
+    description: "Saksi: Catherina berdebat emosional dengan korban.",
+    suspectId: "catherina",
+    source: "Interogasi Oline",
+    glyph: "👁️",
+  },
+  "stmt-cath-alibi": {
+    id: "stmt-cath-alibi",
+    title: "Pernyataan Catherina: Debat",
+    description: "Menyebut debat 'hanya koreografi' — berbohong.",
+    suspectId: "catherina",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-cath-video": {
+    id: "stmt-cath-video",
+    title: "Pernyataan Catherina: Video",
+    description: "Mengaku video bocor, klaim 'sudah menanganinya'.",
+    suspectId: "catherina",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-cath-parfum": {
+    id: "stmt-cath-parfum",
+    title: "Pernyataan Catherina: Parfum",
+    description: "Tak bisa menjelaskan parfum di jas korban.",
+    suspectId: "catherina",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-cath-glove": {
+    id: "stmt-cath-glove",
+    title: "Pernyataan Catherina: Sarung Tangan",
+    description: "Mengakui punya sarung tangan lace serupa — gugup.",
+    suspectId: "catherina",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-abigail-alibi": {
+    id: "stmt-abigail-alibi",
+    title: "Pernyataan Abigail: Telepon",
+    description: "Alibi telepon ibu tidak terverifikasi.",
+    suspectId: "abigail",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-abigail-secret": {
+    id: "stmt-abigail-secret",
+    title: "Pernyataan Abigail: Rahasia",
+    description: "Menolak membahas rahasia keluarga yang dikorban ketahui.",
+    suspectId: "abigail",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-abigail-photo": {
+    id: "stmt-abigail-photo",
+    title: "Pernyataan Abigail: Foto",
+    description: "Mengakui menyobek foto keluarga — alasan diragukan.",
+    suspectId: "abigail",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-abigail-fiony": {
+    id: "stmt-abigail-fiony",
+    title: "Abigail melihat Fiony",
+    description: "Saksi: Fiony terburu-buru membawa sesuatu di lorong.",
+    suspectId: "fiony",
+    source: "Interogasi Abigail",
+    glyph: "👁️",
+  },
+  "stmt-fiony-alibi": {
+    id: "stmt-fiony-alibi",
+    title: "Pernyataan Fiony: Listrik",
+    description: "Alibi 'listrik mati' — log tidak mendukung.",
+    suspectId: "fiony",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-fiony-usb": {
+    id: "stmt-fiony-usb",
+    title: "Pernyataan Fiony: USB",
+    description: "Tak bisa menjelaskan isi USB berciri sidik jaranya.",
+    suspectId: "fiony",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-fiony-access": {
+    id: "stmt-fiony-access",
+    title: "Pernyataan Fiony: Server",
+    description: "Menyangkal menghapus rekaman — motif penggantian dirinya.",
+    suspectId: "fiony",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  "stmt-fiony-calendar": {
+    id: "stmt-fiony-calendar",
+    title: "Pernyataan Fiony: Kalender",
+    description: "Tak menjelaskan lingkaran merah di kalender — berbohong.",
+    suspectId: "fiony",
+    source: "Interogasi",
+    glyph: "🗣️",
+  },
+  // Timeline puzzle bonus clue
+  "stmt-timeline": {
+    id: "stmt-timeline",
+    title: "Pola Kronologi Terungkap",
+    description:
+      "Linimasa lengkap menunjukkan jeda 9 menit (23:17→23:32) — waktu pelaku beraksi dan mematikan CCTV.",
+    suspectId: undefined,
+    source: "Rekonstruksi Linimasa",
+    glyph: "🕐",
+  },
 };
 
 // The canonical correct culprit for the accusation finale.
@@ -145,11 +284,17 @@ export const CULPRIT_ID = "catherina";
 interface GameState {
   clues: Clue[];
   examinedEvidence: Record<string, boolean>;
+  interrogatedSuspects: Record<string, boolean>;
+  recordedStatements: Record<string, boolean>;
   notebookOpen: boolean;
   accusation: string | null; // suspect id if accused
   accusationResult: "pending" | "correct" | "wrong" | null;
+  timelineSolved: boolean;
   // actions
   examineEvidence: (evidenceId: string) => void;
+  recordStatement: (clueId: string) => void;
+  markInterrogated: (suspectId: string) => void;
+  setTimelineSolved: (v: boolean) => void;
   hasClue: (clueId: string) => boolean;
   toggleNotebook: (open?: boolean) => void;
   makeAccusation: (suspectId: string) => void;
@@ -164,9 +309,12 @@ export const useGame = create<GameState>()(
     (set, get) => ({
       clues: [],
       examinedEvidence: {},
+      interrogatedSuspects: {},
+      recordedStatements: {},
       notebookOpen: false,
       accusation: null,
       accusationResult: null,
+      timelineSolved: false,
       examineEvidence: (evidenceId) => {
         const ev = EVIDENCE_ITEMS.find((e) => e.id === evidenceId);
         if (!ev) return;
@@ -184,6 +332,30 @@ export const useGame = create<GameState>()(
             : [...state.clues, newClue],
         });
       },
+      recordStatement: (clueId) => {
+        const state = get();
+        if (state.recordedStatements[clueId]) return;
+        const clueDef = CLUE_DEFS[clueId];
+        if (!clueDef) return;
+        const newClue: Clue = { ...clueDef, foundAt: Date.now() };
+        set({
+          recordedStatements: { ...state.recordedStatements, [clueId]: true },
+          clues: state.clues.some((c) => c.id === newClue.id)
+            ? state.clues
+            : [...state.clues, newClue],
+        });
+      },
+      markInterrogated: (suspectId) => {
+        const state = get();
+        if (state.interrogatedSuspects[suspectId]) return;
+        set({
+          interrogatedSuspects: {
+            ...state.interrogatedSuspects,
+            [suspectId]: true,
+          },
+        });
+      },
+      setTimelineSolved: (v) => set({ timelineSolved: v }),
       hasClue: (clueId) => get().clues.some((c) => c.id === clueId),
       toggleNotebook: (open) =>
         set((s) => ({ notebookOpen: open ?? !s.notebookOpen })),
@@ -197,9 +369,12 @@ export const useGame = create<GameState>()(
         set({
           clues: [],
           examinedEvidence: {},
+          interrogatedSuspects: {},
+          recordedStatements: {},
           notebookOpen: false,
           accusation: null,
           accusationResult: null,
+          timelineSolved: false,
         }),
       cluesCount: () => get().clues.length,
     }),
@@ -209,8 +384,11 @@ export const useGame = create<GameState>()(
       partialize: (s) => ({
         clues: s.clues,
         examinedEvidence: s.examinedEvidence,
+        interrogatedSuspects: s.interrogatedSuspects,
+        recordedStatements: s.recordedStatements,
         accusation: s.accusation,
         accusationResult: s.accusationResult,
+        timelineSolved: s.timelineSolved,
       }),
     }
   )

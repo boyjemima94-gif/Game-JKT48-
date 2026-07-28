@@ -163,3 +163,93 @@ Unresolved issues / risks:
 - Evidence Locker + Accusation grids use 2-col on mobile; the accusation 4-suspect grid is 2-col on small screens which is fine but could be optimized.
 - The Zustand persist means a returning user keeps their progress; the "MAIN LAGI" reset is the only way to clear. This is intentional but should be documented.
 - No visual loading state on evidence detail modal images (they're emoji glyphs, so no actual image loading needed — low risk).
+
+---
+Task ID: 3
+Agent: main-orchestrator (cron webDevReview round 2)
+Task: QA testing, bug fixes (briefing contrast, accusation typo), and major feature expansion (Interrogation System, Timeline Puzzle, Victim Profile, Ambient Beams).
+
+Work Log:
+- Read worklog.md (Tasks 0-2). Project stable with Evidence Locker, Notebook, Accusation Finale, Progress HUD from last round.
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. Captured section screenshots + VLM analysis.
+- QA findings (bugs):
+  1. Briefing terminal: header path "teatro@detective:..." too low-contrast (text-noir-paper/50); footer "Transmisi terenkripsi" nearly invisible (text-noir-paper/30)
+  2. Briefing: no way to skip/replay the typewriter animation
+  3. Accusation lock text had typos: "TERTUTUK" (should be TERTUTUP) and "BANYIK" (should be BANYAK)
+- Fixed all bugs:
+  - Briefing header path: text-noir-brass/80 + drop-shadow
+  - Briefing footer: text-noir-brass/60 + drop-shadow
+  - Briefing: added "⏭ LEWATI" button (skips to full text) + "↻ ULANG" button (replays from start) in terminal header bar
+  - Accusation: fixed "TERTUTUK→TERTUTUP" and "BANYIK→BANYAK"
+- Created `src/lib/interrogations.ts` — dialogue data + timeline events + victim profile:
+  - 4 interrogation trees (one per suspect), each with 4 questions + branching unlocks
+  - Responses have tones (truth/lie/evasive/breakdown) with metadata (label, color, icon)
+  - Some responses record statements (clues) to the notebook
+  - 8 timeline events in chronological order (20:00 → 23:45) for reconstruction puzzle
+  - Victim profile: Mardiono 'M' Santoso, cause of death, last words, 4 suspect relationships
+- Expanded `src/lib/game-store.ts`:
+  - Added 17 new CLUE_DEFS for interrogation statements (stmt-oline-*, stmt-cath-*, stmt-abigail-*, stmt-fiony-*) + 1 timeline bonus (stmt-timeline)
+  - Added state: interrogatedSuspects{}, recordedStatements{}, timelineSolved
+  - Added actions: recordStatement(clueId), markInterrogated(suspectId), setTimelineSolved(v)
+  - Updated resetGame + partialize to include new state
+  - TOTAL_CLUE_COUNT now ~23 (6 evidence + 16 statements + 1 timeline)
+- Built `src/components/game/interrogation-modal.tsx` — full dialogue system:
+  - Two-pane layout: suspect info (portrait, codename, progress) + dialogue pane
+  - "● REC" recording indicator, room label
+  - Greeting with tone badge
+  - Question buttons with branching unlock logic (root questions always available; follow-ups unlock after prereq asked)
+  - Typewriter response animation + tone label (JUJUR/BERBOHONG/MENGHINDAR/GUGUP) + "✓ DICATAT" badge
+  - Progress dots (0/4 → 4/4), auto-marks suspect as interrogated
+  - "AKHIRI INTEROGASI" close button
+- Wired interrogation into `src/components/game/conspiracy-board.tsx`:
+  - Added "🗣️ Interogasi" button to each suspect's dossier (with ✓ checkmark if already interrogated)
+  - Opens InterrogationModal with that suspect
+- Built `src/components/game/timeline-section.tsx` — "URUTAN LINIMASA" puzzle:
+  - 8 events shuffled deterministically (stable per session)
+  - Click event → places on chronological rail
+  - Rail shows numbered nodes (01-08) with time + event + detail
+  - "✓ PERIKSA URUTAN" validates order: correct → green border + "LINIMASA TERPECAHKAN" banner + bonus clue; wrong → crimson border + "✗ SALAH POSISI" + attempt counter
+  - "↻ RESET" clears placement
+  - Solved state shows all events green + "✓ BENAR"
+- Built `src/components/game/victim-profile.tsx` — "SIAPA KORBAN?" section:
+  - Folder tab aesthetic ("BERKAS KORBAN" + "RAHASIA")
+  - Sealed state: 📇 icon + "BERKAS TERSEGEL" + "✖ RAHASIA ✖" stamp + "📂 BUKA BERKAS" button
+  - Revealed state: SVG silhouette portrait with "KORBAN" + "† MENINGGAL" stamps, victim name/role/age, cause of death, last words, background narrative, 4 suspect relationship cards (each with name, codename, relation to victim)
+  - "tutup berkas" re-seal option
+- Built `src/components/game/ambient-beams.tsx` — decorative drifting light beams:
+  - 3 slow-moving radial gradients (warm beam, crimson beam, center glow) with CSS keyframe animations
+  - pointer-events-none, very low opacity for subtle atmosphere
+- Added beam keyframes to `globals.css`: beam-drift-a, beam-drift-b, beam-pulse
+- Updated `src/app/page.tsx` — new section order: Hero → Briefing → [divider] → Case Files → [divider] → Conspiracy Board → [divider] → Victim Profile → [divider] → Evidence Locker → [divider] → Timeline → [divider] → Accusation → Stamp CTA → Footer. Added AmbientBeams.
+- Updated `src/components/game/site-footer.tsx` — added "→ Profil Korban" and "→ Urutan Linimasa" nav links.
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- Briefing fixes: skip/replay buttons present, brighter header/footer.
+- Accusation typo: fixed and confirmed.
+- Interrogation flow tested (Catherina):
+  - Opens modal with portrait + REC indicator + greeting + 2 root questions
+  - Asking alibi question → typewriter response + tone label + "✓ DICATAT" + 2 follow-up questions unlocked
+  - Notebook badge incremented to 9 clues
+  - VLM confirmed: "clean and functional, dark theme with gold accents, no visual bugs"
+- Timeline section: VLM confirmed "header URUTAN LINIMASA, empty rail, shuffled event cards, CEK URUTAN button — clean and functional"
+- Victim profile: sealed state confirmed (BERKAS KORBAN tab, RAHASIA stamp, BUKA BERKAS button); revealed state confirmed (Mardiono name, silhouette, cause of death, last words, background)
+- Full page screenshot captured (2.1MB, all sections render correctly).
+
+Stage Summary:
+- ALL QA bugs fixed (briefing contrast, skip/replay, accusation typos).
+- 4 major new features added and tested:
+  ✓ Interrogation System — dialogue trees with 4 suspects, branching questions, tone labels, statement recording
+  ✓ Timeline Reconstruction — 8-event chronological puzzle with validation + bonus clue
+  ✓ Victim Profile — sealed/revealed folder with silhouette, cause of death, suspect relationships
+  ✓ Ambient Beams — drifting atmospheric light beams
+- Game loop now: examine evidence → interrogate suspects (record statements) → reconstruct timeline → accuse culprit → see result → replay
+- Multiple clue sources now feed the accusation lock (evidence + interrogation statements + timeline bonus), making the investigation richer.
+- Next round could add: interrogation cross-referencing (present evidence to catch lies), multiple endings, sound design for interrogation, score/rating system.
+
+Unresolved issues / risks:
+- Interrogation responses use typewriter animation; if user clicks rapidly, responses still complete (intervals cleared on unmount). Tested OK.
+- Timeline shuffle is deterministic per session but not truly random — acceptable for a puzzle.
+- Victim portrait is an SVG silhouette (victim is fictional) — intentional design choice.
+- The game-state localStorage now stores more data; reset clears all. Verified.

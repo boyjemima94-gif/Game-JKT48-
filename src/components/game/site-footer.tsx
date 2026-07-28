@@ -83,6 +83,22 @@ export default function SiteFooter() {
               </li>
               <li>
                 <a
+                  href="#korban"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Profil Korban
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#linimasa"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Urutan Linimasa
+                </a>
+              </li>
+              <li>
+                <a
                   href="#tuduhan"
                   className="text-noir-paper/70 hover:text-noir-brass transition-colors"
                 >

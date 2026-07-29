@@ -118,9 +118,10 @@ export default function AchievementsGallery() {
 
                 {/* glyph + title */}
                 <div className="flex items-center gap-3 mb-2">
-                  <span
+                  <motion.span
+                    whileHover={{ scale: isUnlocked ? 1.15 : 1, rotate: isUnlocked ? 5 : 0 }}
                     className={`text-4xl transition-all ${
-                      isUnlocked ? "" : "grayscale opacity-30"
+                      isUnlocked ? "" : "grayscale opacity-30 group-hover:opacity-50"
                     }`}
                     style={{
                       filter: isUnlocked
@@ -129,11 +130,13 @@ export default function AchievementsGallery() {
                     }}
                   >
                     {ach.glyph}
-                  </span>
+                  </motion.span>
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`font-stamp text-sm font-black leading-tight ${
-                        isUnlocked ? "text-noir-paper" : "text-noir-paper/40"
+                      className={`font-stamp text-sm font-black leading-tight transition-colors ${
+                        isUnlocked
+                          ? "text-noir-paper"
+                          : "text-noir-paper/40 group-hover:text-noir-paper/60"
                       }`}
                     >
                       {ach.title}
@@ -143,16 +146,25 @@ export default function AchievementsGallery() {
 
                 {/* description */}
                 <p
-                  className={`font-typewriter text-[11px] leading-relaxed ${
+                  className={`font-typewriter text-[11px] leading-relaxed transition-all ${
                     isUnlocked
                       ? "text-noir-paper/70"
-                      : "text-noir-paper/30 italic"
+                      : "text-noir-paper/30 italic group-hover:text-noir-paper/45"
                   }`}
                 >
                   {isUnlocked
                     ? ach.description
                     : "???"}
                 </p>
+
+                {/* hover hint for locked achievements */}
+                {!isUnlocked && (
+                  <div className="mt-2 pt-2 border-t border-noir-coffee/30 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p className="font-stamp text-[8px] tracking-widest text-noir-brass/50 uppercase">
+                      🔒 Terkunci — selesaikan tantangan
+                    </p>
+                  </div>
+                )}
               </motion.div>
             );
           })}

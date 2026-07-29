@@ -382,6 +382,12 @@
   50% { opacity: 0.04; transform: translate(-50%, 0) scale(1.15); }
 }
 
+/* ============ CRT scanline drift ============ */
+@keyframes crt-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(2000%); }
+}
+
 /* ============ Vignette ============ */
 .scene-vignette::before {
   content: "";

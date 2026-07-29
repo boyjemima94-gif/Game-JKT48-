@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGame, DIFFICULTIES, type CaseRecord } from "@/lib/game-store";
 import { SUSPECTS } from "@/lib/suspects";
-import { playClick } from "@/lib/audio";
+import { playClick, playPaperRustle, playStampSlam } from "@/lib/audio";
 
 const RANK_COLORS: Record<string, string> = {
   S: "text-noir-brass",
@@ -20,7 +20,11 @@ const RANK_COLORS: Record<string, string> = {
  */
 export default function CaseArchive() {
   const caseHistory = useGame((s) => s.caseHistory);
+  const wipeAllData = useGame((s) => s.wipeAllData);
+  const unlockedAchievements = useGame((s) => s.unlockedAchievements);
   const [expanded, setExpanded] = useState(false);
+  const [showReset, setShowReset] = useState(false);
+  const [resetStep, setResetStep] = useState(0);
   const stats = useMemo(() => {
     if (caseHistory.length === 0) {
       return {
@@ -218,16 +222,153 @@ export default function CaseArchive() {
             </div>
 
             {/* expand history */}
-            <button
-              onClick={() => {
-                playClick();
-                setExpanded(!expanded);
-              }}
-              data-cursor-active
-              className="w-full py-3 font-stamp text-xs tracking-widest uppercase text-noir-brass border border-noir-brass/40 hover:border-noir-brass hover:bg-noir-brass/10 transition-colors"
-            >
-              {expanded ? "▲ TUTUP RIWAYAT" : "▼ LIHAT RIWAYAT LENGKAP"}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  playClick();
+                  setExpanded(!expanded);
+                }}
+                data-cursor-active
+                className="flex-1 py-3 font-stamp text-xs tracking-widest uppercase text-noir-brass border border-noir-brass/40 hover:border-noir-brass hover:bg-noir-brass/10 transition-colors"
+              >
+                {expanded ? "▲ TUTUP RIWAYAT" : "▼ LIHAT RIWAYAT"}
+              </button>
+              <button
+                onClick={() => {
+                  playClick();
+                  setShowReset(true);
+                  setResetStep(0);
+                }}
+                data-cursor-active
+                aria-label="Hapus semua progres"
+                className="px-4 py-3 font-stamp text-xs tracking-widest uppercase text-noir-crimson border border-noir-crimson/40 hover:border-noir-crimson hover:bg-noir-crimson/10 transition-colors"
+              >
+                🗑
+              </button>
+            </div>
+
+            {/* reset confirmation dialog */}
+            <AnimatePresence>
+              {showReset && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[99] flex items-center justify-center p-4"
+                  onClick={() => {
+                    playClick();
+                    setShowReset(false);
+                    setResetStep(0);
+                  }}
+                >
+                  <div className="absolute inset-0 bg-noir-ink/95 backdrop-blur-sm" />
+                  <motion.div
+                    initial={{ scale: 0.92, y: 20 }}
+                    animate={{ scale: 1, y: 0 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="relative paper-texture paper-edge paper-burn rounded-sm max-w-md w-full p-6 border-4 border-noir-crimson"
+                  >
+                    <button
+                      onClick={() => {
+                        playClick();
+                        setShowReset(false);
+                        setResetStep(0);
+                      }}
+                      data-cursor-active
+                      aria-label="Batal"
+                      className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-noir-paper-ink/60 hover:text-noir-crimson transition-colors font-stamp text-lg"
+                    >
+                      ✕
+                    </button>
+
+                    <div className="text-center mb-5">
+                      <span className="text-4xl">🗑</span>
+                      <h3 className="font-stamp text-xl font-black text-noir-crimson mt-2">
+                        HAPUS SEMUA PROGRES?
+                      </h3>
+                    </div>
+
+                    {resetStep === 0 ? (
+                      <>
+                        <p className="font-typewriter text-sm text-noir-paper-ink/80 leading-relaxed mb-5 text-center">
+                          Tindakan ini akan menghapus{" "}
+                          <strong>semua riwayat kasus</strong> ({stats.totalCases}{" "}
+                          kasus) dan{" "}
+                          <strong>semua pencapaian</strong> (
+                          {unlockedAchievements.length} terbuka). Progres saat ini
+                          juga akan direset. Tindakan ini tidak dapat dibatalkan.
+                        </p>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => {
+                              playClick();
+                              setShowReset(false);
+                              setResetStep(0);
+                            }}
+                            data-cursor-active
+                            className="flex-1 py-2.5 font-stamp text-xs tracking-widest uppercase text-noir-paper-ink border border-noir-paper-ink/30 hover:bg-noir-paper-ink/10 transition-colors"
+                          >
+                            Batal
+                          </button>
+                          <button
+                            onClick={() => {
+                              playClick();
+                              setResetStep(1);
+                            }}
+                            data-cursor-active
+                            className="flex-1 py-2.5 font-stamp text-xs tracking-widest uppercase text-noir-paper bg-noir-crimson hover:bg-noir-blood transition-colors"
+                          >
+                            Lanjut →
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="font-typewriter text-sm text-noir-crimson font-bold leading-relaxed mb-5 text-center">
+                          Konfirmasi terakhir: Yakin ingin menghapus semua?
+                          <br />
+                          <span className="text-noir-paper-ink/60 font-normal text-xs">
+                            Klik &ldquo;HAPUS SEMUA&rdquo; untuk permanen.
+                          </span>
+                        </p>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => {
+                              playClick();
+                              setShowReset(false);
+                              setResetStep(0);
+                            }}
+                            data-cursor-active
+                            className="flex-1 py-2.5 font-stamp text-xs tracking-widest uppercase text-noir-paper-ink border border-noir-paper-ink/30 hover:bg-noir-paper-ink/10 transition-colors"
+                          >
+                            Batal
+                          </button>
+                          <button
+                            onClick={() => {
+                              playPaperRustle(0.6, 0.6);
+                              setTimeout(() => playStampSlam(), 200);
+                              wipeAllData();
+                              setShowReset(false);
+                              setResetStep(0);
+                            }}
+                            data-cursor-active
+                            className="flex-1 py-2.5 font-stamp text-xs tracking-widest uppercase text-noir-paper bg-noir-crimson hover:bg-noir-blood transition-colors shadow-[0_0_20px_rgba(192,57,43,0.5)]"
+                          >
+                            HAPUS SEMUA
+                          </button>
+                        </div>
+                      </>
+                    )}
+
+                    {/* corner stamp */}
+                    <div className="absolute top-3 left-3 font-stamp text-[8px] tracking-widest text-noir-crimson/60 -rotate-6 border border-noir-crimson/40 px-1.5 py-0.5">
+                      PERMANEN
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <AnimatePresence>
               {expanded && (

@@ -423,6 +423,7 @@ interface GameState {
   toggleNotebook: (open?: boolean) => void;
   makeAccusation: (suspectId: string) => void;
   resetGame: () => void;
+  wipeAllData: () => void;
   cluesCount: () => number;
 }
 
@@ -536,6 +537,21 @@ export const useGame = create<GameState>()(
           caseHistory: s.caseHistory,
           unlockedAchievements: s.unlockedAchievements,
         })),
+      wipeAllData: () =>
+        set({
+          clues: [],
+          examinedEvidence: {},
+          interrogatedSuspects: {},
+          recordedStatements: {},
+          notebookOpen: false,
+          accusation: null,
+          accusationResult: null,
+          timelineSolved: false,
+          difficulty: null,
+          hintsUsed: 0,
+          caseHistory: [],
+          unlockedAchievements: [],
+        }),
       cluesCount: () => get().clues.length,
     }),
     {

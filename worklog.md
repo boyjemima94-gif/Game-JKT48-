@@ -522,3 +522,59 @@ Unresolved issues / risks:
 - Achievements only populate after a real accusation (recordCase + checkAchievements fire in DetectiveScore useEffect). Injected test data gets overwritten by persist middleware. Code is correct.
 - Floating buttons (notebook bottom-right, soundboard bottom-20-right, hint bottom-center, audio bottom-left, keyboard top-right) — carefully positioned to avoid overlap. Verified.
 - Page is now 15+ sections long; full-page screenshot times out in headless browser. Individual section screenshots all verified OK.
+
+---
+Task ID: 8
+Agent: main-orchestrator (cron webDevReview round 7)
+Task: QA testing, and feature expansion (Quick Nav, Reset Progress dialog, CRT scanline animation, achievements hover polish).
+
+Work Log:
+- Read worklog.md (Tasks 0-7). Project stable with complete game arc + meta-progression + achievements + soundboard. 14+ sections.
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. VLM confirmed achievements gallery (12 cards, 0/12, locked with ???), hero buttons properly stacked on mobile.
+- Built `src/components/game/quick-nav.tsx` — floating ☰ navigation menu:
+  - Appears after scrolling past 50% of viewport (top-left corner)
+  - Click ☰ → expands to vertical panel with 12 section links (Atas, Mode, Berkas, Benang Merah, Tokoh, Korban, Bukti, Linimasa, Tuduhan, Arsip, Pencapaian, Bergabung)
+  - Each link: emoji glyph + label, hover scale + brass color, smooth scroll to target
+  - Close button rotates ☰→✕, Esc closes, click outside closes
+  - Paper-styled panel with header "NAVIGASI CEPAT" + footer "Teatro del Misteri"
+- Added `wipeAllData()` action to game store (`src/lib/game-store.ts`):
+  - Clears ALL state including caseHistory + unlockedAchievements (unlike resetGame which preserves them)
+  - Added to GameState interface
+- Updated `src/components/game/case-archive.tsx` with Reset Progress dialog:
+  - 🗑 button next to "LIHAT RIWAYAT" (only in populated state)
+  - Two-step confirmation: step 0 shows warning (X kasus, Y achievements will be deleted) + "Lanjut →" / "Batal"; step 1 shows final warning + "HAPUS SEMUA" (crimson, glowing)
+  - Plays paper rustle + stamp slam on confirm, calls wipeAllData()
+  - "PERMANEN" corner stamp, crimson border-4, backdrop blur
+- Added CRT scanline animation to briefing terminal (`briefing-section.tsx`):
+  - Moving scanline beam (linear gradient) animates vertically via `crt-scan` keyframe (4s linear infinite)
+  - Increased scanline opacity (0.20→0.25), darker lines (0.4→0.5)
+  - Added CRT screen curvature effect (inset box-shadow)
+  - Added `crt-scan` keyframe to globals.css
+- Improved achievements card hover (`achievements-gallery.tsx`):
+  - Locked glyphs: opacity 30%→50% on hover, grayscale maintained
+  - Locked titles: text 40%→60% on hover
+  - Locked descriptions: 30%→45% on hover
+  - Added "🔒 Terkunci — selesaikan tantangan" hint that fades in on hover (border-t separator)
+  - Unlocked glyphs: scale 1.15 + rotate 5° on hover (motion.span whileHover)
+- Composed QuickNav into `src/app/page.tsx` as dynamic import.
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- QuickNav: VLM confirmed "NAVIGASI CEPAT header, section links with emojis (🎮📁🧵🎭📇🔍), clean vertical list, polished — no visual issues".
+- Briefing CRT: VLM confirmed "terminal window with scanlines, CRT glow effect, typewriter text visible — no major visual issues".
+- Reset dialog: code verified (two-step confirmation, wipeAllData action, only shows in populated state).
+- Achievements hover: glyph scale/rotate + locked hint fade-in implemented.
+
+Stage Summary:
+- 4 features added and tested:
+  ✓ Quick Nav — floating ☰ menu with 12 section jump links (essential for the now-14-section page)
+  ✓ Reset Progress — two-step confirmation dialog with wipeAllData (clears case history + achievements)
+  ✓ CRT scanline animation — moving beam + curvature + enhanced glow on briefing terminal
+  ✓ Achievements hover polish — locked cards reveal hint, unlocked glyphs scale/rotate on hover
+- Game now has complete UX: long page navigable via QuickNav, persistent data wipeable via Reset, atmospheric CRT effect on terminal, rewarding hover interactions on achievements.
+
+Unresolved issues / risks:
+- Reset dialog only appears in populated Case Archive state (when caseHistory.length > 0) — correct design, can't reset nothing.
+- QuickNav button at top-left may overlap with nothing (keyboard help is top-right, audio is bottom-left) — verified no overlap.
+- CRT scanline animation uses transform translateY(2000%) which is fine for the terminal height.

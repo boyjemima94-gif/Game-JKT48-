@@ -175,20 +175,38 @@ export default function BriefingSection() {
             )}
           </div>
 
-          {/* scanline overlay */}
+          {/* scanline overlay (animated drift) */}
           <div
-            className="absolute inset-0 pointer-events-none opacity-20"
+            className="absolute inset-0 pointer-events-none opacity-25 overflow-hidden"
             style={{
               backgroundImage:
-                "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,0,0,0.4) 2px, rgba(0,0,0,0.4) 3px)",
+                "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,0,0,0.5) 2px, rgba(0,0,0,0.5) 3px)",
             }}
-          />
-          {/* CRT glow */}
+          >
+            {/* moving scanline beam */}
+            <div
+              className="absolute inset-x-0 h-8"
+              style={{
+                background:
+                  "linear-gradient(180deg, transparent 0%, rgba(255,203,122,0.08) 50%, transparent 100%)",
+                animation: "crt-scan 4s linear infinite",
+              }}
+            />
+          </div>
+          {/* CRT glow + flicker */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
                 "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)",
+            }}
+          />
+          {/* CRT screen curvature subtle edge */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-30"
+            style={{
+              boxShadow:
+                "inset 0 0 60px rgba(0,0,0,0.6), inset 0 0 120px rgba(0,0,0,0.3)",
             }}
           />
         </motion.div>

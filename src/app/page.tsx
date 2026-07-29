@@ -54,6 +54,10 @@ const Soundboard = dynamic(
   () => import("@/components/game/soundboard"),
   { ssr: false }
 );
+const QuickNav = dynamic(
+  () => import("@/components/game/quick-nav"),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
@@ -65,6 +69,7 @@ export default function Home() {
       <KeyboardHelp />
       <HintSystem />
       <Soundboard />
+      <QuickNav />
       <Onboarding />
       <AudioToggle />
       <DetectiveNotebook />

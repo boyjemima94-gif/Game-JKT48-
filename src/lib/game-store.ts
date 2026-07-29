@@ -409,6 +409,7 @@ interface GameState {
   hintsUsed: number;
   // persistent stats across games
   caseHistory: CaseRecord[];
+  unlockedAchievements: string[];
   // actions
   examineEvidence: (evidenceId: string) => void;
   recordStatement: (clueId: string) => void;
@@ -417,6 +418,7 @@ interface GameState {
   setDifficulty: (d: Difficulty) => void;
   useHint: () => void;
   recordCase: (rec: CaseRecord) => void;
+  unlockAchievements: (ids: string[]) => void;
   hasClue: (clueId: string) => boolean;
   toggleNotebook: (open?: boolean) => void;
   makeAccusation: (suspectId: string) => void;
@@ -456,6 +458,7 @@ export const useGame = create<GameState>()(
       difficulty: null,
       hintsUsed: 0,
       caseHistory: [],
+      unlockedAchievements: [],
       examineEvidence: (evidenceId) => {
         const ev = EVIDENCE_ITEMS.find((e) => e.id === evidenceId);
         if (!ev) return;
@@ -501,6 +504,13 @@ export const useGame = create<GameState>()(
       useHint: () => set((s) => ({ hintsUsed: s.hintsUsed + 1 })),
       recordCase: (rec) =>
         set((s) => ({ caseHistory: [rec, ...s.caseHistory].slice(0, 20) })),
+      unlockAchievements: (ids) =>
+        set((s) => ({
+          unlockedAchievements: [
+            ...s.unlockedAchievements,
+            ...ids.filter((id) => !s.unlockedAchievements.includes(id)),
+          ],
+        })),
       hasClue: (clueId) => get().clues.some((c) => c.id === clueId),
       toggleNotebook: (open) =>
         set((s) => ({ notebookOpen: open ?? !s.notebookOpen })),
@@ -522,8 +532,9 @@ export const useGame = create<GameState>()(
           timelineSolved: false,
           difficulty: null,
           hintsUsed: 0,
-          // keep caseHistory across resets
+          // keep caseHistory + achievements across resets
           caseHistory: s.caseHistory,
+          unlockedAchievements: s.unlockedAchievements,
         })),
       cluesCount: () => get().clues.length,
     }),
@@ -541,6 +552,7 @@ export const useGame = create<GameState>()(
         difficulty: s.difficulty,
         hintsUsed: s.hintsUsed,
         caseHistory: s.caseHistory,
+        unlockedAchievements: s.unlockedAchievements,
       }),
     }
   )

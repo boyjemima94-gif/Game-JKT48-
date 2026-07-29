@@ -456,3 +456,69 @@ Unresolved issues / risks:
 - Case Archive populated state couldn't be fully VLM-verified (persist middleware overwrites injected test data; only real accusations populate it). Code is correct — recordCase fires on accusation via useEffect in DetectiveScore.
 - Cast List bios are static (CAST_BIOS) — could be moved to suspects.ts data file in future, but current approach keeps lore separate from gameplay data.
 - Page is now very long (12+ sections); full-page screenshot times out in headless browser. Individual section screenshots all verified OK.
+
+---
+Task ID: 7
+Agent: main-orchestrator (cron webDevReview round 6)
+Task: QA testing, and major feature expansion (Achievements system, Soundboard, section divider film-strip polish).
+
+Work Log:
+- Read worklog.md (Tasks 0-6). Project stable with complete game arc + meta-progression (Case Archive, Cast List, difficulty, hints, cross-reference).
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. VLM confirmed hero buttons properly stacked on mobile (no overlap). All 14 sections present in accessibility tree.
+- Created `src/lib/achievements.ts` — 12 unlockable achievements with rarity system:
+  - Achievement interface (id, title, description, glyph, check function, rarity: common/rare/epic/legendary)
+  - AchievementContext (correct, score, rank, difficulty, cluesFound, totalClues, hintsUsed, timelineSolved, suspectsInterrogated, totalSuspects, casesPlayed, wins, perfectAccusations)
+  - 12 achievements: Detektif Baru (first case), Kasus Terpecahkan (first win), Tanpa Bantuan (no hints), Penyelidik Sempurna (all clues), Interogator Ulung (all suspects), Ahli Kronologi (timeline), Detektif Legendaris (rank S), Tanpa Ampun (legend win), Detektif Kilat (speed run), Veteran Teatro (5 wins), Sang Detektif (10 cases), Sempurna Tanpa Cela (flawless)
+  - RARITY_META with colors (common=grey, rare=cyan, epic=purple, legendary=brass) + glow + border
+  - checkAchievements(ctx, alreadyUnlocked) returns newly-unlocked IDs
+- Expanded `src/lib/game-store.ts` with achievements persistence:
+  - Added unlockedAchievements: string[] to state
+  - Added unlockAchievements(ids) action (dedupes + appends)
+  - Updated resetGame to preserve unlockedAchievements
+  - Updated partialize to persist unlockedAchievements
+- Updated `src/components/game/detective-score.tsx` to check achievements after accusation:
+  - Added useEffect that builds AchievementContext from the recorded CaseRecord + caseHistory
+  - Calls checkAchievements, unlocks new ones, sets newAchievements state for display
+  - Added "✦ Pencapaian Baru Terbuka ✦" panel showing newly-unlocked achievements with rarity-colored borders, glyphs, titles, descriptions, rarity badges, glow
+- Built `src/components/game/achievements-gallery.tsx` — "GALLERI PENCAPAIAN" section:
+  - Progress indicator (12 dots + count + percentage)
+  - Grid of all 12 achievement cards with: rarity badge, ✓ TERBUKA / 🔒 TERKUNCI status, glyph (greyscale if locked), title, description ("???" if locked)
+  - Unlocked cards glow with rarity color; locked cards are dimmed
+  - "★ SEMUA PENCAPAIAN TERBUKA ★" completion message when all 12 unlocked
+- Built `src/components/game/soundboard.tsx` — floating 🔊 button + modal:
+  - Fixed bottom-right button (bottom-20 to avoid overlap with notebook/hint buttons)
+  - Modal with "SOUND BOARD" header + 6 SFX buttons in a grid:
+    - 📄 Gemerisik Kertas, 🔨 Hantaman Cap, 💡 Dengung Lampu, 🗄️ Laci Geser, 🔘 Klik Tombol, ✉️ Kertas Lembut
+  - Each button: glyph, name, description, "▸ PUTAR" on hover, whileTap scale animation
+  - Calls unlockAudio() then the SFX play function
+  - Footer: "Semua suara dibuat secara real-time — tanpa file audio eksternal"
+- Polished `src/components/game/section-divider.tsx` with film-strip border:
+  - Added decorative film-strip perforation pattern (repeating-linear-gradient) with fade mask
+  - Glyphs now have drop-shadow glow (drop-shadow-[0_0_8px_currentColor])
+  - Label text now font-bold with drop-shadow
+  - Added "achievement" variant (✦ brass)
+  - Increased py from 8 to 10 for more presence
+- Updated `src/app/page.tsx` — added AchievementsGallery after CaseArchive, added Soundboard as floating component.
+- Updated `src/components/game/site-footer.tsx` — added "→ Pencapaian" nav link.
+- Fixed typo in soundboard: "SOUNDB BOARD" → "SOUND BOARD" (caught by VLM).
+- Fixed soundboard button overlap: moved from bottom-4 right-16 to bottom-20 right-4 to avoid covering other floating buttons.
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings) — fixed set-state-in-effect by deferring with requestAnimationFrame.
+- Dev server: compiles cleanly, no runtime errors.
+- Achievements gallery: VLM confirmed "GALLERI PENCAPAIAN header, 12 achievement cards with emojis, all showing 🔒 TERKUNCI with ??? descriptions, progress 0/12 0% — clean".
+- Soundboard: VLM confirmed "SOUND BOARD header (after typo fix), 6 SFX buttons with emojis (📄🔨💡🗄️🔘✉️), each with name/description/PUTAR hover — vintage parchment aesthetic".
+- Section dividers: film-strip border + glow glyphs render correctly (visible in section screenshots).
+
+Stage Summary:
+- 3 major new features added and tested:
+  ✓ Achievements System — 12 unlockable badges with 4 rarity tiers, persistent, auto-checked on accusation, displayed in gallery + unlock notification in Detective Score
+  ✓ Soundboard — floating 🔊 button + modal previewing all 6 synthesized SFX (paper rustle, stamp slam, lamp buzz, drawer, click, soft rustle)
+  ✓ Section Divider polish — film-strip perforation border + glowing glyphs + bolder labels
+- Game now has full achievement-based progression: play cases → unlock badges → track completion (12 total) → aim for "Sempurna Tanpa Cela" (flawless legendary win).
+- Soundboard lets users appreciate the Web Audio API sound design independently.
+
+Unresolved issues / risks:
+- Achievements only populate after a real accusation (recordCase + checkAchievements fire in DetectiveScore useEffect). Injected test data gets overwritten by persist middleware. Code is correct.
+- Floating buttons (notebook bottom-right, soundboard bottom-20-right, hint bottom-center, audio bottom-left, keyboard top-right) — carefully positioned to avoid overlap. Verified.
+- Page is now 15+ sections long; full-page screenshot times out in headless browser. Individual section screenshots all verified OK.

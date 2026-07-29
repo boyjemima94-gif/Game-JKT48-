@@ -14,6 +14,7 @@ import TimelineSection from "@/components/game/timeline-section";
 import AccusationFinale from "@/components/game/accusation-finale";
 import DetectiveScore from "@/components/game/detective-score";
 import CaseArchive from "@/components/game/case-archive";
+import AchievementsGallery from "@/components/game/achievements-gallery";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -49,6 +50,10 @@ const HintSystem = dynamic(
   () => import("@/components/game/hint-system"),
   { ssr: false }
 );
+const Soundboard = dynamic(
+  () => import("@/components/game/soundboard"),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
@@ -59,6 +64,7 @@ export default function Home() {
       <ProgressHud />
       <KeyboardHelp />
       <HintSystem />
+      <Soundboard />
       <Onboarding />
       <AudioToggle />
       <DetectiveNotebook />
@@ -85,6 +91,8 @@ export default function Home() {
         <DetectiveScore />
         <SectionDivider variant="file" label="Rekam Jejak" />
         <CaseArchive />
+        <SectionDivider variant="achievement" label="Pencapaian" />
+        <AchievementsGallery />
         <StampCta />
       </main>
 

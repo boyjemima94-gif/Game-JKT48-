@@ -123,6 +123,14 @@ export default function SiteFooter() {
               </li>
               <li>
                 <a
+                  href="#pencapaian"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Pencapaian
+                </a>
+              </li>
+              <li>
+                <a
                   href="#stamp"
                   className="text-noir-paper/70 hover:text-noir-brass transition-colors"
                 >

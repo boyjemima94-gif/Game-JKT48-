@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useEffect, useRef } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   useGame,
@@ -12,6 +12,7 @@ import {
 import { EVIDENCE_ITEMS } from "@/lib/game-store";
 import { INTERROGATIONS } from "@/lib/interrogations";
 import { SUSPECTS } from "@/lib/suspects";
+import { checkAchievements, ACHIEVEMENTS, RARITY_META } from "@/lib/achievements";
 
 /**
  * Detective Performance Score — appears after an accusation is made.
@@ -126,6 +127,9 @@ export default function DetectiveScore() {
 
   const recordCase = useGame((s) => s.recordCase);
   const caseHistory = useGame((s) => s.caseHistory);
+  const unlockAchievements = useGame((s) => s.unlockAchievements);
+  const unlockedAchievements = useGame((s) => s.unlockedAchievements);
+  const [newAchievements, setNewAchievements] = useState<string[]>([]);
   const recordedRef = useRef<string | null>(null);
 
   // Record this case into history once (when accusation is made)
@@ -161,6 +165,32 @@ export default function DetectiveScore() {
     };
     recordCase(rec);
     recordedRef.current = key;
+
+    // Check achievements
+    const wins = caseHistory.filter((c) => c.correct).length + (rec.correct ? 1 : 0);
+    const perfectAccusations =
+      caseHistory.filter((c) => c.correct && c.hintsUsed === 0).length +
+      (rec.correct && rec.hintsUsed === 0 ? 1 : 0);
+    const ctx = {
+      correct: rec.correct,
+      score: rec.score,
+      rank: rec.rank,
+      difficulty: rec.difficulty,
+      cluesFound: rec.cluesFound,
+      totalClues: rec.totalClues,
+      hintsUsed: rec.hintsUsed,
+      timelineSolved: rec.timelineSolved,
+      suspectsInterrogated: rec.suspectsInterrogated,
+      totalSuspects: 4,
+      casesPlayed: caseHistory.length + 1,
+      wins,
+      perfectAccusations,
+    };
+    const newlyUnlocked = checkAchievements(ctx, unlockedAchievements);
+    if (newlyUnlocked.length > 0) {
+      unlockAchievements(newlyUnlocked);
+      requestAnimationFrame(() => setNewAchievements(newlyUnlocked));
+    }
   }, [
     accusation,
     difficulty,
@@ -172,7 +202,9 @@ export default function DetectiveScore() {
     interrogatedSuspects,
     accusationResult,
     recordCase,
+    unlockAchievements,
     caseHistory,
+    unlockedAchievements,
     TOTAL_CLUE_COUNT,
   ]);
 
@@ -419,6 +451,52 @@ export default function DetectiveScore() {
             Kasus JKT-48-001 · {new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" })}
           </p>
         </motion.div>
+
+        {/* newly unlocked achievements */}
+        {newAchievements.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.6 }}
+            className="mb-6 paper-texture paper-edge p-5 border-4 border-noir-brass"
+          >
+            <p className="font-stamp text-sm tracking-[0.3em] text-noir-brass font-bold uppercase text-center mb-3">
+              ✦ Pencapaian Baru Terbuka ✦
+            </p>
+            <div className="space-y-2">
+              {newAchievements.map((id) => {
+                const ach = ACHIEVEMENTS.find((a) => a.id === id);
+                if (!ach) return null;
+                const rarity = RARITY_META[ach.rarity];
+                return (
+                  <motion.div
+                    key={id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.8 }}
+                    className={`flex items-center gap-3 p-3 border-2 ${rarity.border} bg-noir-paper/30`}
+                    style={{ boxShadow: `0 0 20px ${rarity.glow}` }}
+                  >
+                    <span className="text-3xl">{ach.glyph}</span>
+                    <div className="flex-1">
+                      <p className={`font-stamp text-sm font-black ${rarity.color}`}>
+                        {ach.title}
+                      </p>
+                      <p className="font-typewriter text-[11px] text-noir-paper-ink/70">
+                        {ach.description}
+                      </p>
+                    </div>
+                    <span
+                      className={`font-stamp text-[9px] tracking-widest font-bold px-2 py-0.5 border ${rarity.border} ${rarity.color}`}
+                    >
+                      {rarity.label}
+                    </span>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* actions */}
         <div className="flex flex-wrap items-center justify-center gap-3">

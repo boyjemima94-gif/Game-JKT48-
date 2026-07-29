@@ -578,3 +578,62 @@ Unresolved issues / risks:
 - Reset dialog only appears in populated Case Archive state (when caseHistory.length > 0) — correct design, can't reset nothing.
 - QuickNav button at top-left may overlap with nothing (keyboard help is top-right, audio is bottom-left) — verified no overlap.
 - CRT scanline animation uses transform translateY(2000%) which is fine for the terminal height.
+
+---
+Task ID: 9
+Agent: main-orchestrator (cron webDevReview round 8)
+Task: QA testing, mobile safe-area fix, and feature expansion (Lore section, Credits section).
+
+Work Log:
+- Read worklog.md (Tasks 0-8). Project stable with 30+ components, complete game arc, meta-progression, achievements, soundboard, quick nav, reset dialog, CRT scanlines.
+- Performed QA via agent-browser: lint clean, dev server clean. VLM mobile test (390px) found floating buttons may conflict with mobile gesture bars / safe areas.
+- Fixed mobile safe-area handling in `src/app/globals.css`:
+  - Added `env(safe-area-inset-*)` padding to body (left/right)
+  - Added utility classes: `.safe-bottom` (1rem + safe-area), `.safe-bottom-lg` (5rem + safe-area), `.safe-top` (0.75rem + safe-area), `.safe-left`, `.safe-right`
+- Applied safe-area classes to all floating buttons:
+  - `audio-toggle.tsx`: bottom-4 left-4 → safe-bottom safe-left
+  - `detective-notebook.tsx`: bottom-4 right-4 → safe-bottom safe-right
+  - `soundboard.tsx`: bottom-20 right-4 → safe-bottom-lg safe-right
+  - `hint-system.tsx`: bottom-4 left-1/2 → safe-bottom left-1/2
+  - `quick-nav.tsx`: top-3 left-3 → safe-top safe-left (button + panel)
+  - `keyboard-help.tsx`: top-3 right-3 → safe-top safe-right
+  - `progress-hud.tsx`: top-3 left-1/2 → safe-top left-1/2
+- Built `src/components/game/lore-section.tsx` — "DUNIA TEATRO" worldbuilding section:
+  - 6 theater facts strip (Berdiri 2012, Jakarta, 4 member, 120+ pertunjukan, 1 kasus, ? penyelesaian)
+  - Vertical timeline with 5 entries (alternating left/right zig-zag on desktop, left-aligned on mobile):
+    - 2012 Pendirian Teatro 🎭
+    - 2018 Kolaborasi JKT48 ✨
+    - 2023 Era Keemasan 🌟
+    - 2025 Insiden Pertama ⚡
+    - 13 Okt Malam Itu 🕯️
+  - Each entry: glyph + year (crimson) + title + narrative text in paper-textured card
+  - Central vertical line with brass nodes, closing quote: "Di atas panggung, semua orang bermain peran..."
+- Built `src/components/game/credits-section.tsx` — "KREDIT" about section:
+  - About blurb (paper-textured): describes Teatro del Misteri as interactive murder mystery with noir atmosphere
+  - Tech stack grid (9 items): Next.js 16, TypeScript, Three.js, React Three Fiber, Framer Motion, Tailwind CSS 4, shadcn/ui, Zustand, Web Audio API — each with role
+  - Cast list (4 members): Oline/Catherina/Abigail/Fiony with codenames + JKT48 disclaimer
+  - Features list (18 features) in 2-col grid: lamp 3D, magnifier cursor, paper flip, red thread, stamp CTA, typewriter, interrogation, cross-ref, timeline, 3 difficulties, achievements, notebook, hints, score, archive, soundboard, quick nav, real-time audio
+  - Footer: "★ TEATRO DEL MISTERI ★" + disclaimer
+- Updated `src/app/page.tsx` — added LoreSection + CreditsSection after AchievementsGallery, before StampCta. Added imports.
+- Updated `src/components/game/quick-nav.tsx` — added "Latar Cerita 📚" and "Tentang ℹ️" nav items (now 14 links).
+- Updated `src/components/game/site-footer.tsx` — added "→ Latar Cerita" and "→ Tentang" nav links.
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly (initial Fast Refresh warnings during edit resolved after reload).
+- Lore section: VLM confirmed "vertical timeline with year markers (2018, 2023), alternating zig-zag layout, theater facts, JKT48 collaboration entry — clean".
+- Credits section: VLM confirmed "tech stack grid (Next.js, Three.js, etc.), cast list (Oline/Catherina/Abigail/Fiony with codenames) — all visible".
+- Safe-area: utility classes applied to all 7 floating button positions; will respect iOS notch / gesture bar on real mobile devices.
+
+Stage Summary:
+- Mobile safe-area fixed: all floating buttons now use env(safe-area-inset-*) to clear iOS notch and Android gesture bars.
+- 2 major new sections added:
+  ✓ Lore / Worldbuilding — theater history timeline (2012→13 Okt) with 5 entries + 6 facts strip + closing quote
+  ✓ Credits / About — tech stack (9 items) + cast (4 members) + features list (18 features) + about blurb + disclaimer
+- Page now has 16 main sections: Hero → CaseIntro → Difficulty → Briefing → CaseFiles → ConspiracyBoard → CastList → VictimProfile → EvidenceLocker → Timeline → Accusation → DetectiveScore → CaseArchive → Achievements → Lore → Credits → StampCta.
+- QuickNav updated to 14 links covering all sections.
+
+Unresolved issues / risks:
+- Safe-area utilities only tested in headless browser (no real mobile device); CSS is standard env() so should work on real iOS/Android.
+- Page is now 16 sections — very long but navigable via QuickNav + footer links + scroll.
+- Credits "KREDIT" header was above the VLM screenshot crop but confirmed present in code.

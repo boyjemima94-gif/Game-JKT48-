@@ -131,6 +131,22 @@ export default function SiteFooter() {
               </li>
               <li>
                 <a
+                  href="#loran"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Latar Cerita
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#kredit"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Tentang
+                </a>
+              </li>
+              <li>
+                <a
                   href="#stamp"
                   className="text-noir-paper/70 hover:text-noir-brass transition-colors"
                 >

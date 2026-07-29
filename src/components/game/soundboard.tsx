@@ -89,7 +89,7 @@ export default function Soundboard() {
         }}
         data-cursor-active
         aria-label="Buka soundboard"
-        className="fixed bottom-20 right-4 z-[78] w-11 h-11 rounded-full bg-noir-coal/90 border border-noir-brass/40 backdrop-blur flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.8)] hover:border-noir-brass transition-colors"
+        className="fixed safe-bottom-lg safe-right z-[78] w-11 h-11 rounded-full bg-noir-coal/90 border border-noir-brass/40 backdrop-blur flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.8)] hover:border-noir-brass transition-colors"
       >
         <span className="text-lg">🔊</span>
       </button>

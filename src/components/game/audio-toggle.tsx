@@ -83,7 +83,7 @@ export default function AudioToggle() {
       }}
       data-cursor-active
       aria-label={muted ? "Nyalakan suara" : "Matikan suara"}
-      className="fixed bottom-4 left-4 z-[80] w-11 h-11 rounded-full bg-noir-coal/90 border border-noir-brass/40 backdrop-blur flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.8)] hover:border-noir-brass transition-colors group"
+      className="fixed safe-bottom safe-left z-[80] w-11 h-11 rounded-full bg-noir-coal/90 border border-noir-brass/40 backdrop-blur flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.8)] hover:border-noir-brass transition-colors group"
     >
       {muted ? (
         // muted icon

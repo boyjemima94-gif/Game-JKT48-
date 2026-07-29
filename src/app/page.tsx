@@ -15,6 +15,8 @@ import AccusationFinale from "@/components/game/accusation-finale";
 import DetectiveScore from "@/components/game/detective-score";
 import CaseArchive from "@/components/game/case-archive";
 import AchievementsGallery from "@/components/game/achievements-gallery";
+import LoreSection from "@/components/game/lore-section";
+import CreditsSection from "@/components/game/credits-section";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -98,6 +100,10 @@ export default function Home() {
         <CaseArchive />
         <SectionDivider variant="achievement" label="Pencapaian" />
         <AchievementsGallery />
+        <SectionDivider variant="file" label="Latar Cerita" />
+        <LoreSection />
+        <SectionDivider variant="stamp" label="Tentang" />
+        <CreditsSection />
         <StampCta />
       </main>
 

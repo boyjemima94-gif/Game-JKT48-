@@ -43,7 +43,7 @@ export default function KeyboardHelp() {
         }}
         data-cursor-active
         aria-label="Bantuan keyboard (?)"
-        className="fixed top-3 right-3 z-[80] w-10 h-10 rounded-full bg-noir-coal/90 border border-noir-brass/40 backdrop-blur flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.8)] hover:border-noir-brass transition-colors font-stamp text-lg text-noir-brass"
+        className="fixed safe-top safe-right z-[80] w-10 h-10 rounded-full bg-noir-coal/90 border border-noir-brass/40 backdrop-blur flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.8)] hover:border-noir-brass transition-colors font-stamp text-lg text-noir-brass"
       >
         ?
       </button>

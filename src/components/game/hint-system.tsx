@@ -134,7 +134,7 @@ export default function HintSystem() {
         onClick={revealHint}
         data-cursor-active
         aria-label="Minta petunjuk"
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[78] group flex items-center gap-2 px-4 h-11 rounded-full bg-noir-coal/90 border border-noir-brass/50 backdrop-blur shadow-[0_4px_20px_rgba(201,163,90,0.3)] hover:border-noir-brass transition-colors"
+        className="fixed safe-bottom left-1/2 -translate-x-1/2 z-[78] group flex items-center gap-2 px-4 h-11 rounded-full bg-noir-coal/90 border border-noir-brass/50 backdrop-blur shadow-[0_4px_20px_rgba(201,163,90,0.3)] hover:border-noir-brass transition-colors"
       >
         <span className="text-lg group-hover:rotate-12 transition-transform">
           💡

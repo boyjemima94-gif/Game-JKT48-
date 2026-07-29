@@ -33,7 +33,7 @@ export default function ProgressHud() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -60, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-3 left-1/2 -translate-x-1/2 z-[75] w-[min(94vw,640px)]"
+          className="fixed safe-top left-1/2 -translate-x-1/2 z-[75] w-[min(94vw,640px)]"
         >
           <div className="flex items-center gap-3 px-4 py-2 bg-noir-coal/90 backdrop-blur border border-noir-brass/40 shadow-[0_8px_24px_rgba(0,0,0,0.7)] rounded-sm">
             {/* case badge */}

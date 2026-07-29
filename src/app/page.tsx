@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/game/hero-section";
 import CaseIntro from "@/components/game/case-intro";
+import DifficultySelect from "@/components/game/difficulty-select";
 import BriefingSection from "@/components/game/briefing-section";
 import CaseFileSection from "@/components/game/case-file-section";
 import ConspiracyBoard from "@/components/game/conspiracy-board";
@@ -42,6 +43,10 @@ const KeyboardHelp = dynamic(
   () => import("@/components/game/keyboard-help"),
   { ssr: false }
 );
+const HintSystem = dynamic(
+  () => import("@/components/game/hint-system"),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
@@ -51,6 +56,7 @@ export default function Home() {
       <AtmosphereOverlay />
       <ProgressHud />
       <KeyboardHelp />
+      <HintSystem />
       <Onboarding />
       <AudioToggle />
       <DetectiveNotebook />
@@ -58,6 +64,7 @@ export default function Home() {
       <main className="relative z-10 flex-1">
         <HeroSection />
         <CaseIntro />
+        <DifficultySelect />
         <BriefingSection />
         <SectionDivider variant="file" label="Arsip Kasus" />
         <CaseFileSection />

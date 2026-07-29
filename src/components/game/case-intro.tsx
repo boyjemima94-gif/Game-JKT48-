@@ -106,7 +106,7 @@ export default function CaseIntro() {
           >
             TIGA BELAS OKTOBER
           </h2>
-          <p className="font-typewriter text-sm text-noir-paper/60 tracking-widest uppercase">
+          <p className="font-typewriter text-sm sm:text-base text-noir-brass/80 tracking-[0.3em] uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
             Teatro del Misteri · Lantai 2
           </p>
         </motion.div>

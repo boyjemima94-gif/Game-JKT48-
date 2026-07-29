@@ -6,9 +6,10 @@ import {
   INTERROGATIONS,
   TONE_META,
   type ResponseTone,
+  type CrossRef,
 } from "@/lib/interrogations";
 import { SUSPECTS } from "@/lib/suspects";
-import { useGame } from "@/lib/game-store";
+import { useGame, EVIDENCE_ITEMS } from "@/lib/game-store";
 import { playClick, playPaperRustle } from "@/lib/audio";
 
 interface Props {
@@ -24,10 +25,17 @@ export default function InterrogationModal({ suspectId, onClose }: Props) {
     questionId: string;
   } | null>(null);
   const [typing, setTyping] = useState(false);
+  const [showEvidenceTray, setShowEvidenceTray] = useState(false);
+  const [crossRefResult, setCrossRefResult] = useState<{
+    text: string;
+    tone: ResponseTone;
+    evidenceId: string;
+  } | null>(null);
 
   const recordStatement = useGame((s) => s.recordStatement);
   const markInterrogated = useGame((s) => s.markInterrogated);
   const recordedStatements = useGame((s) => s.recordedStatements);
+  const examinedEvidence = useGame((s) => s.examinedEvidence);
 
   const tree = suspectId ? INTERROGATIONS[suspectId] : null;
   const suspect = suspectId ? SUSPECTS.find((s) => s.id === suspectId) : null;
@@ -37,14 +45,60 @@ export default function InterrogationModal({ suspectId, onClose }: Props) {
     setAskedIds(new Set());
     setCurrentResponse(null);
     setTyping(false);
+    setShowEvidenceTray(false);
+    setCrossRefResult(null);
   }, [suspectId]);
 
-  // mark as interrogated when at least one question asked
+  // mark as interrogated when at least one question asked OR cross-ref done
   useEffect(() => {
-    if (suspectId && askedIds.size >= 1) {
+    if (suspectId && (askedIds.size >= 1 || crossRefResult)) {
       markInterrogated(suspectId);
     }
-  }, [suspectId, askedIds, markInterrogated]);
+  }, [suspectId, askedIds, crossRefResult, markInterrogated]);
+
+  // evidence available for cross-reference (only examined ones relevant to this suspect)
+  const availableCrossRefs = useMemo(() => {
+    if (!tree?.crossRefs) return [];
+    return tree.crossRefs.filter(
+      (cr) =>
+        examinedEvidence[cr.evidenceId] &&
+        !recordedStatements[cr.recordsClueId ?? ""]
+    );
+  }, [tree, examinedEvidence, recordedStatements]);
+
+  // total possible cross-refs (whether examined or not) — for display
+  const totalCrossRefs = tree?.crossRefs?.length ?? 0;
+  const examinedCrossRefs = useMemo(() => {
+    if (!tree?.crossRefs) return 0;
+    return tree.crossRefs.filter(
+      (cr) => examinedEvidence[cr.evidenceId]
+    ).length;
+  }, [tree, examinedEvidence]);
+
+  const presentEvidence = (cr: CrossRef) => {
+    playClick();
+    setShowEvidenceTray(false);
+    setTyping(true);
+    setCrossRefResult(null);
+    const fullText = cr.reaction;
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setCrossRefResult({
+        text: fullText.slice(0, i),
+        tone: cr.tone,
+        evidenceId: cr.evidenceId,
+      });
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        setTyping(false);
+        if (cr.recordsClueId) {
+          recordStatement(cr.recordsClueId);
+          playPaperRustle(0.4, 0.4);
+        }
+      }
+    }, 20);
+  };
 
   // which questions are available: root questions + unlocked ones
   const availableQuestions = useMemo(() => {
@@ -249,6 +303,55 @@ export default function InterrogationModal({ suspectId, onClose }: Props) {
                   )}
                 </AnimatePresence>
 
+                {/* cross-reference result */}
+                <AnimatePresence mode="wait">
+                  {crossRefResult && (
+                    <motion.div
+                      key={crossRefResult.evidenceId + typing}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="border-l-2 border-noir-tungsten pl-3 py-1 bg-noir-tungsten/5"
+                    >
+                      <p className="font-stamp text-[9px] tracking-widest text-noir-tungsten uppercase mb-0.5 flex items-center gap-1.5">
+                        ⚡ KONFRONTASI BUKTI:
+                      </p>
+                      <p className="font-typewriter text-sm text-noir-paper/90 leading-relaxed">
+                        &ldquo;{crossRefResult.text}&rdquo;
+                        {typing && <span className="caret" />}
+                      </p>
+                      {!typing && (
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <span
+                            className={`inline-block px-1.5 py-0.5 border ${
+                              TONE_META[crossRefResult.tone].bg
+                            } ${TONE_META[crossRefResult.tone].color} font-stamp text-[8px] tracking-widest font-bold`}
+                          >
+                            {TONE_META[crossRefResult.tone].icon}{" "}
+                            {TONE_META[crossRefResult.tone].label}
+                          </span>
+                          {(() => {
+                            const cr = tree.crossRefs?.find(
+                              (c) => c.evidenceId === crossRefResult.evidenceId
+                            );
+                            if (
+                              cr?.recordsClueId &&
+                              recordedStatements[cr.recordsClueId]
+                            ) {
+                              return (
+                                <span className="font-stamp text-[8px] tracking-widest text-noir-brass">
+                                  ✓ DICATAT
+                                </span>
+                              );
+                            }
+                            return null;
+                          })()}
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* question options */}
                 <div className="mt-auto pt-3 border-t border-noir-umber/40 space-y-2">
                   <p className="font-stamp text-[9px] tracking-widest text-noir-brass/70 uppercase">
@@ -272,6 +375,78 @@ export default function InterrogationModal({ suspectId, onClose }: Props) {
                     </button>
                   ))}
                 </div>
+
+                {/* present evidence (cross-reference) */}
+                {tree.crossRefs && tree.crossRefs.length > 0 && (
+                  <div className="pt-3 border-t border-noir-tungsten/30">
+                    {showEvidenceTray ? (
+                      <div className="space-y-2">
+                        <p className="font-stamp text-[9px] tracking-widest text-noir-tungsten uppercase">
+                          ⚡ Konfrontasi dengan Bukti:
+                        </p>
+                        {availableCrossRefs.length === 0 ? (
+                          <p className="font-typewriter text-[11px] text-noir-paper/50 italic">
+                            {examinedCrossRefs === 0
+                              ? "Belum ada bukti yang kau periksa untuk dikonfrontasi. Periksa bukti di Loker Bukti dulu."
+                              : examinedCrossRefs < totalCrossRefs
+                              ? `Hanya ${examinedCrossRefs}/${totalCrossRefs} bukti relevan yang diperiksa. Periksa lebih banyak.`
+                              : "Semua bukti yang relevan telah dikonfrontasi."}
+                          </p>
+                        ) : (
+                          <div className="space-y-1.5">
+                            {availableCrossRefs.map((cr) => {
+                              const ev = EVIDENCE_ITEMS.find(
+                                (e) => e.id === cr.evidenceId
+                              );
+                              if (!ev) return null;
+                              return (
+                                <button
+                                  key={cr.evidenceId}
+                                  onClick={() => presentEvidence(cr)}
+                                  data-cursor-active
+                                  className="block w-full text-left px-3 py-2 border border-noir-tungsten/50 hover:border-noir-tungsten hover:bg-noir-tungsten/10 transition-colors group"
+                                >
+                                  <span className="font-typewriter text-xs text-noir-paper/80 group-hover:text-noir-tungsten flex items-center gap-2">
+                                    <span className="text-lg">{ev.glyph}</span>
+                                    <span>
+                                      Tunjukkan <strong>{ev.name}</strong>
+                                    </span>
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                        <button
+                          onClick={() => setShowEvidenceTray(false)}
+                          data-cursor-active
+                          className="font-typewriter text-[10px] text-noir-paper/40 hover:text-noir-paper/70 transition-colors"
+                        >
+                          ↑ tutup bukti
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          playClick();
+                          setShowEvidenceTray(true);
+                        }}
+                        data-cursor-active
+                        className="w-full px-3 py-2 border border-noir-tungsten/40 hover:border-noir-tungsten hover:bg-noir-tungsten/10 transition-colors flex items-center justify-center gap-2 group"
+                      >
+                        <span className="text-base">⚡</span>
+                        <span className="font-stamp text-[10px] tracking-widest text-noir-tungsten uppercase">
+                          Konfrontasi Bukti
+                        </span>
+                        {availableCrossRefs.length > 0 && (
+                          <span className="font-typewriter text-[9px] text-noir-paper/40">
+                            ({availableCrossRefs.length} tersedia)
+                          </span>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

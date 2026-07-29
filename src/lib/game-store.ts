@@ -276,10 +276,125 @@ export const CLUE_DEFS: Record<string, Omit<Clue, "foundAt">> = {
     source: "Rekonstruksi Linimasa",
     glyph: "🕐",
   },
+  // Cross-reference reactions — when evidence is presented during interrogation
+  "xref-oline-hair": {
+    id: "xref-oline-hair",
+    title: "Oline gugup saat rambut TKP ditunjukkan",
+    description: "Mengenali rambut itu tapi tidak mau mengaku — sinyal keterlibatan.",
+    suspectId: "oline",
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-oline-watch": {
+    id: "xref-oline-watch",
+    title: "Oline tak verifikasi keberadaan pukul 23:17",
+    description: "Alibi panggung tanpa saksi bertepatan dengan waktu kematian korban.",
+    suspectId: "oline",
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-cath-glove": {
+    id: "xref-cath-glove",
+    title: "Catherina mengakui sarung tangan lace mirip miliknya",
+    description: "Sarung tangan di TKP terbukti mirip milik Catherina — dia gugup.",
+    suspectId: "catherina",
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-cath-parfum": {
+    id: "xref-cath-parfum",
+    title: "Catherina tak menyangkal parfum di jas korban",
+    description: "Parfum mawar Catherina ditemukan di jas korban — dia tak bisa menjelaskan.",
+    suspectId: "catherina",
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-abigail-glove": {
+    id: "xref-abigail-glove",
+    title: "Abigail tak memiliki sarung tangan lace (jujur)",
+    description: "Abigail jujur — lace bukan miliknya. Mengarah ke member lain.",
+    suspectId: undefined,
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-abigail-letter": {
+    id: "xref-abigail-letter",
+    title: "Tinta surat ancaman dari studio seniman teater",
+    description: "Abigail: tinta langka dari studio seniman teater — menunjuk panggung.",
+    suspectId: undefined,
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-fiony-usb": {
+    id: "xref-fiony-usb",
+    title: "Fiony panik saat USB berciri sidik jaranya ditunjukkan",
+    description: "USB di TKP berciri sidik jari Fiony — dia panik, klaim ditiru.",
+    suspectId: "fiony",
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
+  "xref-fiony-watch": {
+    id: "xref-fiony-watch",
+    title: "Fiony tak bisa menjelaskan jeda 9 menit di log-nya",
+    description: "Log listrik Fiony mati 23:32 — bertepatan dengan CCTV mati. Sembilan menit misterius.",
+    suspectId: "fiony",
+    source: "Konfrontasi Bukti",
+    glyph: "⚡",
+  },
 };
 
 // The canonical correct culprit for the accusation finale.
 export const CULPRIT_ID = "catherina";
+
+// Difficulty modes
+export type Difficulty = "pemula" | "detektif" | "legendaris";
+
+export interface DifficultyConfig {
+  id: Difficulty;
+  label: string;
+  description: string;
+  minClues: number; // minimum clues to unlock accusation
+  hintCost: number; // score penalty per hint used
+  scoreMultiplier: number; // final score multiplier
+  showHints: boolean;
+  icon: string;
+}
+
+export const DIFFICULTIES: Record<Difficulty, DifficultyConfig> = {
+  pemula: {
+    id: "pemula",
+    label: "Pemula",
+    description:
+      "Petunjuk selalu diberikan. Cukup 3 petunjuk untuk menuduh. Cocok untuk penyelidik baru.",
+    minClues: 3,
+    hintCost: 5,
+    scoreMultiplier: 0.8,
+    showHints: true,
+    icon: "🌱",
+  },
+  detektif: {
+    id: "detektif",
+    label: "Detektif",
+    description:
+      "Petunjuk terbatas. 6 petunjuk untuk menuduh. Pengalaman standar.",
+    minClues: 6,
+    hintCost: 10,
+    scoreMultiplier: 1.0,
+    showHints: true,
+    icon: "🔍",
+  },
+  legendaris: {
+    id: "legendaris",
+    label: "Legendaris",
+    description:
+      "Tanpa petunjuk. Semua petunjuk harus dikumpulkan. Untuk detektif sejati.",
+    minClues: 12,
+    hintCost: 0,
+    scoreMultiplier: 1.4,
+    showHints: false,
+    icon: "★",
+  },
+};
 
 interface GameState {
   clues: Clue[];
@@ -290,11 +405,15 @@ interface GameState {
   accusation: string | null; // suspect id if accused
   accusationResult: "pending" | "correct" | "wrong" | null;
   timelineSolved: boolean;
+  difficulty: Difficulty | null; // null = not chosen yet
+  hintsUsed: number;
   // actions
   examineEvidence: (evidenceId: string) => void;
   recordStatement: (clueId: string) => void;
   markInterrogated: (suspectId: string) => void;
   setTimelineSolved: (v: boolean) => void;
+  setDifficulty: (d: Difficulty) => void;
+  useHint: () => void;
   hasClue: (clueId: string) => boolean;
   toggleNotebook: (open?: boolean) => void;
   makeAccusation: (suspectId: string) => void;
@@ -315,6 +434,8 @@ export const useGame = create<GameState>()(
       accusation: null,
       accusationResult: null,
       timelineSolved: false,
+      difficulty: null,
+      hintsUsed: 0,
       examineEvidence: (evidenceId) => {
         const ev = EVIDENCE_ITEMS.find((e) => e.id === evidenceId);
         if (!ev) return;
@@ -356,6 +477,8 @@ export const useGame = create<GameState>()(
         });
       },
       setTimelineSolved: (v) => set({ timelineSolved: v }),
+      setDifficulty: (d) => set({ difficulty: d }),
+      useHint: () => set((s) => ({ hintsUsed: s.hintsUsed + 1 })),
       hasClue: (clueId) => get().clues.some((c) => c.id === clueId),
       toggleNotebook: (open) =>
         set((s) => ({ notebookOpen: open ?? !s.notebookOpen })),
@@ -375,6 +498,8 @@ export const useGame = create<GameState>()(
           accusation: null,
           accusationResult: null,
           timelineSolved: false,
+          difficulty: null,
+          hintsUsed: 0,
         }),
       cluesCount: () => get().clues.length,
     }),
@@ -389,6 +514,8 @@ export const useGame = create<GameState>()(
         accusation: s.accusation,
         accusationResult: s.accusationResult,
         timelineSolved: s.timelineSolved,
+        difficulty: s.difficulty,
+        hintsUsed: s.hintsUsed,
       }),
     }
   )

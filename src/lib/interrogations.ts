@@ -22,11 +22,29 @@ export interface InterrogationQuestion {
   unlocks?: string[];
 }
 
+/** Cross-reference reactions — when specific evidence is presented to a suspect.
+ *  Allows the detective to "break" evasive/lie responses.
+ */
+export interface CrossRef {
+  /** evidence id (from EVIDENCE_ITEMS) */
+  evidenceId: string;
+  /** the reaction text */
+  reaction: string;
+  /** tone of the reaction */
+  tone: ResponseTone;
+  /** clue ID recorded if this cross-ref reveals something */
+  recordsClueId?: string;
+  /** short label for notebook */
+  statementLabel?: string;
+}
+
 export interface InterrogationTree {
   suspectId: string;
   greeting: string;
   greetingTone: ResponseTone;
   questions: InterrogationQuestion[];
+  /** evidence that can be presented to this suspect */
+  crossRefs?: CrossRef[];
 }
 
 export const INTERROGATIONS: Record<string, InterrogationTree> = {
@@ -77,6 +95,24 @@ export const INTERROGATIONS: Record<string, InterrogationTree> = {
         },
       },
     ],
+    crossRefs: [
+      {
+        evidenceId: "ev-hair",
+        reaction:
+          "Oline melihat rambut hitam di TKP dan langsung terdiam. Matanya berpindah — dia mengenali sesuatu, tapi tidak mau mengaku.",
+        tone: "breakdown",
+        recordsClueId: "xref-oline-hair",
+        statementLabel: "Oline gugup saat rambut hitam TKP ditunjukkan",
+      },
+      {
+        evidenceId: "ev-watch",
+        reaction:
+          "Oline mengaku masih di panggung pukul 23:17. Tapi jam korban berhenti saat itu — dan Oline tidak punya saksi.",
+        tone: "lie",
+        recordsClueId: "xref-oline-watch",
+        statementLabel: "Oline tak bisa verifikasi keberadaannya pukul 23:17",
+      },
+    ],
   },
   catherina: {
     suspectId: "catherina",
@@ -123,6 +159,24 @@ export const INTERROGATIONS: Record<string, InterrogationTree> = {
           recordsClueId: "stmt-cath-glove",
           statementLabel: "Catherina mengakui punya sarung tangan lace serupa (gugup)",
         },
+      },
+    ],
+    crossRefs: [
+      {
+        evidenceId: "ev-glove",
+        reaction:
+          "Catherina memeriksa sarung tangan itu. Tangannya gemetar. 'Itu... mirip milikku. Tapi aku tidak memakainya. Seseorang menanamnya!'",
+        tone: "breakdown",
+        recordsClueId: "xref-cath-glove",
+        statementLabel: "Catherina mengakui sarung tangan lace mirip miliknya",
+      },
+      {
+        evidenceId: "ev-parfum",
+        reaction:
+          "Catherina diam sejenak. 'Aku memang memakai parfum mawar. Tapi bukan di jasnya. Mungkin kami berdekatan. Itu saja.'",
+        tone: "evasive",
+        recordsClueId: "xref-cath-parfum",
+        statementLabel: "Catherina tak menyangkal parfum mawar di jas korban",
       },
     ],
   },
@@ -173,6 +227,24 @@ export const INTERROGATIONS: Record<string, InterrogationTree> = {
         },
       },
     ],
+    crossRefs: [
+      {
+        evidenceId: "ev-glove",
+        reaction:
+          "Abigail menatap sarung tangan lace itu. 'Itu... bukan milikku. Aku tidak memakai lace. Tapi aku mengenal gaya ini — lace langka, dipakai salah satu member.'",
+        tone: "truth",
+        recordsClueId: "xref-abigail-glove",
+        statementLabel: "Abigail tak memiliki sarung tangan lace (jujur)",
+      },
+      {
+        evidenceId: "ev-letter",
+        reaction:
+          "Abigail membaca surat ancaman itu. Tinta merah. 'Tinta ini... langka. Aku melihatnya di studio seniman teater. Seseorang di panggung yang memakainya.'",
+        tone: "truth",
+        recordsClueId: "xref-abigail-letter",
+        statementLabel: "Abigail: tinta spidol surat dari studio seniman teater",
+      },
+    ],
   },
   fiony: {
     suspectId: "fiony",
@@ -219,6 +291,24 @@ export const INTERROGATIONS: Record<string, InterrogationTree> = {
           recordsClueId: "stmt-fiony-calendar",
           statementLabel: "Fiony tak menjelaskan lingkaran merah di kalender (berbohong)",
         },
+      },
+    ],
+    crossRefs: [
+      {
+        evidenceId: "ev-usb",
+        reaction:
+          "Fiony menatap USB itu. Wajahnya memucat. 'Aku... aku punya drive seperti itu. Tapi ini bukan milikku! Seseorang menyalin sidik jaraku!'",
+        tone: "lie",
+        recordsClueId: "xref-fiony-usb",
+        statementLabel: "Fiony panik saat USB berciri sidik jaranya ditunjukkan",
+      },
+      {
+        evidenceId: "ev-watch",
+        reaction:
+          "Fiony menghitung waktu di jam korban. '23:17... di studio aku masih aktif. Log listrik mati 23:32. Sembilan menit... di mana aku?'",
+        tone: "evasive",
+        recordsClueId: "xref-fiony-watch",
+        statementLabel: "Fiony tak bisa menjelaskan jeda 9 menit dalam log-nya",
       },
     ],
   },

@@ -311,3 +311,87 @@ Unresolved issues / risks:
 - Full-page screenshot timed out (page is now very long with many sections) — not a bug, just a testing limitation.
 - Detective Score appears between Accusation and Stamp CTA; if user scrolls past it they'll see the stamp. This is fine — score is the "ending" and stamp is the "join" CTA.
 - Evidence cross-referencing (present evidence during interrogation to catch lies) was planned but deferred — would require significant data model changes. Left for a future round.
+
+---
+Task ID: 5
+Agent: main-orchestrator (cron webDevReview round 4)
+Task: QA testing, case intro subtitle polish, and major feature expansion (Difficulty Selection, Hint System, Evidence Cross-Reference, difficulty-based scoring).
+
+Work Log:
+- Read worklog.md (Tasks 0-4). Project stable with full game arc: Hero → Case Intro → Briefing → Case Files → Conspiracy Board (+interrogation) → Victim Profile → Evidence Locker → Timeline → Accusation → Detective Score → Stamp CTA.
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. VLM confirmed case intro + evidence + timeline sections all render correctly. Noted case intro subtitle was thin/low-contrast.
+- Fixed case intro subtitle contrast: changed from text-noir-paper/60 to text-noir-brass/80 with drop-shadow + tracking-[0.3em].
+- Expanded `src/lib/game-store.ts` with difficulty system:
+  - Added Difficulty type (pemula/detektif/legendaris) + DIFFICULTIES config (minClues, hintCost, scoreMultiplier, showHints, icon, label, description)
+  - Pemula: 3 min clues, hints on, ×0.8 score
+  - Detektif: 6 min clues, hints on, ×1.0 score (recommended)
+  - Legendaris: 12 min clues, no hints, ×1.4 score
+  - Added state: difficulty, hintsUsed
+  - Added actions: setDifficulty, useHint
+  - Updated resetGame + partialize to include difficulty + hintsUsed
+- Built `src/components/game/difficulty-select.tsx` — "MODE PENYELIDIKAN" section:
+  - 3 cards (Pemula 🌱 / Detektif 🔍 / Legendaris ★) with color-coded borders (green/brass/crimson) + glow
+  - Each card: icon, label, description, 3 stats (min clues, hints, score multiplier), "Pilih Mode →" CTA
+  - "★ DIREKOMENDASI" badge on Detektif
+  - Hover lift + icon scale, plays stamp slam on choose
+  - Disappears after selection (returns null if difficulty set)
+- Built `src/components/game/hint-system.tsx` — floating 💡 bulb:
+  - Shows on pemula/detektif modes (not legendaris) after onboarding + difficulty chosen
+  - Bottom-center floating button with hint count badge
+  - Click opens paper-textured modal with "PETUNJUK DETEKTIF" + "BIAYA: -X POIN"
+  - Suggests next logical step based on game state (examine evidence → interrogate → timeline → more clues → accuse)
+  - "→ KE LOKER BUKTI / PAPAN / LINIMASA / TUDUHAN" navigation button to scroll to target
+  - Each use costs score points (per difficulty config)
+- Built Evidence Cross-Reference system:
+  - Added CrossRef interface + crossRefs arrays to each interrogation tree (8 cross-refs total: 2 per suspect)
+  - Each cross-ref: evidenceId, reaction text, tone, recordsClueId, statementLabel
+  - Added 8 cross-ref clue definitions to CLUE_DEFS (xref-oline-hair, xref-oline-watch, xref-cath-glove, xref-cath-parfum, xref-abigail-glove, xref-abigail-letter, xref-fiony-usb, xref-fiony-watch)
+  - Updated interrogation-modal.tsx with cross-reference UI:
+    - "⚡ KONFRONTASI BUKTI" button (tungsten-themed) with "(N tersedia)" count
+    - Opens tray listing examined evidence relevant to this suspect
+    - Smart empty-state messages: "Belum ada bukti yang kau periksa" / "Hanya X/Y bukti relevan yang diperiksa" / "Semua bukti yang relevan telah dikonfrontasi"
+    - Click evidence → typewriter reaction with tungsten border + tone label + "✓ DICATAT"
+    - Records statement to notebook
+- Updated `src/components/game/accusation-finale.tsx`:
+  - Min clues now reads from difficulty config (DIFFICULTIES[difficulty].minClues) instead of hardcoded 3
+  - Lock message shows dynamic "X / Y minimum"
+- Updated `src/components/game/detective-score.tsx` with difficulty integration:
+  - Overall score = (weighted base × difficulty multiplier) − (hintsUsed × hintCost)
+  - Score display shows "(Mode: Detektif ×1.0 −3×10)" breakdown
+  - Stats grid expanded to 6 cells: Bukti, Tersangka, Petunjuk, Linimasa, Mode, Petunjuk Dipakai
+  - Added difficulty + hintsUsed to useMemo deps
+- Composed all new sections into `src/app/page.tsx`:
+  - Hero → CaseIntro → DifficultySelect → Briefing → [dividers] → ... → Stamp CTA
+  - Added HintSystem as dynamic import
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings) — fixed 2 issues (useHint hook naming, setState in effect).
+- Dev server: compiles cleanly, no runtime errors.
+- Case intro subtitle: brightened to brass/80.
+- Difficulty select: VLM confirmed "3 cards (Pemula/Detektif/Legendaris) with icons, min clues, hints, score multiplier, DIREKOMENDASI badge on Detektif — clean, color-coded".
+- Hint system: tested — bulb appears after choosing Detektif + dismissing onboarding; modal shows "PETUNJUK DETEKTIF · BIAYA: -10 POIN" with next-step suggestion + navigation button.
+- Cross-reference: tested full flow:
+  1. Examined Sarung Tangan Lace (ev-glove)
+  2. Opened Catherina interrogation
+  3. "⚡ KONFRONTASI BUKTI (1 tersedia)" button visible
+  4. Clicked → "🧤 Tunjukkan Sarung Tangan Lace" appeared
+  5. Clicked → typewriter reaction: "Catherina memeriksa sarung tangan itu. Tangannya gemetar. 'Itu... mirip milikku...'"
+  6. Tone label "GUGUP" + "✓ DICATAT" confirmed by VLM
+  7. Statement recorded to notebook (xref-cath-glove)
+- VLM confirmed cross-ref: "⚡ KONFRONTASI BUKTI section visible, reaction text visible, GUGUP tone label, ✓ DICATAT indicator — clean and functional".
+
+Stage Summary:
+- Case intro subtitle polished for readability.
+- 3 major new features added and tested:
+  ✓ Difficulty Selection — 3 modes (Pemula/Detektif/Legendaris) with different min clues, hints, score multipliers
+  ✓ Hint System — floating 💡 bulb with next-step suggestions + score cost
+  ✓ Evidence Cross-Reference — present examined evidence during interrogation to break lies, records new statements
+- Difficulty-based scoring: Detective Score now applies multiplier (×0.8/×1.0/×1.4) + hint penalty, shows breakdown.
+- Accusation lock now dynamic based on difficulty (3/6/12 min clues).
+- Game now has full replayability: 3 difficulty modes × different strategies × score optimization.
+- TOTAL_CLUE_COUNT now ~31 (6 evidence + 16 statements + 1 timeline + 8 cross-refs).
+
+Unresolved issues / risks:
+- Cross-ref requires examining evidence first — the empty-state messages guide users but some may still be confused. Acceptable.
+- Hint bulb uses setInterval to check onboarding state — minor perf cost, acceptable.
+- Difficulty persists across sessions; reset clears it. Verified.

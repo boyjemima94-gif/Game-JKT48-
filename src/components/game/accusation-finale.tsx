@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGame, CULPRIT_ID, TOTAL_CLUE_COUNT } from "@/lib/game-store";
+import { useGame, CULPRIT_ID, TOTAL_CLUE_COUNT, DIFFICULTIES } from "@/lib/game-store";
 import { SUSPECTS } from "@/lib/suspects";
 import { playClick, playStampSlam, playPaperRustle } from "@/lib/audio";
 
@@ -12,11 +12,15 @@ export default function AccusationFinale() {
   const accusationResult = useGame((s) => s.accusationResult);
   const makeAccusation = useGame((s) => s.makeAccusation);
   const resetGame = useGame((s) => s.resetGame);
+  const difficulty = useGame((s) => s.difficulty);
   const [selected, setSelected] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
 
+  const minCluesRequired = difficulty
+    ? DIFFICULTIES[difficulty].minClues
+    : 3;
   const allCluesFound = clues.length >= TOTAL_CLUE_COUNT;
-  const minCluesFound = clues.length >= 3;
+  const minCluesFound = clues.length >= minCluesRequired;
   const canAccuse = minCluesFound && !accusation;
 
   const handleAccuse = () => {
@@ -101,7 +105,7 @@ export default function AccusationFinale() {
       TERTUTUP — PERLU LEBIH BANYAK PETUNJUK
                     </p>
                     <p className="font-typewriter text-xs text-noir-paper/70">
-                      Petunjuk terkumpul: {clues.length} / 3 minimum
+                      Petunjuk terkumpul: {clues.length} / {minCluesRequired} minimum
                     </p>
                     <a
                       href="#bukti"

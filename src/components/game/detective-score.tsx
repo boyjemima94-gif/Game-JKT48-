@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { useGame, TOTAL_CLUE_COUNT, CULPRIT_ID } from "@/lib/game-store";
+import { useGame, TOTAL_CLUE_COUNT, CULPRIT_ID, DIFFICULTIES } from "@/lib/game-store";
 import { EVIDENCE_ITEMS } from "@/lib/game-store";
 import { INTERROGATIONS } from "@/lib/interrogations";
 import { SUSPECTS } from "@/lib/suspects";
@@ -21,6 +21,8 @@ export default function DetectiveScore() {
   const interrogatedSuspects = useGame((s) => s.interrogatedSuspects);
   const timelineSolved = useGame((s) => s.timelineSolved);
   const resetGame = useGame((s) => s.resetGame);
+  const difficulty = useGame((s) => s.difficulty);
+  const hintsUsed = useGame((s) => s.hintsUsed);
 
   const stats = useMemo(() => {
     const evidenceExamined = Object.keys(examinedEvidence).length;
@@ -51,13 +53,21 @@ export default function DetectiveScore() {
             (clues.filter((c) => c.suspectId === CULPRIT_ID).length / 5) * 100
           );
 
-    // Overall score (weighted)
-    const overall = Math.round(
+    // Overall score (weighted) — base
+    const baseScore =
       accuracyPct * 0.35 +
-        thoroughnessPct * 0.25 +
-        interrogationPct * 0.2 +
-        timelinePct * 0.1 +
-        evidencePct * 0.1
+      thoroughnessPct * 0.25 +
+      interrogationPct * 0.2 +
+      timelinePct * 0.1 +
+      evidencePct * 0.1;
+
+    // Apply difficulty multiplier + hint penalty
+    const diffConfig = difficulty ? DIFFICULTIES[difficulty] : null;
+    const multiplier = diffConfig ? diffConfig.scoreMultiplier : 1.0;
+    const hintPenalty = hintsUsed * (diffConfig ? diffConfig.hintCost : 0);
+    const overall = Math.max(
+      0,
+      Math.round(baseScore * multiplier - hintPenalty)
     );
 
     // Rank
@@ -104,6 +114,8 @@ export default function DetectiveScore() {
     clues,
     timelineSolved,
     accusationResult,
+    difficulty,
+    hintsUsed,
   ]);
 
   if (!accusation) return null;
@@ -223,6 +235,15 @@ export default function DetectiveScore() {
                   {stats.overall}
                 </span>
                 /100
+                {difficulty && (
+                  <span className="ml-2 text-[11px] text-noir-paper-ink/60">
+                    (Mode: {DIFFICULTIES[difficulty].label} ×{DIFFICULTIES[difficulty].scoreMultiplier}
+                    {hintsUsed > 0
+                      ? ` −${hintsUsed}×${DIFFICULTIES[difficulty].hintCost}`
+                      : ""}
+                    )
+                  </span>
+                )}
               </p>
               <p className="font-typewriter text-[11px] text-noir-paper-ink/60 italic">
                 {isWin
@@ -267,7 +288,7 @@ export default function DetectiveScore() {
         </div>
 
         {/* stats grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
           {[
             {
               label: "Bukti Diperiksa",
@@ -288,6 +309,16 @@ export default function DetectiveScore() {
               label: "Linimasa",
               value: stats.timelinePct === 100 ? "✓" : "✗",
               icon: "🕐",
+            },
+            {
+              label: "Mode",
+              value: difficulty ? DIFFICULTIES[difficulty].label : "—",
+              icon: difficulty ? DIFFICULTIES[difficulty].icon : "🎮",
+            },
+            {
+              label: "Petunjuk Dipakai",
+              value: `${hintsUsed}`,
+              icon: "💡",
             },
           ].map((s, i) => (
             <motion.div

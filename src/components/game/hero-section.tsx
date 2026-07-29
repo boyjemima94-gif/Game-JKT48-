@@ -60,6 +60,34 @@ export default function HeroSection() {
       className="relative w-full min-h-[100svh] overflow-hidden"
       aria-label="Hero: lampu meja berkedip"
     >
+      {/* Noir film-frame decorative corners */}
+      <div className="pointer-events-none absolute inset-0 z-[5]">
+        {/* top-left corner */}
+        <div className="absolute top-0 left-0 w-20 h-20 sm:w-28 sm:h-28">
+          <div className="absolute top-4 left-4 w-full h-0.5 bg-noir-brass/70" />
+          <div className="absolute top-4 left-4 h-full w-0.5 bg-noir-brass/70" />
+          <div className="absolute top-6 left-6 w-3 h-3 border-t-2 border-l-2 border-noir-brass" />
+        </div>
+        {/* top-right corner */}
+        <div className="absolute top-0 right-0 w-20 h-20 sm:w-28 sm:h-28">
+          <div className="absolute top-4 right-4 w-full h-0.5 bg-noir-brass/70" />
+          <div className="absolute top-4 right-4 h-full w-0.5 bg-noir-brass/70" />
+          <div className="absolute top-6 right-6 w-3 h-3 border-t-2 border-r-2 border-noir-brass" />
+        </div>
+        {/* bottom-left corner */}
+        <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-28 sm:h-28">
+          <div className="absolute bottom-4 left-4 w-full h-0.5 bg-noir-brass/70" />
+          <div className="absolute bottom-4 left-4 h-full w-0.5 bg-noir-brass/70" />
+          <div className="absolute bottom-6 left-6 w-3 h-3 border-b-2 border-l-2 border-noir-brass" />
+        </div>
+        {/* bottom-right corner */}
+        <div className="absolute bottom-0 right-0 w-20 h-20 sm:w-28 sm:h-28">
+          <div className="absolute bottom-4 right-4 w-full h-0.5 bg-noir-brass/70" />
+          <div className="absolute bottom-4 right-4 h-full w-0.5 bg-noir-brass/70" />
+          <div className="absolute bottom-6 right-6 w-3 h-3 border-b-2 border-r-2 border-noir-brass" />
+        </div>
+      </div>
+
       {/* Three.js lamp scene */}
       <div className="absolute inset-0">
         <HeroLampScene onFlicker={onFlicker} onSweep={onSweep} />

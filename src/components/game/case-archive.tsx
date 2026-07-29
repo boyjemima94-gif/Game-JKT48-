@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useGame, DIFFICULTIES, type CaseRecord } from "@/lib/game-store";
 import { SUSPECTS } from "@/lib/suspects";
 import { playClick, playPaperRustle, playStampSlam } from "@/lib/audio";
+import RankProgression from "./rank-progression";
+import CaseStatsDeepDive from "./case-stats-deep-dive";
 
 const RANK_COLORS: Record<string, string> = {
   S: "text-noir-brass",
@@ -134,6 +136,9 @@ export default function CaseArchive() {
           </div>
         ) : (
           <>
+            {/* rank progression */}
+            <RankProgression />
+
             {/* summary stats grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
               <StatCard
@@ -220,6 +225,9 @@ export default function CaseArchive() {
                 })}
               </div>
             </div>
+
+            {/* deep dive analytics */}
+            <CaseStatsDeepDive />
 
             {/* expand history */}
             <div className="flex gap-2">

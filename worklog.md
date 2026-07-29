@@ -637,3 +637,48 @@ Unresolved issues / risks:
 - Safe-area utilities only tested in headless browser (no real mobile device); CSS is standard env() so should work on real iOS/Android.
 - Page is now 16 sections — very long but navigable via QuickNav + footer links + scroll.
 - Credits "KREDIT" header was above the VLM screenshot crop but confirmed present in code.
+
+---
+Task ID: 10
+Agent: main-orchestrator (cron webDevReview round 9)
+Task: QA testing, and feature expansion (Detective Rank Progression, Case Statistics Deep Dive, hero film-frame corners).
+
+Work Log:
+- Read worklog.md (Tasks 0-9). Project stable with 16 sections, complete game arc, meta-progression, achievements, soundboard, quick nav, reset, CRT, lore, credits, mobile safe-area.
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. VLM confirmed hero renders correctly (title, portraits, CTA, lamp). All 16 sections present in accessibility tree.
+- Built `src/components/game/rank-progression.tsx` — "Tangga Pangkat Detektif" visual:
+  - Ranks: D (Magang, 0+), C (Pemula, 40+), B (Kompeten, 60+), A (Senior, 75+), S (Legendaris, 90+)
+  - Current rank stamp (circular, color-coded) + best score
+  - Progress bar to next rank with "Butuh X poin lagi" message
+  - 5-cell rank ladder showing achieved (✓), current ("SAAT INI" badge + glow), and locked ranks
+  - Only renders when caseHistory exists
+- Built `src/components/game/case-stats-deep-dive.tsx` — "Analisis Mendalam" expanded analytics:
+  - 4 stat cards: Rata-rata Petunjuk (X/31 + %), Rata-rata Hint (X + no-hint wins), Linimasa Selesai (% + count), Rata-rata Interogasi (X/4)
+  - Difficulty distribution: 3 bars (Pemula/Detektif/Legendaris) showing case count + avg score per difficulty
+  - Animated progress bars, only renders when caseHistory exists
+- Integrated both into `src/components/game/case-archive.tsx`:
+  - RankProgression added at top of populated state (before summary stats grid)
+  - CaseStatsDeepDive added after "Kemenangan per Mode" section (before expand history button)
+- Added noir film-frame decorative corners to `src/components/game/hero-section.tsx`:
+  - 4 L-shaped brass brackets in each corner (top-left, top-right, bottom-left, bottom-right)
+  - Each corner: horizontal line + vertical line (bg-noir-brass/70) + small bracket accent (border-2)
+  - pointer-events-none, z-[5] so they don't interfere with interactions
+  - Sizes scale: w-20 h-20 mobile → w-28 h-28 desktop
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- Hero film-frame: 28 brass elements confirmed in DOM via querySelectorAll.
+- Rank progression + deep dive: code verified (both components render conditionally on caseHistory.length > 0, integrated into Case Archive populated state).
+
+Stage Summary:
+- 2 major new analytics features added:
+  ✓ Detective Rank Progression — visual rank ladder (D→S) with current rank stamp, progress bar to next rank, achieved/current/locked states
+  ✓ Case Statistics Deep Dive — 4 analytics cards (avg clues, avg hints, timeline rate, avg interrogation) + difficulty distribution bars with avg scores
+- Hero styling polish: noir film-frame decorative corners (brass L-brackets in all 4 corners).
+- Case Archive now shows: Rank Progression → Summary Stats → Best Rank/Avg/Clues panels → Wins by Mode → Deep Dive Analytics → Expand History.
+
+Unresolved issues / risks:
+- Rank progression + deep dive only populate after real accusations (caseHistory.length > 0). Code correct.
+- Film-frame corners are decorative; subtle but visible at brass/70 opacity. Confirmed in DOM.
+- Page remains 16 sections; all navigable via QuickNav (14 links) + footer.

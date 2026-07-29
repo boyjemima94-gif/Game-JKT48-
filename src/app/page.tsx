@@ -17,6 +17,8 @@ import CaseArchive from "@/components/game/case-archive";
 import AchievementsGallery from "@/components/game/achievements-gallery";
 import LoreSection from "@/components/game/lore-section";
 import CreditsSection from "@/components/game/credits-section";
+import DailyChallengeSection from "@/components/game/daily-challenge-section";
+import SuspectComparison from "@/components/game/suspect-comparison";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -80,11 +82,15 @@ export default function Home() {
         <HeroSection />
         <CaseIntro />
         <DifficultySelect />
+        <SectionDivider variant="stamp" label="Tantangan Harian" />
+        <DailyChallengeSection />
         <BriefingSection />
         <SectionDivider variant="file" label="Arsip Kasus" />
         <CaseFileSection />
         <SectionDivider variant="thread" label="Jaring Tersangka" />
         <ConspiracyBoard />
+        <SectionDivider variant="evidence" label="Deduksi" />
+        <SuspectComparison />
         <SectionDivider variant="stamp" label="Tokoh" />
         <CastList />
         <SectionDivider variant="stamp" label="Korban" />

@@ -682,3 +682,60 @@ Unresolved issues / risks:
 - Rank progression + deep dive only populate after real accusations (caseHistory.length > 0). Code correct.
 - Film-frame corners are decorative; subtle but visible at brass/70 opacity. Confirmed in DOM.
 - Page remains 16 sections; all navigable via QuickNav (14 links) + footer.
+
+---
+Task ID: 11
+Agent: main-orchestrator (cron webDevReview round 10)
+Task: QA testing, and feature expansion (Daily Challenge, Suspect Comparison, conspiracy board watermark).
+
+Work Log:
+- Read worklog.md (Tasks 0-10). Project stable with 16 sections, complete game arc, meta-progression, achievements, rank progression, deep dive analytics, lore, credits, mobile safe-area.
+- Performed QA via agent-browser: lint clean, dev server clean, no runtime errors. VLM confirmed stamp CTA renders correctly (large stamp tool, paper pad, good contrast). All 16 sections present.
+- Created `src/lib/daily-challenge.ts` — Daily Challenge system:
+  - 5 modifiers: Tanpa Buku Catatan (+30%), Petunjuk Berlimpah (+20%), Tekanan Waktu (+25%), Bukti Acak (+20%), Dua Kali Lipat atau Nol (+50%)
+  - getDailyChallenge(date) — deterministic per-day selection of 2 modifiers based on day-of-year
+  - isDailyCompleted(caseHistory, dateKey) — checks if daily was completed today
+  - Returns dateKey, modifiers[], bonusMultiplier (1 + sum of modifier bonuses)
+- Built `src/components/game/daily-challenge-section.tsx` — "Tantangan Harian" section:
+  - Paper-textured card with crimson "★ HARIAN" corner ribbon
+  - Header: today's date (Indonesian format: "Rabu, 29 Juli 2026")
+  - 2 modifier cards: glyph + title + bonus % + description
+  - Bonus multiplier display (×1.50) in brass-bordered box
+  - "🎲 Mulai Tantangan Harian →" button (sets difficulty to legendaris base)
+  - Completion state: "✓ Tantangan haran ini telah selesai!" with green border
+  - Footer note: modifiers are date-based (same for all players daily)
+- Built `src/components/game/suspect-comparison.tsx` — "BANDING TERSANGKA" deduction tool:
+  - Two 4-portrait selectors (left/right) with disabled state for the other selection
+  - Side-by-side comparison table with 7 fields: Peran, Usia, Tinggi, Ancaman (● dots), Terakhir Dilihat, Alibi, Motif
+  - Matching fields highlighted with orange border + "⚠ SAMA" warning (flags potential collusion)
+  - Interrogation status row: ✓ Diinterogasi (X pertanyaan) / Belum diinterogasi
+  - Clues pointing to each suspect: list + count
+  - Tip: "Baris dengan highlight oranye menandakan kesamaan — periksa apakah kebetulan atau sinyal kolusi"
+- Added classified stamp watermark to conspiracy board (`conspiracy-board.tsx`):
+  - Large "RAHASIA" text (crimson, rotated -12°, 8% opacity) centered behind board content
+  - Secondary "JKT-48-001" text (brass, rotated 6°, 6% opacity) overlay
+  - pointer-events-none, doesn't interfere with interactions
+  - Used inline rgba() styles to avoid Tailwind opacity class generation issues
+- Updated `src/app/page.tsx` — added DailyChallengeSection after DifficultySelect, SuspectComparison after ConspiracyBoard. New section order: Hero → CaseIntro → Difficulty → [divider] → DailyChallenge → Briefing → ... → ConspiracyBoard → [divider] → SuspectComparison → [divider] → CastList → ...
+- Updated `src/components/game/quick-nav.tsx` — added "Harian 🎲" and "Banding ⚖" nav items (now 16 links).
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- Daily Challenge: VLM confirmed "TANTANGAN HARIAN header, today's date (Rabu 29 Juli 2026), 2 modifier cards (Tanpa Buku Catatan +30%, Bukti Acak +20%), bonus multiplier ×1.50, Mulai Tantangan Harian button — clean, parchment texture".
+- Suspect Comparison: VLM confirmed "two suspect selectors (Oline BURUNG MERAK / Catherina MERAH MUDA), side-by-side comparison table (Peran, Usia, Tinggi, Ancaman dots, Alibi), portraits — all visible".
+- Conspiracy board watermark: "RAHASIA" + "JKT-48-001" watermarks added behind board content.
+
+Stage Summary:
+- 3 major new features added and tested:
+  ✓ Daily Challenge — deterministic per-day modifiers (2 of 5) + bonus multiplier (×1.50 today), completion tracking, "Mulai Tantangan Harian" CTA
+  ✓ Suspect Comparison — side-by-side deduction tool with 7 comparison fields, collusion highlighting, interrogation/clue status
+  ✓ Conspiracy Board watermark — "RAHASIA" + "JKT-48-001" classified stamp watermarks
+- Page now has 18 main sections (added DailyChallenge + SuspectComparison).
+- QuickNav updated to 16 links covering all sections.
+- Game now offers daily replayability via Daily Challenge + deduction aid via Suspect Comparison.
+
+Unresolved issues / risks:
+- Daily Challenge modifiers are defined but not all enforced in gameplay (e.g., "no-notebook" doesn't actually disable the notebook yet). The modifiers are cosmetic/announcement for now — full enforcement would require deeper integration. The bonus multiplier is conceptual.
+- Suspect Comparison reads live game state (interrogation status, clues) so it updates as the player investigates.
+- Page is now 18 sections — very long but fully navigable via QuickNav + footer.

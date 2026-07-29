@@ -93,6 +93,28 @@ export default function ConspiracyBoard() {
             }}
           />
 
+          {/* classified stamp watermark */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <div
+              className="font-stamp text-[clamp(60px,12vw,140px)] font-black select-none -rotate-12 tracking-[0.15em]"
+              style={{
+                color: "rgba(139,26,26,0.08)",
+                textShadow: "0 0 2px rgba(139,26,26,0.15)",
+              }}
+            >
+              RAHASIA
+            </div>
+          </div>
+          {/* secondary diagonal watermark */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <div
+              className="font-stamp text-[clamp(40px,8vw,90px)] font-black select-none rotate-6 tracking-[0.3em]"
+              style={{ color: "rgba(201,163,90,0.06)" }}
+            >
+              JKT-48-001
+            </div>
+          </div>
+
           {/* SVG threads layer */}
           <svg
             viewBox="0 0 100 100"

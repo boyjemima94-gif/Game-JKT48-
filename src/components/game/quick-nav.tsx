@@ -13,8 +13,10 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { id: "hero", label: "Atas", glyph: "↑" },
   { id: "mode", label: "Mode", glyph: "🎮" },
+  { id: "tantangan-harian", label: "Harian", glyph: "🎲" },
   { id: "berkas", label: "Berkas", glyph: "📁" },
   { id: "papan", label: "Benang Merah", glyph: "🧵" },
+  { id: "banding", label: "Banding", glyph: "⚖" },
   { id: "tokoh", label: "Tokoh", glyph: "🎭" },
   { id: "korban", label: "Korban", glyph: "📇" },
   { id: "bukti", label: "Bukti", glyph: "🔍" },

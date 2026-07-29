@@ -55,8 +55,8 @@ export const SUSPECTS: Suspect[] = [
     id: "oline",
     name: "Oline Manuel",
     memberOf: "JKT48 — Theater Company",
-    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c558a2398836.jpg",
-    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a2f9ccc031f2.jpg",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2cdc7c53eba5.jpg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/29fa230fa001.jpg",
     role: "The Lead Star",
     codename: "BURUNG MERAK",
     age: 22,
@@ -114,8 +114,8 @@ export const SUSPECTS: Suspect[] = [
     id: "catherina",
     name: "Catherina Valencia",
     memberOf: "JKT48 — Theater Company",
-    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f20059fab187.jpg",
-    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0e1dc4d095ab.jpg",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6db28d1034ae.jpg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7b12d88593aa.jpg",
     role: "The Rival",
     codename: "MERAH MUDA",
     age: 21,
@@ -173,8 +173,8 @@ export const SUSPECTS: Suspect[] = [
     id: "abigail",
     name: "Abigail Rachel",
     memberOf: "JKT48 — Theater Company",
-    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a90f049d7e2c.jpg",
-    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bad492ab380d.jpg",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1f4e8f0ab43f.jpg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b3467efd36db.jpg",
     role: "The Confidante",
     codename: "ANGSA PUTIH",
     age: 23,
@@ -194,13 +194,46 @@ export const SUSPECTS: Suspect[] = [
     quote: "Ada rahasia yang lebih baik kubur bersamaamanya.",
     signature: "— A.R.",
     location: { x: 24, y: 72 },
+    depth: {
+      appearance:
+        "Rambut cokelat gelanggang seléh bahu, sering dikepang dua. Senyum lembut tapi mata selalu sedih. Memakai kalung salib kecil — warisan neneknya. Tangan dingin, sering memegang pergelangan tangan sendiri saat gugup.",
+      habits: [
+        "Mengunyah bibir bawah saat berbohong (tidak disadari)",
+        "Selalu bawa buku catatan kecil bertuliskan 'Jangan Lupa'",
+        "Menyapu meja rias orang lain tanpa diminta (kebiasaan ibu-ibu)",
+        "Menelepon ibu setiap malam pukul 22:00 tanpa gagal",
+      ],
+      personality: ["Tenang", "Perhatian", "Tertutup", "Penyimpan rahasia", "Mudah bersalah"],
+      careerTimeline: [
+        { year: "2021", event: "Audisi JKT48 — lolos bersamaan dengan Fiony" },
+        { year: "2022", event: "Spesialis harmoni vokal, jar ambil spotlight" },
+        { year: "2023", event: "Dihormati sesama member karena kedewasaannya" },
+        { year: "2024", event: "Korban menemukan rahasia keluarganya" },
+        { year: "2025", event: "Diancam korban: ikuti kemauanku atau rahasia terbongkar" },
+      ],
+      victimRelationship:
+        "Awalnya percaya korban sebagai mentor. Tapi korban menemukan skandal keluarga Abigail (ayahnya punya hutang gelap ke lintah darat) dan mengancam mengungkap jika Abigail tidak menjadi mata-mata.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Sahabat lama, tapi jadi penengah konflik Oline-Catherina" },
+        { suspectId: "catherina", relationship: "Menganggap Catherina terlalu dramatis tapi tetap mendengarkan" },
+        { suspectId: "fiony", relationship: "Bertemu sebentar di lorong malam itu — melihat Fiony terburu-buru" },
+      ],
+      darkSecret:
+        "Abigail sebenarnya sudah tahu siapa pelaku sejak awal — dia melihat sesuatu malam itu. Tapi diam karena takut rahasia keluarganya terbongkar jika ikut campur.",
+      fear: "Rahasia keluarganya terbongkar — ayahnya bisa masuk penjara, ibunya akan hancur.",
+      alibiWitness: "Tidak ada — mengaku menelepon ibu, tapi catatan panggilan tidak ditemukan di ponsel.",
+      duringGap:
+        "Di kafe lobi, menatap ponsel. Tapi ponselnya menunjukkan aplikasi pesan terenkripsi — bukan panggilan telepon biasa.",
+      accusationReaction:
+        "Mata membasah, lalu menunduk. 'Aku... aku tahu lebih banyak dari yang kukatakan. Tapi aku tidak melakukannya. Aku hanya takut.' Tangannya gemetar memegang kalung.",
+    },
   },
   {
     id: "fiony",
     name: "Fiony Alveria",
     memberOf: "JKT48 — Theater Company",
-    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e7a0fe342f45.jpg",
-    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3364a2ab5ea4.jpg",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/979622bb2b8b.jpg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ef8e54666d27.jpeg",
     role: "The Strategist",
     codename: "BAYANG MALAM",
     age: 22,
@@ -220,6 +253,39 @@ export const SUSPECTS: Suspect[] = [
     quote: "Setiap langkah sudah kuhitung. Termasuk langkahnya.",
     signature: "— F.A.",
     location: { x: 80, y: 70 },
+    depth: {
+      appearance:
+        "Rambut lurus hitam seléh pinggang, jarang diikat. Kacamata baca sering tersangkut di kepala. Memakai jam tangan digital — selalu cek waktu. Kuku pendek, bersih — tangan editor video yang profesional.",
+      habits: [
+        "Menghitung detik dalam kepala (bisa tebak waktu tanpa lihat jam)",
+        "Selalu bawa 2 drive USB — satu untuk kerja, satu 'cadangan rahasia'",
+        "Mengetuk meja dengan pola ritmis saat berpikir (mengganggu orang lain)",
+        "Menghapus jejak digital setiap selesai menggunakan komputer studio",
+      ],
+      personality: ["Cerdas", "Terorganisasi", "Ambisius", "Tidak suka perhatian", "Selalu punya rencana"],
+      careerTimeline: [
+        { year: "2021", event: "Audisi JKT48 — lolos bersamaan dengan Abigail" },
+        { year: "2022", event: "Terpilih jadi produser kreatif untuk acara ulang tahun" },
+        { year: "2023", event: "Karyanya viral — dijuluki 'genius bayang'" },
+        { year: "2024", event: "Korban merencanakan menggantinya dengan orang luar" },
+        { year: "2025", event: "Mengetahui rencana korban sehari sebelum kejadian" },
+      ],
+      victimRelationship:
+        "Awalnya mengagumi korban sebagai mentor kreatif. Tapi korban merencanakan menggantikan Fiony sebagai produser kreatif dengan orang luar yang lebih berpengalaman. Fiony merasa dikhianati setelah dedikasinya bertahun-tahun.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Saling curiga — Fiony dianggap mata-matai latihan Oline" },
+        { suspectId: "catherina", relationship: "Aliansi senyap — saling bertukar informasi tentang korban" },
+        { suspectId: "abigail", relationship: "Bertemu sebentar di lorong — Abigail melihat Fiony terburu-buru" },
+      ],
+      darkSecret:
+        "Fiony sudah menyalin seluruh file proyek ulang tahun ke drive USB-nya — termasuk rekaman yang seharusnya sudah dihapus dari server. Dia punya backup yang bisa menghancurkan reputasi korban.",
+      fear: "Digantikan dan dilupakan — semua kerja kerasnya sia-sia.",
+      alibiWitness: "Tidak ada — mengaku menyunting video sendirian di studio.",
+      duringGap:
+        "Log aktivitas komputernya terhenti 7 menit. Mengaku listrik mati, tapi log server menunjukkan tidak ada pemadaman. Drive USB dengan sidik jaranya ditemukan di TKP.",
+      accusationReaction:
+        "Diam beberapa detik, lalu tersenyum tipis. 'Kau lebih pintar dari yang kukira. Tapi bukti tidak cukup. Aku selalu meninggalkan jejak yang rapi.' Matanya dingin, tanpa penyesalan.",
+    },
   },
 ];
 

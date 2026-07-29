@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { EVIDENCE_ITEMS, useGame } from "@/lib/game-store";
 import { playClick, playPaperRustle } from "@/lib/audio";
+import TiltCard from "./tilt-card";
 
 const CATEGORY_LABELS: Record<string, string> = {
   fisik: "BARANG BUKTI FISIK",
@@ -97,19 +98,21 @@ export default function EvidenceLocker() {
           {EVIDENCE_ITEMS.map((ev, i) => {
             const examined = !!examinedEvidence[ev.id];
             return (
-              <motion.button
+              <motion.div
                 key={ev.id}
-                type="button"
-                onClick={() => openDetail(ev.id)}
-                data-cursor-active
-                aria-label={`Periksa bukti: ${ev.name}`}
-                className="group relative aspect-[3/4] focus:outline-none"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
-                whileHover={{ y: -6 }}
               >
+                <TiltCard maxTilt={18} scale={1.05}>
+                <button
+                  type="button"
+                  onClick={() => openDetail(ev.id)}
+                  data-cursor-active
+                  aria-label={`Periksa bukti: ${ev.name}`}
+                  className="group relative aspect-[3/4] focus:outline-none w-full"
+                >
                 {/* evidence bag / locker cell */}
                 <div
                   className={`relative w-full h-full border-2 ${
@@ -170,7 +173,9 @@ export default function EvidenceLocker() {
                     </span>
                   </div>
                 </div>
-              </motion.button>
+                </button>
+                </TiltCard>
+              </motion.div>
             );
           })}
         </div>

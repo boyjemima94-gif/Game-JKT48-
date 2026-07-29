@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { CASE_FILES, type CaseFile } from "@/lib/suspects";
 import { playPaperRustle, playClick } from "@/lib/audio";
+import TiltCard from "./tilt-card";
 
 const STATUS_COLORS: Record<CaseFile["status"], string> = {
   TERBUKA: "border-noir-brass text-noir-brass",
@@ -25,26 +26,26 @@ function CaseFileCard({ file, index }: { file: CaseFile; index: number }) {
 
   return (
     <div className="flip-scene relative h-[420px] sm:h-[460px]">
-      <motion.div
-        className={`flip-card relative w-full h-full cursor-none`}
-        style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
-        onClick={toggle}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            toggle();
-          }
-        }}
-        aria-label={`Berkas ${file.code}: ${file.title}. ${flipped ? "Tutup" : "Buka"}.`}
-        data-cursor-active
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, delay: index * 0.12 }}
-        whileHover={{ scale: 1.02 }}
-      >
+      <TiltCard maxTilt={8} scale={1.03} className="h-full">
+        <motion.div
+          className={`flip-card relative w-full h-full cursor-none`}
+          style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+          onClick={toggle}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggle();
+            }
+          }}
+          aria-label={`Berkas ${file.code}: ${file.title}. ${flipped ? "Tutup" : "Buka"}.`}
+          data-cursor-active
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: index * 0.12 }}
+        >
         {/* ---------- FRONT (classified) ---------- */}
         <div className="flip-face absolute inset-0 paper-texture paper-edge paper-burn rounded-sm p-6 flex flex-col">
           {/* corner stamps */}
@@ -179,6 +180,7 @@ function CaseFileCard({ file, index }: { file: CaseFile; index: number }) {
           </div>
         </div>
       </motion.div>
+      </TiltCard>
     </div>
   );
 }

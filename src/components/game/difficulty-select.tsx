@@ -143,9 +143,9 @@ export default function DifficultySelect() {
 
                 {/* select CTA */}
                 <div
-                  className={`mt-4 py-2 text-center font-stamp text-[11px] tracking-widest uppercase ${style.text} border-t border-${style.border}/40 group-hover:bg-noir-paper/5 transition-colors`}
+                  className={`mt-4 py-2.5 text-center font-stamp text-xs tracking-widest uppercase font-bold ${style.text} ${style.bg} border-t-2 ${style.border} group-hover:brightness-125 transition-all`}
                 >
-                  Pilih Mode →
+                  ▸ Pilih Mode →
                 </div>
 
                 {/* recommended badge for detektif */}

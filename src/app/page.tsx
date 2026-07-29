@@ -7,11 +7,13 @@ import DifficultySelect from "@/components/game/difficulty-select";
 import BriefingSection from "@/components/game/briefing-section";
 import CaseFileSection from "@/components/game/case-file-section";
 import ConspiracyBoard from "@/components/game/conspiracy-board";
+import CastList from "@/components/game/cast-list";
 import VictimProfile from "@/components/game/victim-profile";
 import EvidenceLocker from "@/components/game/evidence-locker";
 import TimelineSection from "@/components/game/timeline-section";
 import AccusationFinale from "@/components/game/accusation-finale";
 import DetectiveScore from "@/components/game/detective-score";
+import CaseArchive from "@/components/game/case-archive";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -70,6 +72,8 @@ export default function Home() {
         <CaseFileSection />
         <SectionDivider variant="thread" label="Jaring Tersangka" />
         <ConspiracyBoard />
+        <SectionDivider variant="stamp" label="Tokoh" />
+        <CastList />
         <SectionDivider variant="stamp" label="Korban" />
         <VictimProfile />
         <SectionDivider variant="evidence" label="Forensik" />
@@ -79,6 +83,8 @@ export default function Home() {
         <SectionDivider variant="stamp" label="Putusan" />
         <AccusationFinale />
         <DetectiveScore />
+        <SectionDivider variant="file" label="Rekam Jejak" />
+        <CaseArchive />
         <StampCta />
       </main>
 

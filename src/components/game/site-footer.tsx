@@ -75,6 +75,14 @@ export default function SiteFooter() {
               </li>
               <li>
                 <a
+                  href="#tokoh"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Daftar Tokoh
+                </a>
+              </li>
+              <li>
+                <a
                   href="#bukti"
                   className="text-noir-paper/70 hover:text-noir-brass transition-colors"
                 >
@@ -103,6 +111,14 @@ export default function SiteFooter() {
                   className="text-noir-paper/70 hover:text-noir-brass transition-colors"
                 >
                   → Tuduhan Akhir
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#arsip"
+                  className="text-noir-paper/70 hover:text-noir-brass transition-colors"
+                >
+                  → Arsip Penyelidikan
                 </a>
               </li>
               <li>

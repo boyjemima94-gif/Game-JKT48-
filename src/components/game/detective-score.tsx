@@ -1,8 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useGame, TOTAL_CLUE_COUNT, CULPRIT_ID, DIFFICULTIES } from "@/lib/game-store";
+import {
+  useGame,
+  TOTAL_CLUE_COUNT,
+  CULPRIT_ID,
+  DIFFICULTIES,
+  type CaseRecord,
+} from "@/lib/game-store";
 import { EVIDENCE_ITEMS } from "@/lib/game-store";
 import { INTERROGATIONS } from "@/lib/interrogations";
 import { SUSPECTS } from "@/lib/suspects";
@@ -116,6 +122,58 @@ export default function DetectiveScore() {
     accusationResult,
     difficulty,
     hintsUsed,
+  ]);
+
+  const recordCase = useGame((s) => s.recordCase);
+  const caseHistory = useGame((s) => s.caseHistory);
+  const recordedRef = useRef<string | null>(null);
+
+  // Record this case into history once (when accusation is made)
+  useEffect(() => {
+    if (!accusation || !difficulty) return;
+    // generate a unique key for this accusation to avoid double-recording
+    const key = `${accusation}-${stats.overall}-${clues.length}`;
+    if (recordedRef.current === key) return;
+    // check if already in history (same accusation + score + time proximity)
+    const recent = caseHistory[0];
+    if (
+      recent &&
+      recent.accusedId === accusation &&
+      recent.score === stats.overall &&
+      Date.now() - recent.date < 5000
+    ) {
+      recordedRef.current = key;
+      return;
+    }
+    const rec: CaseRecord = {
+      id: `case-${Date.now()}`,
+      date: Date.now(),
+      difficulty,
+      accusedId: accusation,
+      correct: accusationResult === "correct",
+      score: stats.overall,
+      rank: stats.rank,
+      cluesFound: clues.length,
+      totalClues: TOTAL_CLUE_COUNT,
+      hintsUsed,
+      timelineSolved,
+      suspectsInterrogated: Object.keys(interrogatedSuspects).length,
+    };
+    recordCase(rec);
+    recordedRef.current = key;
+  }, [
+    accusation,
+    difficulty,
+    stats.overall,
+    stats.rank,
+    clues.length,
+    hintsUsed,
+    timelineSolved,
+    interrogatedSuspects,
+    accusationResult,
+    recordCase,
+    caseHistory,
+    TOTAL_CLUE_COUNT,
   ]);
 
   if (!accusation) return null;

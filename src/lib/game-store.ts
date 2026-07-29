@@ -407,6 +407,8 @@ interface GameState {
   timelineSolved: boolean;
   difficulty: Difficulty | null; // null = not chosen yet
   hintsUsed: number;
+  // persistent stats across games
+  caseHistory: CaseRecord[];
   // actions
   examineEvidence: (evidenceId: string) => void;
   recordStatement: (clueId: string) => void;
@@ -414,11 +416,28 @@ interface GameState {
   setTimelineSolved: (v: boolean) => void;
   setDifficulty: (d: Difficulty) => void;
   useHint: () => void;
+  recordCase: (rec: CaseRecord) => void;
   hasClue: (clueId: string) => boolean;
   toggleNotebook: (open?: boolean) => void;
   makeAccusation: (suspectId: string) => void;
   resetGame: () => void;
   cluesCount: () => number;
+}
+
+export interface CaseRecord {
+  id: string;
+  date: number; // timestamp
+  difficulty: Difficulty;
+  accusedId: string;
+  correct: boolean;
+  score: number;
+  rank: string;
+  cluesFound: number;
+  totalClues: number;
+  hintsUsed: number;
+  timelineSolved: boolean;
+  suspectsInterrogated: number;
+  durationMs?: number;
 }
 
 const TOTAL_CLUES = Object.keys(CLUE_DEFS).length;
@@ -436,6 +455,7 @@ export const useGame = create<GameState>()(
       timelineSolved: false,
       difficulty: null,
       hintsUsed: 0,
+      caseHistory: [],
       examineEvidence: (evidenceId) => {
         const ev = EVIDENCE_ITEMS.find((e) => e.id === evidenceId);
         if (!ev) return;
@@ -479,6 +499,8 @@ export const useGame = create<GameState>()(
       setTimelineSolved: (v) => set({ timelineSolved: v }),
       setDifficulty: (d) => set({ difficulty: d }),
       useHint: () => set((s) => ({ hintsUsed: s.hintsUsed + 1 })),
+      recordCase: (rec) =>
+        set((s) => ({ caseHistory: [rec, ...s.caseHistory].slice(0, 20) })),
       hasClue: (clueId) => get().clues.some((c) => c.id === clueId),
       toggleNotebook: (open) =>
         set((s) => ({ notebookOpen: open ?? !s.notebookOpen })),
@@ -489,7 +511,7 @@ export const useGame = create<GameState>()(
         });
       },
       resetGame: () =>
-        set({
+        set((s) => ({
           clues: [],
           examinedEvidence: {},
           interrogatedSuspects: {},
@@ -500,7 +522,9 @@ export const useGame = create<GameState>()(
           timelineSolved: false,
           difficulty: null,
           hintsUsed: 0,
-        }),
+          // keep caseHistory across resets
+          caseHistory: s.caseHistory,
+        })),
       cluesCount: () => get().clues.length,
     }),
     {
@@ -516,6 +540,7 @@ export const useGame = create<GameState>()(
         timelineSolved: s.timelineSolved,
         difficulty: s.difficulty,
         hintsUsed: s.hintsUsed,
+        caseHistory: s.caseHistory,
       }),
     }
   )

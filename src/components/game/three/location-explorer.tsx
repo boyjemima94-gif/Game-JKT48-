@@ -192,35 +192,35 @@ function StylizedCharacter({ char }: { char: RoomChar }) {
   return (
     <group ref={groupRef} position={char.position} rotation={[0, char.rotation, 0]}>
       {/* Head */}
-      <mesh position={[0, 1.5, 0]} castShadow>
+      <mesh position={[0, 1.5, 0]} >
         <sphereGeometry args={[0.18, 16, 16]} />
         <meshStandardMaterial color={skinColor} roughness={0.7} />
       </mesh>
       {/* Hair (colored cap) */}
-      <mesh position={[0, 1.6, 0]} castShadow>
+      <mesh position={[0, 1.6, 0]} >
         <sphereGeometry args={[0.2, 16, 16, 0, Math.PI * 2, 0, Math.PI * 0.6]} />
         <meshStandardMaterial color={bodyColor} roughness={0.8} />
       </mesh>
       {/* Body/torso */}
-      <mesh position={[0, 0.8, 0]} castShadow>
+      <mesh position={[0, 0.8, 0]} >
         <capsuleGeometry args={[0.22, 0.6, 8, 16]} />
         <meshStandardMaterial color={bodyColor} roughness={0.7} />
       </mesh>
       {/* Arms */}
-      <mesh position={[-0.3, 0.9, 0]} rotation={[0, 0, 0.3]} castShadow>
+      <mesh position={[-0.3, 0.9, 0]} rotation={[0, 0, 0.3]} >
         <capsuleGeometry args={[0.08, 0.5, 8, 12]} />
         <meshStandardMaterial color={bodyColor} roughness={0.7} />
       </mesh>
-      <mesh position={[0.3, 0.9, 0]} rotation={[0, 0, -0.3]} castShadow>
+      <mesh position={[0.3, 0.9, 0]} rotation={[0, 0, -0.3]} >
         <capsuleGeometry args={[0.08, 0.5, 8, 12]} />
         <meshStandardMaterial color={bodyColor} roughness={0.7} />
       </mesh>
       {/* Legs */}
-      <mesh position={[-0.12, 0.15, 0]} castShadow>
+      <mesh position={[-0.12, 0.15, 0]} >
         <capsuleGeometry args={[0.1, 0.4, 8, 12]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
       </mesh>
-      <mesh position={[0.12, 0.15, 0]} castShadow>
+      <mesh position={[0.12, 0.15, 0]} >
         <capsuleGeometry args={[0.1, 0.4, 8, 12]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
       </mesh>
@@ -242,7 +242,7 @@ function StageProps() {
         <meshStandardMaterial color="#5a1a1a" roughness={0.95} side={THREE.DoubleSide} />
       </mesh>
       {/* Stage platform — wood */}
-      <mesh position={[0, -0.7, -2]} castShadow receiveShadow>
+      <mesh position={[0, -0.7, -2]} receiveShadow>
         <boxGeometry args={[6, 0.6, 3]} />
         <meshStandardMaterial color="#3a2410" roughness={0.7} metalness={0.1} />
       </mesh>
@@ -252,7 +252,7 @@ function StageProps() {
         <meshStandardMaterial color="#c9a35a" metalness={0.8} roughness={0.3} />
       </mesh>
       {/* Spotlight bar overhead */}
-      <mesh position={[0, 3.5, -1]} castShadow>
+      <mesh position={[0, 3.5, -1]} >
         <boxGeometry args={[4, 0.1, 0.15]} />
         <meshStandardMaterial color="#2a2a2a" metalness={0.6} roughness={0.4} />
       </mesh>
@@ -267,7 +267,7 @@ function StageProps() {
       </mesh>
       {/* Audience chairs (simple) */}
       {Array.from({ length: 5 }).map((_, i) => (
-        <mesh key={i} position={[-3 + i * 1.5, -0.7, 1.5]} castShadow>
+        <mesh key={i} position={[-3 + i * 1.5, -0.7, 1.5]} >
           <boxGeometry args={[0.4, 0.5, 0.4]} />
           <meshStandardMaterial color="#1a1a1a" roughness={0.8} />
         </mesh>
@@ -302,7 +302,7 @@ function DressingRoomProps() {
         );
       })}
       {/* Dressing table */}
-      <mesh position={[0, -0.5, -4]} castShadow receiveShadow>
+      <mesh position={[0, -0.5, -4]} receiveShadow>
         <boxGeometry args={[3.5, 0.1, 1.2]} />
         <meshStandardMaterial color="#3a2c20" roughness={0.6} metalness={0.2} />
       </mesh>
@@ -316,7 +316,7 @@ function DressingRoomProps() {
         <meshStandardMaterial color="#2a1a10" />
       </mesh>
       {/* Perfume bottle on table */}
-      <mesh position={[-1, -0.4, -3.8]} castShadow>
+      <mesh position={[-1, -0.4, -3.8]} >
         <cylinderGeometry args={[0.08, 0.1, 0.2, 12]} />
         <meshStandardMaterial color="#ff69b4" transparent opacity={0.6} roughness={0.2} metalness={0.3} />
       </mesh>
@@ -330,7 +330,7 @@ function DressingRoomProps() {
         <meshStandardMaterial color="#8b1a1a" roughness={0.4} />
       </mesh>
       {/* Hanging costume */}
-      <mesh position={[-2.5, 0.5, -3.5]} castShadow>
+      <mesh position={[-2.5, 0.5, -3.5]} >
         <boxGeometry args={[0.5, 1.5, 0.1]} />
         <meshStandardMaterial color="#4a2a4a" roughness={0.8} />
       </mesh>
@@ -343,7 +343,7 @@ function StudioProps() {
     <group>
       {/* Triple monitor setup */}
       {[-1, 0, 1].map((x) => (
-        <mesh key={x} position={[x, 0.1, -4]} castShadow>
+        <mesh key={x} position={[x, 0.1, -4]} >
           <boxGeometry args={[1, 0.6, 0.08]} />
           <meshStandardMaterial
             color="#0a1525"
@@ -357,7 +357,7 @@ function StudioProps() {
       {/* Monitor glow lights */}
       <pointLight position={[0, 0.1, -3.5]} color="#4a9be8" intensity={3} distance={4} />
       {/* Desk */}
-      <mesh position={[0, -0.7, -4]} castShadow receiveShadow>
+      <mesh position={[0, -0.7, -4]} receiveShadow>
         <boxGeometry args={[4, 0.1, 1.5]} />
         <meshStandardMaterial color="#1a1a2a" roughness={0.6} metalness={0.3} />
       </mesh>
@@ -369,7 +369,7 @@ function StudioProps() {
         </mesh>
       ))}
       {/* Office chair */}
-      <mesh position={[0, -0.6, -3]} castShadow>
+      <mesh position={[0, -0.6, -3]} >
         <boxGeometry args={[0.5, 0.6, 0.5]} />
         <meshStandardMaterial color="#0d0d18" roughness={0.7} />
       </mesh>
@@ -384,11 +384,11 @@ function StudioProps() {
         <meshStandardMaterial color="#0a0a0a" />
       </mesh>
       {/* Speakers */}
-      <mesh position={[-2, 0.5, -3.5]} castShadow>
+      <mesh position={[-2, 0.5, -3.5]} >
         <boxGeometry args={[0.2, 0.6, 0.2]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
       </mesh>
-      <mesh position={[2, 0.5, -3.5]} castShadow>
+      <mesh position={[2, 0.5, -3.5]} >
         <boxGeometry args={[0.2, 0.6, 0.2]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
       </mesh>
@@ -400,7 +400,7 @@ function CafeProps() {
   return (
     <group>
       {/* Round table */}
-      <mesh position={[0, -0.6, -2]} castShadow receiveShadow>
+      <mesh position={[0, -0.6, -2]} receiveShadow>
         <cylinderGeometry args={[0.7, 0.7, 0.06, 24]} />
         <meshStandardMaterial color="#3a2c20" roughness={0.6} />
       </mesh>
@@ -415,7 +415,7 @@ function CafeProps() {
         <meshStandardMaterial color="#2a1a10" />
       </mesh>
       {/* Coffee cup */}
-      <mesh position={[0.3, -0.52, -2]} castShadow>
+      <mesh position={[0.3, -0.52, -2]} >
         <cylinderGeometry args={[0.08, 0.06, 0.12, 12]} />
         <meshStandardMaterial color="#e8dcc0" roughness={0.4} />
       </mesh>
@@ -430,16 +430,16 @@ function CafeProps() {
         <meshStandardMaterial color="#e8dcc0" roughness={0.4} />
       </mesh>
       {/* Chair */}
-      <mesh position={[0, -0.7, -1.2]} castShadow>
+      <mesh position={[0, -0.7, -1.2]} >
         <boxGeometry args={[0.4, 0.5, 0.4]} />
         <meshStandardMaterial color="#2a2a1a" roughness={0.8} />
       </mesh>
       {/* Plant in corner */}
-      <mesh position={[-2.5, -0.3, -3]} castShadow>
+      <mesh position={[-2.5, -0.3, -3]} >
         <cylinderGeometry args={[0.15, 0.2, 0.4, 8]} />
         <meshStandardMaterial color="#3a2a1a" roughness={0.8} />
       </mesh>
-      <mesh position={[-2.5, 0.1, -3]} castShadow>
+      <mesh position={[-2.5, 0.1, -3]} >
         <sphereGeometry args={[0.35, 12, 12]} />
         <meshStandardMaterial color="#2a5a2a" roughness={0.9} />
       </mesh>
@@ -459,13 +459,13 @@ function ArchiveProps() {
       {/* Tall bookshelves (3 shelves) */}
       {Array.from({ length: 3 }).map((_, i) => (
         <group key={i}>
-          <mesh position={[-2, -0.5 + i * 0.9, -4]} castShadow receiveShadow>
+          <mesh position={[-2, -0.5 + i * 0.9, -4]} receiveShadow>
             <boxGeometry args={[2.5, 0.08, 0.6]} />
             <meshStandardMaterial color="#2a1a10" roughness={0.85} />
           </mesh>
           {/* Books on shelf */}
           {Array.from({ length: 6 }).map((_, j) => (
-            <mesh key={j} position={[-3 + j * 0.4, -0.3 + i * 0.9, -3.9]} castShadow>
+            <mesh key={j} position={[-3 + j * 0.4, -0.3 + i * 0.9, -3.9]} >
               <boxGeometry args={[0.08, 0.35, 0.2]} />
               <meshStandardMaterial
                 color={["#5a1a1a", "#1a3a5a", "#5a5a1a", "#3a1a3a", "#1a5a3a", "#5a3a1a"][j]}
@@ -485,7 +485,7 @@ function ArchiveProps() {
         <meshStandardMaterial color="#2a1a10" roughness={0.85} />
       </mesh>
       {/* Brankas (safe) */}
-      <mesh position={[2, -0.2, -3.8]} castShadow receiveShadow>
+      <mesh position={[2, -0.2, -3.8]} receiveShadow>
         <boxGeometry args={[0.9, 1.4, 0.7]} />
         <meshStandardMaterial color="#1a1a1a" roughness={0.4} metalness={0.8} />
       </mesh>
@@ -500,11 +500,11 @@ function ArchiveProps() {
         <meshStandardMaterial color="#c9a35a" metalness={0.9} roughness={0.2} />
       </mesh>
       {/* Archive boxes on floor */}
-      <mesh position={[1, -0.85, -2]} castShadow>
+      <mesh position={[1, -0.85, -2]} >
         <boxGeometry args={[0.5, 0.3, 0.4]} />
         <meshStandardMaterial color="#4a3a20" roughness={0.9} />
       </mesh>
-      <mesh position={[1.5, -0.85, -2.5]} castShadow>
+      <mesh position={[1.5, -0.85, -2.5]} >
         <boxGeometry args={[0.4, 0.25, 0.35]} />
         <meshStandardMaterial color="#3a2a18" roughness={0.9} />
       </mesh>
@@ -529,7 +529,7 @@ function ServerProps() {
       {[-2, 0, 2].map((x, rackIdx) => (
         <group key={rackIdx} position={[x, 0, -4]}>
           {/* Rack body */}
-          <mesh castShadow receiveShadow>
+          <mesh receiveShadow>
             <boxGeometry args={[0.7, 2.8, 0.6]} />
             <meshStandardMaterial color="#0d1a0d" roughness={0.5} metalness={0.5} />
           </mesh>
@@ -558,14 +558,14 @@ function ServerProps() {
         </group>
       ))}
       {/* CCTV monitor on wall */}
-      <mesh position={[0, 1.5, -4.4]} castShadow>
+      <mesh position={[0, 1.5, -4.4]} >
         <boxGeometry args={[1.2, 0.8, 0.08]} />
         <meshStandardMaterial color="#0a1525" emissive="#00ff66" emissiveIntensity={0.2} roughness={0.2} />
       </mesh>
       {/* Monitor glow */}
       <pointLight position={[0, 1.5, -4]} color="#00ff66" intensity={1.5} distance={3} />
       {/* Terminal desk */}
-      <mesh position={[0, -0.7, -3]} castShadow receiveShadow>
+      <mesh position={[0, -0.7, -3]} receiveShadow>
         <boxGeometry args={[1.5, 0.08, 0.8]} />
         <meshStandardMaterial color="#1a2a1a" roughness={0.6} />
       </mesh>
@@ -739,7 +739,7 @@ function Room3D({
 
   // Particle system
   const particleGeo = useMemo(() => {
-    const count = 200;
+    const count = 80;
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -796,8 +796,8 @@ function Room3D({
         distance={30}
         decay={0.8}
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
         shadow-camera-near={0.5}
         shadow-camera-far={20}
       />
@@ -816,14 +816,14 @@ function Room3D({
 
       {/* Pillars */}
       <group position={[-3.5, 0, -3]}>
-        <mesh position={[0, -0.7, 0]} castShadow><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
-        <mesh position={[0, 0, 0]} castShadow><cylinderGeometry args={[0.18, 0.22, 3.4, 12]} /><meshStandardMaterial color={location.wallColor} roughness={0.75} metalness={0.15} /></mesh>
-        <mesh position={[0, 1.85, 0]} castShadow><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
+        <mesh position={[0, -0.7, 0]} ><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
+        <mesh position={[0, 0, 0]} ><cylinderGeometry args={[0.18, 0.22, 3.4, 12]} /><meshStandardMaterial color={location.wallColor} roughness={0.75} metalness={0.15} /></mesh>
+        <mesh position={[0, 1.85, 0]} ><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
       </group>
       <group position={[3.5, 0, -3]}>
-        <mesh position={[0, -0.7, 0]} castShadow><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
-        <mesh position={[0, 0, 0]} castShadow><cylinderGeometry args={[0.18, 0.22, 3.4, 12]} /><meshStandardMaterial color={location.wallColor} roughness={0.75} metalness={0.15} /></mesh>
-        <mesh position={[0, 1.85, 0]} castShadow><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
+        <mesh position={[0, -0.7, 0]} ><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
+        <mesh position={[0, 0, 0]} ><cylinderGeometry args={[0.18, 0.22, 3.4, 12]} /><meshStandardMaterial color={location.wallColor} roughness={0.75} metalness={0.15} /></mesh>
+        <mesh position={[0, 1.85, 0]} ><boxGeometry args={[0.5, 0.2, 0.5]} /><meshStandardMaterial color={location.wallColor} /></mesh>
       </group>
 
       {/* Room-specific props */}

@@ -182,7 +182,7 @@ export default function AchievementsGallery() {
               ★ SEMUA PENCAPAIAN TERBUKA ★
             </p>
             <p className="font-typewriter text-xs text-noir-paper-ink/70 mt-1">
-              Kau adalah Detektif Sejati Teatro del Misteri.
+              Kau adalah Detektif Sejati Misteri Theater Berdarah.
             </p>
           </motion.div>
         )}

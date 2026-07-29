@@ -6,7 +6,7 @@ const LORE_ENTRIES = [
   {
     year: "2012",
     title: "Pendirian Teatro",
-    text: "Teatro del Misteri didirikan sebagai kelompok teater eksperimental di Jakarta. Memadukan drama klasik dengan elemen misteri interaktif, cepat menjadi fenomena budaya underground.",
+    text: "Misteri Theater Berdarah didirikan sebagai kelompok teater eksperimental di Jakarta. Memadukan drama klasik dengan elemen misteri interaktif, cepat menjadi fenomena budaya underground.",
     glyph: "🎭",
   },
   {
@@ -45,7 +45,7 @@ const THEATER_FACTS = [
 ];
 
 /**
- * Lore / Worldbuilding section — expands the Teatro del Misteri universe.
+ * Lore / Worldbuilding section — expands the Misteri Theater Berdarah universe.
  * Theater history timeline + key facts + narrative context.
  */
 export default function LoreSection() {
@@ -74,10 +74,10 @@ export default function LoreSection() {
                 "0 0 24px rgba(255,179,71,0.25), 0 4px 12px rgba(0,0,0,0.9)",
             }}
           >
-            DUNIA TEATRO
+            DUNIA MISTERI THEATER
           </h2>
           <p className="font-typewriter text-sm sm:text-base text-noir-paper/85 max-w-lg mx-auto">
-            Setiap misteri punya akar. Kenali sejarah Teatro del Misteri dan
+            Setiap misteri punya akar. Kenali sejarah Misteri Theater Berdarah dan
             konteks di balik kasus JKT-48-001.
           </p>
         </motion.div>
@@ -171,7 +171,7 @@ export default function LoreSection() {
             belakangnya, hanya kebenaran yang menunggu untuk terungkap.&rdquo;
           </p>
           <p className="font-stamp text-[10px] tracking-widest text-noir-brass/60 uppercase mt-2">
-            — Arsip Teatro del Misteri
+            — Arsip Misteri Theater Berdarah
           </p>
         </motion.div>
       </div>

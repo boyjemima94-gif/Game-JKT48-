@@ -555,7 +555,7 @@ export const useGame = create<GameState>()(
       cluesCount: () => get().clues.length,
     }),
     {
-      name: "teatro-game-state",
+      name: "misteri theater-game-state",
       // only persist data, not transient UI flags
       partialize: (s) => ({
         clues: s.clues,

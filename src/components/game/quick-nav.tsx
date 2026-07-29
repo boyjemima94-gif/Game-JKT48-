@@ -120,7 +120,7 @@ export default function QuickNav() {
             {/* footer */}
             <div className="px-3 py-2 border-t border-noir-umber/50 bg-noir-coffee/40">
               <p className="font-typewriter text-[8px] text-noir-paper/30 tracking-widest uppercase">
-                Teatro del Misteri
+                Misteri Theater Berdarah
               </p>
             </div>
           </motion.div>

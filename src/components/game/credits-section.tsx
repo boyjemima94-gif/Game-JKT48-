@@ -68,10 +68,10 @@ export default function CreditsSection() {
           className="paper-texture paper-edge paper-burn p-5 sm:p-7 mb-8"
         >
           <p className="font-stamp text-[10px] tracking-[0.3em] text-noir-crimson font-bold uppercase mb-3 pb-2 border-b border-noir-paper-ink/20">
-            Tentang Teatro del Misteri
+            Tentang Misteri Theater Berdarah
           </p>
           <p className="font-typewriter text-sm text-noir-paper-ink/85 leading-relaxed mb-3">
-            <strong>Teatro del Misteri</strong> adalah game misteri pembunuhan
+            <strong>Misteri Theater Berdarah</strong> adalah game misteri pembunuhan
             interaktif yang memadukan narasi sinematik, penyelidikan forensik,
             dan atmosfer noir. Pemain mengambil peran detektif yang menyelidiki
             kasus JKT-48-001 — kejadian misterius di belakang panggung teater.
@@ -196,7 +196,7 @@ export default function CreditsSection() {
           className="text-center pt-4 border-t border-noir-coffee/40"
         >
           <p className="font-stamp text-sm font-bold text-noir-brass mb-1">
-            ★ TEATRO DEL MISTERI ★
+            ★ MISTERI THEATER BERDARAH ★
           </p>
           <p className="font-typewriter text-[10px] text-noir-paper/50 tracking-widest uppercase">
             Kasus JKT-48-001 · Dibuat dengan Next.js + Three.js

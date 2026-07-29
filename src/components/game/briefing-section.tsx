@@ -94,7 +94,7 @@ export default function BriefingSection() {
             <span className="w-3 h-3 rounded-full bg-noir-brass/80" />
             <span className="w-3 h-3 rounded-full bg-green-600/60" />
             <span className="ml-3 font-typewriter text-[11px] tracking-widest text-noir-brass/80 drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
-              teatro@detective:~/kasus/JKT-48-001
+              misteri theater@detective:~/kasus/JKT-48-001
             </span>
             {/* skip / replay control */}
             {visibleLines < BRIEFING_LINES.length ? (

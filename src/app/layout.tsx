@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Teatro del Misteri — Game 3D Misteri Pembunuhan",
+  title: "Misteri Theater Berdarah — Game 3D Misteri Pembunuhan",
   description:
     "Game 3D misteri pembunuhan interaktif. Empat tersangka, satu malam, satu kebenaran. Selidiki dengan kaca pembesar, balik berkas kasus, dan ikuti benang merah.",
   keywords: [
@@ -26,12 +26,12 @@ export const metadata: Metadata = {
     "JKT48",
     "interaktif",
   ],
-  authors: [{ name: "Teatro del Misteri" }],
+  authors: [{ name: "Misteri Theater Berdarah" }],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
   },
   openGraph: {
-    title: "Teatro del Misteri",
+    title: "Misteri Theater Berdarah",
     description: "Game 3D misteri pembunuhan interaktif.",
     type: "website",
   },

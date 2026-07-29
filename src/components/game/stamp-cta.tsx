@@ -137,7 +137,7 @@ export default function StampCta() {
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
                 <div className="text-center relative z-10">
                   <p className="font-stamp text-[10px] tracking-[0.4em] text-noir-brass font-bold">
-                    ★ TEATRO ★
+                    ★ MISTERI THEATER ★
                   </p>
                   <p className="font-stamp text-2xl font-black text-noir-paper tracking-[0.15em] my-1">
                     CAP RESMI
@@ -194,7 +194,7 @@ export default function StampCta() {
                       <div className="border-[4px] border-noir-crimson rounded-full px-10 py-5 sm:px-16 sm:py-8 -rotate-12 relative">
                         <div className="absolute inset-1.5 border-2 border-noir-crimson/40 rounded-full" />
                         <p className="font-stamp text-[11px] sm:text-sm tracking-[0.35em] text-noir-crimson font-bold mb-2">
-                          ★ TEATRO DEL MISTERI ★
+                          ★ MISTERI THEATER BERDARAH ★
                         </p>
                         <p className="font-stamp text-3xl sm:text-5xl font-black stamp-ink leading-none mb-1">
                           BERGABUNG

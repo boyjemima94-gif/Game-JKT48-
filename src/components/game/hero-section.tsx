@@ -183,13 +183,13 @@ export default function HeroSection() {
               transition: "filter 0.1s linear",
             }}
           >
-            TEATRO
+            MISTERI THEATER
             <br />
             <span
               className="text-noir-crimson"
               style={{ textShadow: "0 0 30px rgba(192,57,43,0.5), 2px 2px 0 rgba(0,0,0,0.6)" }}
             >
-              DEL MISTERI
+              BERDARAH
             </span>
           </h1>
 

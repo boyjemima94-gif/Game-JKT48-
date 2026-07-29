@@ -17,7 +17,7 @@ export default function Onboarding() {
     // don't show again if already seen this session
     let raf = 0;
     try {
-      if (sessionStorage.getItem("teatro-onboarded") === "1") {
+      if (sessionStorage.getItem("misteri theater-onboarded") === "1") {
         raf = requestAnimationFrame(() => setShow(false));
       }
     } catch {
@@ -33,7 +33,7 @@ export default function Onboarding() {
     startRoomTone();
     playClick();
     try {
-      sessionStorage.setItem("teatro-onboarded", "1");
+      sessionStorage.setItem("misteri theater-onboarded", "1");
     } catch {
       /* noop */
     }

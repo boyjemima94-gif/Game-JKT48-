@@ -46,7 +46,7 @@ export default function CastList() {
             PARA TERSANGKA
           </h2>
           <p className="font-typewriter text-sm sm:text-base text-noir-paper/85 max-w-lg mx-auto">
-            Kenali lebih dalam empat bintang panggung Teatro del Misteri.
+            Kenali lebih dalam empat bintang panggung Misteri Theater Berdarah.
             Klik setiap tokoh untuk membaca profil lengkap — penampilan,
             kebiasaan, kepribadian, dan rahasia gelap mereka.
           </p>

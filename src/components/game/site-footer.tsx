@@ -34,7 +34,7 @@ export default function SiteFooter() {
             <div className="flex items-center gap-2 mb-2">
               <span className="w-2 h-2 rounded-full bg-noir-crimson animate-pulse" />
               <span className="font-stamp text-sm tracking-[0.3em] text-noir-brass uppercase">
-                Teatro del Misteri
+                Misteri Theater Berdarah
               </span>
             </div>
             <p className="font-typewriter text-[11px] text-noir-paper/50 leading-relaxed max-w-xs">
@@ -199,7 +199,7 @@ export default function SiteFooter() {
         {/* bottom bar */}
         <div className="mt-8 pt-6 border-t border-noir-coffee/40 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-typewriter text-[10px] text-noir-paper/40">
-            © {new Date().getFullYear()} Teatro del Misteri · Karakter fiksi
+            © {new Date().getFullYear()} Misteri Theater Berdarah · Karakter fiksi
             untuk permainan.
           </p>
           <div className="flex items-center gap-4">

@@ -90,7 +90,7 @@ export default function HintSystem() {
     const check = () => {
       try {
         const onboarded =
-          sessionStorage.getItem("teatro-onboarded") === "1";
+          sessionStorage.getItem("misteri theater-onboarded") === "1";
         shouldShow = onboarded && !!difficulty && !accusation;
         if (shouldShow !== visible) {
           const raf = requestAnimationFrame(() => setVisible(shouldShow));

@@ -337,7 +337,7 @@ export default function DetectiveScore() {
               </p>
               <p className="font-typewriter text-[11px] text-noir-paper-ink/60 italic">
                 {isWin
-                  ? "Kau telah memecahkan kasus JKT-48-001. Teatro del Misteri berutang budi padamu."
+                  ? "Kau telah memecahkan kasus JKT-48-001. Misteri Theater Berdarah berutang budi padamu."
                   : "Keadilan tertundin, tapi penyelidikanmu tidak sia-sia. Kasus ini menjadi arsip dingin."}
               </p>
             </div>

@@ -52,7 +52,7 @@ function CaseFileCard({ file, index }: { file: CaseFile; index: number }) {
           <div className="flex items-start justify-between mb-4">
             <div className="flex flex-col gap-1">
               <span className="font-stamp text-[10px] tracking-[0.3em] text-noir-paper-ink/60">
-                ARSIP TEATRO
+                ARSIP MISTERI THEATER
               </span>
               <span className="font-stamp text-2xl font-black text-noir-paper-ink">
                 {file.code}

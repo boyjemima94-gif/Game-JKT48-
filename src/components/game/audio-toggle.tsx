@@ -16,7 +16,7 @@ export default function AudioToggle() {
   useEffect(() => {
     let initial = false;
     try {
-      initial = localStorage.getItem("teatro-muted") === "1";
+      initial = localStorage.getItem("misteri theater-muted") === "1";
     } catch {
       /* noop */
     }
@@ -35,7 +35,7 @@ export default function AudioToggle() {
     } else {
       // only start if user has interacted (audio unlocked)
       try {
-        if (sessionStorage.getItem("teatro-onboarded") === "1") {
+        if (sessionStorage.getItem("misteri theater-onboarded") === "1") {
           unlockAudio();
           if (!stopRef.current) {
             stopRef.current = startRoomTone();
@@ -46,7 +46,7 @@ export default function AudioToggle() {
       }
     }
     try {
-      localStorage.setItem("teatro-muted", muted ? "1" : "0");
+      localStorage.setItem("misteri theater-muted", muted ? "1" : "0");
     } catch {
       /* noop */
     }
@@ -57,7 +57,7 @@ export default function AudioToggle() {
     const check = () => {
       try {
         if (
-          sessionStorage.getItem("teatro-onboarded") === "1" &&
+          sessionStorage.getItem("misteri theater-onboarded") === "1" &&
           !muted &&
           !stopRef.current
         ) {

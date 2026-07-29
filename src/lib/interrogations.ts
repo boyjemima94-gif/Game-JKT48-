@@ -424,7 +424,7 @@ export const VICTIM: VictimProfile = {
   portrait:
     "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c558a2398836.jpg",
   background:
-    "Mardiono memimpin Teatro del Misteri selama 12 tahun. Dikenal tegas namun genius dalam mengarahkan pertunjukan. Akhir-akhir ini ia menyimpan banyak rahasia — termasuk dokumen yang mengancam karier beberapa member.",
+    "Mardiono memimpin Misteri Theater Berdarah selama 12 tahun. Dikenal tegas namun genius dalam mengarahkan pertunjukan. Akhir-akhir ini ia menyimpan banyak rahasia — termasuk dokumen yang mengancam karier beberapa member.",
   relationships: [
     {
       suspectId: "oline",

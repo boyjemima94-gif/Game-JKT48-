@@ -2,6 +2,31 @@
 // Portraits are JKT48 members researched via image-search (OSS-hosted, embeddable).
 // Characters are FICTIONAL personas for the in-game murder mystery.
 
+export interface CharacterDepth {
+  // Physical appearance description
+  appearance: string;
+  // Distinctive habits or mannerisms
+  habits: string[];
+  // Personality traits (3-5 keywords)
+  personality: string[];
+  // Career timeline (key milestones)
+  careerTimeline: { year: string; event: string }[];
+  // Relationship with the victim (detailed)
+  victimRelationship: string;
+  // Relationship with each other suspect
+  suspectRelationships: { suspectId: string; relationship: string }[];
+  // A hidden secret only revealed through deep investigation
+  darkSecret: string;
+  // What they fear most
+  fear: string;
+  // Their alibi witness (or lack thereof)
+  alibiWitness: string;
+  // Where they were during the 9-minute CCTV gap
+  duringGap: string;
+  // Their reaction when accused (final moment)
+  accusationReaction: string;
+}
+
 export interface Suspect {
   id: string;
   name: string;
@@ -21,6 +46,8 @@ export interface Suspect {
   quote: string;
   signature: string; // handwriting-ish snippet
   location: { x: number; y: number }; // position on the board (percentage)
+  // Deep character data
+  depth: CharacterDepth;
 }
 
 export const SUSPECTS: Suspect[] = [
@@ -49,6 +76,39 @@ export const SUSPECTS: Suspect[] = [
     quote: "Panggung ini milikku. Selalu milikku.",
     signature: "— O.M.",
     location: { x: 20, y: 32 },
+    depth: {
+      appearance:
+        "Rambut hitam panjang, sering diikat saat latihan. Mata tajam, ekspresi tertutup. Memakai syal merah tua kemanapun pergi — hadiah dari ibunya sebelum meninggal.",
+      habits: [
+        "Menggigit kuku saat gugup (terlihat di rekaman latihan)",
+        "Selalu tiba 30 menit lebih awal untuk latihan solo",
+        "Menulis diary setiap malam di buku bersampul cokelat",
+        "Berbisik pada diri sendiri sebelum naik panggung",
+      ],
+      personality: ["Perfeksionis", "Ambisius", "Tertutup", "Protektif", "Cemburu"],
+      careerTimeline: [
+        { year: "2020", event: "Audisi JKT48 — lolos di percobaan ketiga" },
+        { year: "2021", event: "Naik jadi member reguler setelah video viral" },
+        { year: "2023", event: "Dipilih jadi center untuk 'Malam Sang Misteri'" },
+        { year: "2024", event: "Konflik dengan korban soal koreografi solo" },
+        { year: "2025", event: "Terima surat ancaman anonim — disimpan diam-diam" },
+      ],
+      victimRelationship:
+        "Awalnya mentor-keturunan, berubah jadi saingan. Korban merencanakan menggantikan Oline sebagai center dengan member baru. Oline merasa dikhianati setelah semua pengorbanannya.",
+      suspectRelationships: [
+        { suspectId: "catherina", relationship: "Saingan langsung — saling menghindari di ruang ganti" },
+        { suspectId: "abigail", relationship: "Sahabat lama, tapi hubungan mendingin setelah Oline jadi center" },
+        { suspectId: "fiony", relationship: "Saling tidak percaya — Oline curiga Fiony mata-matai latihannya" },
+      ],
+      darkSecret:
+        "Oline sebenarnya menerima tawaran dari agensi lain untuk pindah, dengan syarat posisi center dilepas. Korban mengetahui ini dan mengancam mengungkapnya.",
+      fear: "Kehilangan panggung — itu satu-satunya hal yang membuatnya merasa hidup.",
+      alibiWitness: "Tidak ada — mengaku sendirian di panggung saat latihan solo.",
+      duringGap:
+        "Mengaku masih di panggung, tapi tidak ada saksi. Pintu belakang terbuka dari dalam — bisa keluar-masuk tanpa terlihat.",
+      accusationReaction:
+        "Mata membesar, lalu menatap tajam. 'Kau tidak tahu apa-apa. Aku tidak akan merusak panggungku sendiri.' Tapi suaranya bergetar.",
+    },
   },
   {
     id: "catherina",
@@ -75,6 +135,39 @@ export const SUSPECTS: Suspect[] = [
     quote: "Aku tidak pernah memaafkan pengkhianatan.",
     signature: "— C.V.",
     location: { x: 80, y: 28 },
+    depth: {
+      appearance:
+        "Rambut hitam bergelombang seléh bahu. Memakai parfum mawar yang kuat — aromanya bisa tercium dari jarak 2 meter. Kuku selalu dicat merah muda. Memiliki bekas luka tipis di pergelangan tangan kanan.",
+      habits: [
+        "Menyemprot parfum 3 kali sebelum tampil (ritual sakti)",
+        "Memeriksa ponsel setiap 5 menit — selalu cemas media",
+        "Merapikan rambut orang lain tanpa sadar (kebiasaan lama)",
+        "Menyimpan kliping koran tentang dirinya di dompet",
+      ],
+      personality: ["Karismatik", "Tegas", "Pendendam", "Mudah cemburu", "Setia pada yang dipercaya"],
+      careerTimeline: [
+        { year: "2018", event: "Member termuda yang jadi center — fenomena" },
+        { year: "2020", event: "Posisi center diambil alih Oline — pukulan besar" },
+        { year: "2023", event: "Memimpin koreografi ensemble, kembali bersinar" },
+        { year: "2025", event: "Video latihan bocor ke media — merusak nama baik" },
+        { year: "2025", event: "Menuntut korban secara hukum — kalah karena bukti kurang" },
+      ],
+      victimRelationship:
+        "Mantan dekat korban — dulu pasangan kreatif yang dipuja. Hubungan berubah racun setelah korban membocorkan videonya. Catherina merasa dihancurkan oleh orang yang dulu percaya.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Saingan utama — tidak pernah berdamaka sejak posisi center berpindah" },
+        { suspectId: "abigail", relationship: "Tidak terlalu dekat — menganggap Abigail terlalu pasif" },
+        { suspectId: "fiony", relationship: "Aliansi senyap — saling bertukar informasi tentang korban" },
+      ],
+      darkSecret:
+        "Catherina menyimpan salinan video asli yang membuktikan korban yang membocorkannya. Tapi mengungkap berarti mengaku video itu ada — malu.",
+      fear: "Dicintai lalu ditinggalkan lagi — trauma dari masa kecil.",
+      alibiWitness: "Dua staf di koridor utama, tapi mereka hilang 6 menit — tidak bisa konfirmasi sepenuhnya.",
+      duringGap:
+        "Staf yang jadi saksi alibi menghilang 6 menit. Catherina mengaku di koridor, tapi tidak ada CCTV yang mengonfirmasi.",
+      accusationReaction:
+        "Tertawa pahit. 'Akhirnya kau tuduh aku. Ya, aku membencinya. Tapi aku tidak membunuhnya. Aku lebih baik dari itu.' Matanya basah tapi suaranya tegas.",
+    },
   },
   {
     id: "abigail",

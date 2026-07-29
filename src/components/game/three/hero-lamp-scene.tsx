@@ -121,8 +121,8 @@ function DeskLamp({ bulbRef, lightRef }: {
               distance={12}
               decay={1.6}
               castShadow
-              shadow-mapSize-width={1024}
-              shadow-mapSize-height={1024}
+              shadow-mapSize-width={512}
+              shadow-mapSize-height={512}
             />
             {/* subtle inner glow */}
             <mesh position={[-0.5, 0.05, 0]}>
@@ -360,7 +360,7 @@ export default function HeroLampScene({
       <DeskLamp bulbRef={bulbRef} lightRef={lightRef} />
       {/* track shade group for light cone follow — re-grab via ref hack */}
       <group ref={shadeGroupRef} />
-      <DustParticles count={180} />
+      <DustParticles count={80} />
       <FlickerController
         bulbRef={bulbRef}
         lightRef={lightRef}

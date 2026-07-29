@@ -25,11 +25,11 @@ const LOCATIONS: Location[] = [
     name: "Panggung Utama",
     glyph: "🎭",
     fogColor: "#1a0d0a",
-    ambientColor: "#3a2a1a",
+    ambientColor: "#4a3a2a",
     lightColor: "#ffcb7a",
-    lightIntensity: 25,
+    lightIntensity: 35,
     accent: "#ffcb7a",
-    wallColor: "#2a1a10",
+    wallColor: "#4a3020",
     floorColor: "#1a1008",
     description: "Tempat pertunjukan utama. Lampu sorot berkedip. Tempat korban ditemukan di belakang tirai.",
     clue: "Bekas sepatu di belakang tirai — ukuran 42, bukan milik korban.",
@@ -39,11 +39,11 @@ const LOCATIONS: Location[] = [
     name: "Ruang Ganti No.4",
     glyph: "🚪",
     fogColor: "#0d1a0d",
-    ambientColor: "#2a3a2a",
+    ambientColor: "#3a4a3a",
     lightColor: "#ffb347",
-    lightIntensity: 18,
+    lightIntensity: 28,
     accent: "#ffb347",
-    wallColor: "#1a2a1a",
+    wallColor: "#1a3a1a",
     floorColor: "#0d180d",
     description: "Ruang ganti para member. Cermin dengan lampu bohlam. Tempat debat Catherina & korban.",
     clue: "Parfum mawar di meja rias Catherina — botol setengah kosong, baru dipakai.",
@@ -53,11 +53,11 @@ const LOCATIONS: Location[] = [
     name: "Studio Rekaman B",
     glyph: "🎥",
     fogColor: "#0a0d1a",
-    ambientColor: "#1a2a3a",
+    ambientColor: "#2a3a4a",
     lightColor: "#4a9be8",
-    lightIntensity: 15,
+    lightIntensity: 22,
     accent: "#4a9be8",
-    wallColor: "#0d1828",
+    wallColor: "#0d2848",
     floorColor: "#080d18",
     description: "Studio suntingan video Fiony. Layar komputer biru dingin. Drive USB ditemukan di sini.",
     clue: "Log komputer menunjukkan aktivitas 23:05-23:12 — 7 menit tanpa input tapi file diakses.",
@@ -67,11 +67,11 @@ const LOCATIONS: Location[] = [
     name: "Kafe Lobi",
     glyph: "☕",
     fogColor: "#1a1a0d",
-    ambientColor: "#3a3a2a",
+    ambientColor: "#4a4a3a",
     lightColor: "#ffd9a0",
-    lightIntensity: 12,
+    lightIntensity: 18,
     accent: "#ffd9a0",
-    wallColor: "#282818",
+    wallColor: "#383828",
     floorColor: "#181808",
     description: "Kafe di lobi theater. Tempat Abigail duduk sendirian. Aroma kopi basi.",
     clue: "Tisu basah di tempat sampah — ada lipstik pink, bukan milik Abigail.",
@@ -81,11 +81,11 @@ const LOCATIONS: Location[] = [
     name: "Ruang Arsip",
     glyph: "📂",
     fogColor: "#0d0d0d",
-    ambientColor: "#2a2a1a",
+    ambientColor: "#3a3a2a",
     lightColor: "#c9a35a",
-    lightIntensity: 10,
+    lightIntensity: 15,
     accent: "#c9a35a",
-    wallColor: "#1a1a10",
+    wallColor: "#2a2a18",
     floorColor: "#0d0d08",
     description: "Ruang arsip dokumen lama. Gelap, berdebu. Brankas dokumen di pojok. Hillary mengakses malam itu.",
     clue: "Brankas terbuka — dokumen kontrak Hillary hilang. Sidik jari di gagang.",
@@ -95,11 +95,11 @@ const LOCATIONS: Location[] = [
     name: "Ruang Server",
     glyph: "🖥️",
     fogColor: "#0d1a0d",
-    ambientColor: "#1a2a1a",
+    ambientColor: "#2a3a2a",
     lightColor: "#00ff66",
-    lightIntensity: 12,
+    lightIntensity: 18,
     accent: "#00ff66",
-    wallColor: "#0d1a0d",
+    wallColor: "#1a2a1a",
     floorColor: "#080f08",
     description: "Ruang server keamanan. Lampu LED hijau berkedip. Terminal CCTV — Marsha mengakses malam itu.",
     clue: "Log terminal: CCTV dimatikan 23:17, dihidupkan 23:26. 9 menit kegelapan.",
@@ -263,21 +263,36 @@ function Room3D({ location }: { location: Location }) {
       <spotLight
         ref={spotlightRef}
         position={[0, 4.5, 1]}
-        angle={0.5}
-        penumbra={0.6}
+        angle={0.8}
+        penumbra={0.4}
         intensity={location.lightIntensity}
         color={location.lightColor}
-        distance={20}
-        decay={1.2}
+        distance={30}
+        decay={0.8}
         castShadow
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-near={0.5}
-        shadow-camera-far={15}
+        shadow-camera-far={20}
       />
 
-      {/* Ambient fill light */}
-      <ambientLight intensity={0.15} color={location.ambientColor} />
+      {/* Directional light for overall scene illumination */}
+      <directionalLight
+        position={[2, 5, 3]}
+        intensity={0.4}
+        color={location.ambientColor}
+      />
+
+      {/* Ambient fill light — boosted for visibility */}
+      <ambientLight intensity={0.6} color={location.ambientColor} />
+
+      {/* Hemisphere light for natural fill */}
+      <hemisphereLight args={[location.ambientColor, location.floorColor, 0.5]} />
+
+      {/* Fill lights to illuminate walls and corners */}
+      <pointLight position={[-3, 2, 1]} color={location.ambientColor} intensity={8} distance={12} decay={1.5} />
+      <pointLight position={[3, 2, 1]} color={location.ambientColor} intensity={8} distance={12} decay={1.5} />
+      <pointLight position={[0, 2, -3]} color={location.ambientColor} intensity={6} distance={10} decay={1.5} />
 
       {/* Accent glow light — near the clue */}
       <pointLight
@@ -595,13 +610,13 @@ export default function LocationExplorer() {
               antialias: true,
               alpha: false,
               toneMapping: THREE.ACESFilmicToneMapping,
-              toneMappingExposure: 1.1,
+              toneMappingExposure: 1.6,
             }}
             onCreated={({ gl }) => {
-              gl.setClearColor(activeLocation.fogColor);
+              gl.setClearColor(new THREE.Color(activeLocation.fogColor).multiplyScalar(1.5));
             }}
           >
-            <fog attach="fog" args={[activeLocation.fogColor, 3, 14]} />
+            <fog attach="fog" args={[activeLocation.fogColor, 10, 30]} />
             <Suspense fallback={null}>
               <Room3D location={activeLocation} />
               <CameraRig />

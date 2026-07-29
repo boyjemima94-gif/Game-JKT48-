@@ -846,3 +846,74 @@ Stage Summary:
 - 3D Location Explorer built — 6 interactive 3D scenes with unique atmospheres, parallax camera, clue examination
 - Board positions redistributed for 7 suspects
 - Game now has 7 suspects × 6 3D locations × deep character narratives × interconnected relationships
+
+---
+Task ID: 14
+Agent: main-orchestrator (user request: fix bugs, max graphics quality, add Adeline Wijaya, 3D dynamic rooms, personal bond)
+Task: Deep QA, graphics upgrade, Adeline Wijaya addition, 3D Location Explorer rebuild, Personal Bond system.
+
+Work Log:
+- Deep QA via agent-browser + VLM: found 3D Location Explorer rated 3/10 (too dark, flat shading, no depth, broken rendering). Identified as primary quality issue.
+- Researched Adeline Wijaya via web search — limited public data (likely trainee/new member). Created deep fictional profile based on JKT48 context. Fetched 4 photos via image-search (IDN Times source).
+- Added Adeline Wijaya (MATA SENJA, The Witness, age 20) to suspects.ts with full CharacterDepth:
+  - Appearance: rambut sebahu pita merah, sketchbook kulit, jam saku antik, noda tinta
+  - 4 habits: menggambar diam-diam, berdiri di tempat tinggi, tinta ungu, tidak berkedip
+  - 5 personality: Observatif, Senja, Artistik, Misterius, Empatik tapi dingin
+  - 5 career timeline entries
+  - 7 suspect relationships (connected to all 7 other suspects)
+  - Dark secret: melihat pelaku dari atap, gambar di sketchbook disobek
+  - Fear: sketchbook ditemukan
+  - During gap: di atap, melihat siluet keluar pintu belakang
+  - Accusation reaction: menutup sketchbook, "Buka sketchbook-ku. Halaman terakhir. Tapi bersiaplah."
+- Added 4 new thread connections for Adeline (to Victoria, Marsha, Oline, Abigail)
+- Updated board positions for 8 suspects (Adeline at 92,45)
+- REBUILT Location Explorer 3D (`location-explorer.tsx`) with massive graphics upgrade:
+  - Procedural canvas textures for walls (noise + water damage streaks) and floor (wood planks)
+  - Proper MeshStandardMaterial with texture maps (not flat colors)
+  - SpotLight with shadows (castShadow, shadow-mapSize 1024x1024, penumbra 0.6)
+  - Ambient fill light per location (color-matched)
+  - ACESFilmicToneMapping + toneMappingExposure 1.1 for cinematic look
+  - Volumetric light cone (additive blending, fake god ray)
+  - 200 dust particles with individual sizes (Float32Array) + drift animation
+  - Spotlight flicker animation (intensity varies with sin waves)
+  - Pillar component: base + shaft + capital (proper 3D architecture)
+  - Central clue pedestal: cylinder base + glowing orb + halo sphere
+  - Location-specific furniture props:
+    - Panggung: curtain + stage platform
+    - Ruang Ganti: mirror with 8 bohlam point lights + dressing table
+    - Studio: monitor with emissive glow + desk + chair + blue point light
+    - Kafe: round table + coffee cup + pendant light
+    - Arsip: 3 shelves + brankas with brass dial
+    - Server: 3 server racks with 15 blinking LED spheres
+  - CameraRig with smooth lerp (0.04 factor) for parallax
+  - Higher DPR (1-2) for retina sharpness
+  - Fog with per-location color
+  - Suspense wrapper for async loading
+- Built `src/components/game/personal-bond.tsx` — Personal Bond System:
+  - 8 suspect selection grid (choose one to bond with)
+  - 5 bond levels (0: Tidak Dikenal → 4: Sekutu Sejati) with color-coded titles
+  - Bond level calculated from game state (evidence examined, interrogated, suspect clues, timeline)
+  - 4 personal messages per suspect (whisper → secret → truth), 32 total messages
+  - Each message reveals deeper character secrets and case clues
+  - Locked messages show "🔒 Tingkat X · Terkunci" with hint to deepen
+  - Progressive hints guide player to next bond level
+  - "Putus" button to change bonded suspect
+- Added PersonalBond to page.tsx after LocationExplorer
+- Added "Ikatan 🤝" to QuickNav
+- Fixed lint: set-state-in-effect → requestAnimationFrame defer
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- 3D Location Explorer: VLM rated 6/10 (up from 3/10) — "significant improvement, volumetric spotlight, clue orb visible, good depth, atmospheric"
+- Cast List: VLM confirmed 8 character portrait cards (2 rows × 4)
+- Personal Bond: VLM confirmed 8 portrait cards in selection grid, "SEKUTU PERSONAL" header
+- Bond with Adeline: confirmed — MATA SENJA codename, bond screen with level/messages visible
+
+Stage Summary:
+- 3D graphics quality doubled (3/10 → 6/10) via procedural textures, proper lighting, shadows, furniture, volumetric effects
+- Adeline Wijaya added as 8th suspect with deep profile (The Witness — saw the killer from rooftop)
+- Personal Bond System built — 8 suspects × 5 levels × 4 messages = 32 personal secrets to unlock
+- 8 suspects now with full depth data (12 fields each × 8 = 96 character data points)
+- 12 thread connections on conspiracy board linking all 8 suspects
+- 6 3D locations with unique furniture, lighting, and atmosphere

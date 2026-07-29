@@ -20,6 +20,7 @@ import CreditsSection from "@/components/game/credits-section";
 import DailyChallengeSection from "@/components/game/daily-challenge-section";
 import SuspectComparison from "@/components/game/suspect-comparison";
 import LocationExplorer from "@/components/game/three/location-explorer";
+import PersonalBond from "@/components/game/personal-bond";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -100,6 +101,8 @@ export default function Home() {
         <EvidenceLocker />
         <SectionDivider variant="evidence" label="TKP 3D" />
         <LocationExplorer />
+        <SectionDivider variant="stamp" label="Ikatan" />
+        <PersonalBond />
         <SectionDivider variant="thread" label="Kronologi" />
         <TimelineSection />
         <SectionDivider variant="stamp" label="Putusan" />

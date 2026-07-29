@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "korban", label: "Korban", glyph: "📇" },
   { id: "bukti", label: "Bukti", glyph: "🔍" },
   { id: "lokasi-3d", label: "TKP 3D", glyph: "🏛️" },
+  { id: "ikatan", label: "Ikatan", glyph: "🤝" },
   { id: "linimasa", label: "Linimasa", glyph: "🕐" },
   { id: "tuduhan", label: "Tuduhan", glyph: "⚖" },
   { id: "arsip", label: "Arsip", glyph: "📋" },

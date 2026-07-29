@@ -373,7 +373,7 @@ export const SUSPECTS: Suspect[] = [
     accent: "#6a9bd4",
     quote: "Aku hanya ingin menjadi bintang... tanpa harus membayar harga.",
     signature: "— V.K.",
-    location: { x: 50, y: 80 },
+    location: { x: 50, y: 88 },
     depth: {
       appearance:
         "Rambut pirang belang (diwarnai), ikang ekor kuda. Wajah baby-faced dengan bulu mata panjang. Selalu memakai gelang persahabatan dari Marsha. Mata besar yang mudah berair — senjata alaminya.",
@@ -473,6 +473,69 @@ export const SUSPECTS: Suspect[] = [
         "Diam lama, lalu tersenyum tipis. 'Kau pintar. Ya, aku matikan CCTV. Tapi bukan untuk membunuh. Seseorang memintanya — dan aku tidak akan mengatakan siapa.' Matanya menantang.",
     },
   },
+  {
+    id: "adeline",
+    name: "Adeline Wijaya",
+    memberOf: "JKT48 — Theater Company",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bae8183dafdd.jpeg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c70fbaef325f.jpg",
+    role: "The Witness",
+    codename: "MATA SENJA",
+    age: 20,
+    height: "162 cm",
+    lastSeen: "Atap Theater, 23:15 — mengamati dari ketinggian.",
+    alibi:
+      "Mengaku di atap untuk 'berenafrasa' — butuh hening. Tapi atap punya view langsung ke belakang panggung. Dia melihat semuanya.",
+    motive:
+      "Tidak ada motif langsung — tapi dia tahu siapa pelaku sebenarnya. Diamnya adalah pelindung... atau pelitian.",
+    evidence: [
+      "Sketchbook di atap dengan gambar siluet malam kejadian",
+      "Sepatu kotor tanah atap (bukti dia di sana)",
+      "Pesan tidak terkirim: 'aku melihatmu'",
+    ],
+    threat: 3,
+    accent: "#8a7ad4",
+    quote: "Setiap orang punya bayangan. Tapi tidak semua orang melihatnya.",
+    signature: "— A.W.",
+    location: { x: 92, y: 45 },
+    depth: {
+      appearance:
+        "Rambut hitam sebahu dengan pita kecil merah tua. Mata besar cokelat yang menatap dalam — seakan membaca pikiran. Selalu bawa sketchbook kulit cokelat. Jari tangan ada noda tinta permanen. Memakai jam saku antik — warisan kakek.",
+      habits: [
+        "Menggambar siapa saja yang dia amati (tanpa mereka tahu)",
+        "Berdiri di tempat tinggi saat butuh berpikir (atap, tangga, balkon)",
+        "Menulis dengan tinta ungu — bukan biru/hitam",
+        "Tidak berkedip saat menatap — intens dan mengganggu",
+      ],
+      personality: ["Observatif", "Senja", "Artistik", "Misterius", "Empatik tapi dingin"],
+      careerTimeline: [
+        { year: "2020", event: "Audisi JKT48 — ditolak dua kali sebelum diterima" },
+        { year: "2021", event: "Member pelatihan, jarang tampil — fokus backstage" },
+        { year: "2022", event: "Diberi peran 'pengamat' di produksi theater" },
+        { year: "2024", event: "Mulai sketchbook rahasia — menggambar semua member" },
+        { year: "2025", event: "Menggambar siluet malam kejadian dari atap" },
+      ],
+      victimRelationship:
+        "Korban pernah memintanya menjadi mata-mata internal — awasi member lain. Adeline menolak, tapi korban mengancam mengungkap masa lalunya (dia pernah dipecat dari grup lain). Adeline merasa terjebak, tapi tidak membenci — dia mengerti korban juga punya luka.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Mengagumi dedikasi Oline — menggambarnya paling sering" },
+        { suspectId: "catherina", relationship: "Tahu Catherina berbohong — tapi simpati dengan lukanya" },
+        { suspectId: "abigail", relationship: "Melihat Abigail di lorong malam itu — belum memberitahu siapa-siapa" },
+        { suspectId: "fiony", relationship: "Saling menghormati diam — keduanya pengamat" },
+        { suspectId: "hillary", relationship: "Curiga identitas asli Hillary — sketchbook ada gambarnya" },
+        { suspectId: "victoria", relationship: "Ingin melindungi Victoria — terlalu muda untuk dunia ini" },
+        { suspectId: "marsha", relationship: "Tahu Marsha yang matikan CCTV — tapi mengerti alasannya" },
+      ],
+      darkSecret:
+        "Adeline melihat siapa yang berada di belakang panggung saat korban ditemukan. Dia menggambarnya di sketchbook — tapi halaman itu disobek. Siapa yang dia lindungi? Atau dia takut?",
+      fear: "Sketchbook-nya ditemukan — semua rahasia member akan terbongkar, termasuk miliknya.",
+      alibiWitness: "Tidak ada — sendirian di atap. Tapi sketchbook-nya bukti dia di sana.",
+      duringGap:
+        "Di atap, mengamati. Dia melihat seseorang keluar dari pintu belakang panggung — siluet yang dia gambar. Tapi gambar itu... tidak lengkap.",
+      accusationReaction:
+        "Menutup sketchbook erat. 'Aku tidak membunuhnya. Tapi aku... melihat sesuatu malam itu. Sesuatu yang membuatku tidak bisa tidur.' Matanya berkaca-kaca — pertama kalinya menunjukkan emosi. 'Buka sketchbook-ku. Halaman terakhir. Tapi bersiaplah.'",
+    },
+  },
 ];
 
 // Conspiracy board connections (red thread) — pairs of suspect ids with a label
@@ -500,6 +563,11 @@ export const THREAD_LINKS: ThreadLink[] = [
   { from: "catherina", to: "marsha", label: "Iri popularitas", weight: 1 },
   { from: "victoria", to: "oline", label: "Mengagumi", weight: 1 },
   { from: "hillary", to: "catherina", label: "Dicurigai", weight: 1 },
+  // Adeline connections
+  { from: "adeline", to: "victoria", label: "Ingin melindungi", weight: 2 },
+  { from: "adeline", to: "marsha", label: "Tahu rahasia CCTV", weight: 2 },
+  { from: "adeline", to: "oline", label: "Mengagumi & gambar", weight: 1 },
+  { from: "adeline", to: "abigail", label: "Melihat di lorong", weight: 2 },
 ];
 
 export interface CaseFile {

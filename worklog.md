@@ -799,3 +799,50 @@ Stage Summary:
 - JKT48 characters deeply expanded: 12 depth fields per suspect (appearance, habits, personality, career timeline, relationships, dark secret, fear, alibi, gap, accusation reaction).
 - Updated photos with latest 2024-2025 images from web search.
 - Game now feels 3D throughout (not just hero) and characters have rich, layered narratives.
+
+---
+Task ID: 13
+Agent: main-orchestrator (user request: more 3D, deeper characters, new members, interconnected cases)
+Task: User feedback — interactions not intuitive, atmosphere not mysterious enough, add 3 new JKT48 members (Hillary Abigail, Victoria Kimberly, Marsha Lenathea), build interconnected cases, build 3D interactive locations.
+
+Work Log:
+- Researched 3 new JKT48 members via web search:
+  - Marsha Lenathea: Team Dream, joined 2019, born Jan 9 2006 (age 19), gamer, actress, member of Valkyrie48, catchphrase about pizza
+  - Victoria Kimberly: Team Passion/Love, born Mar 8 2010 (age 16), active on TikTok (945K followers)
+  - Hillary Abigail: less web data — created fictional deep profile
+- Fetched 3 photos per new member via image-search (OSS-hosted, embeddable)
+- Added 3 new suspects to suspects.ts with full CharacterDepth data:
+  - Hillary Abigail (BAYANGAN TIRAI, The Whisper, age 19): tomboy, topi hitam, bekas luka bakar, agen informasi rahasia, mengakses ruang arsip malam kejadian
+  - Victoria Kimberly (BUMI TERATAI, The Innocent, age 16): termuda, baby-faced, gelang persahabatan Marsha, pintar berakting, diancam korban dengan foto memalukan
+  - Marsha Lenathea (PIZZA DREAMER, The Gamer, age 19): kacamata gaming, Valkyrie48 member, menonaktifkan CCTV, stiker pizza di laptop
+- Each new suspect has full depth: appearance, 4 habits, 5 personality traits, 5 career timeline entries, victim relationship, 6 suspect relationships, dark secret, fear, alibi witness, during-gap activity, accusation reaction
+- Updated THREAD_LINKS: added 8 new connections between old and new suspects (Hillary-Marsha "Saling melindungi", Marsha-Victoria "Gelang persahabatan", Hillary-Fiony "Aliansi info rahasia", Victoria-Abigail "Pelindung & dilindungi", Marsha-Abigail "Tukar rahasia", Catherina-Marsha "Iri popularitas", Victoria-Oline "Mengagumi", Hillary-Catherina "Dicurigai")
+- Redistributed board positions for 7 suspects: Oline(15,25), Catherina(85,20), Hillary(50,15), Marsha(10,50), Abigail(20,75), Fiony(85,70), Victoria(50,80)
+- Built `src/components/game/three/location-explorer.tsx` — interactive 3D location explorer:
+  - 6 locations: Panggung Utama 🎭, Ruang Ganti No.4 🚪, Studio Rekaman B 🎥, Kafe Lobi ☕, Ruang Arsip 📂, Ruang Server 🖥️
+  - Each location has unique fog color, light color, light intensity, accent color
+  - Procedural 3D room: floor, back wall, left/right walls, 2 pillars, central glowing clue marker
+  - Location-specific point lights (warm amber for panggung, cold blue for studio, green LED for server)
+  - 150 drifting dust particles per location (color-matched)
+  - Camera follows mouse (parallax orbit via CameraRig using THREE.MathUtils.lerp)
+  - Clue examination: click 🔍 marker → reveals location-specific clue
+  - Progress counter (X/6 examined)
+  - Location selector grid at bottom (6 buttons with glyphs + names)
+  - Description + clue overlay at bottom of 3D canvas
+- Added LocationExplorer to page.tsx after Evidence Locker
+- Added "TKP 3D 🏛️" to QuickNav
+- Fixed lint: camera position mutation → THREE.MathUtils.lerp + position.set()
+
+Verification (via agent-browser + VLM):
+- ESLint: clean (0 errors, 0 warnings).
+- Dev server: compiles cleanly, no runtime errors.
+- 3D Location Explorer: VLM confirmed "3D environment with pillars/walls, floor, spotlight effect, floating particles, magnifying glass icon in center — Panggung Utama location name overlay"
+- Cast List with 7 suspects: VLM confirmed "7 character portrait cards — 4 top row (Oline, Catherina, Abigail, Fiony) + 3 bottom row (The Whisper/Bayangan Tirai, The Innocent/Bumi Teratai, The Gamer/Pizza Dreamer)"
+- Conspiracy board: VLM confirmed red threads connecting portraits + RAHASIA watermark visible
+
+Stage Summary:
+- 3 new JKT48 members added with deep character profiles (Hillary, Victoria, Marsha) — total 7 suspects
+- 8 new thread connections linking all 7 suspects in a complex web
+- 3D Location Explorer built — 6 interactive 3D scenes with unique atmospheres, parallax camera, clue examination
+- Board positions redistributed for 7 suspects
+- Game now has 7 suspects × 6 3D locations × deep character narratives × interconnected relationships

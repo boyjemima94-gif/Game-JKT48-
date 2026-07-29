@@ -75,7 +75,7 @@ export const SUSPECTS: Suspect[] = [
     accent: "#e0a83c",
     quote: "Panggung ini milikku. Selalu milikku.",
     signature: "— O.M.",
-    location: { x: 20, y: 32 },
+    location: { x: 15, y: 25 },
     depth: {
       appearance:
         "Rambut hitam panjang, sering diikat saat latihan. Mata tajam, ekspresi tertutup. Memakai syal merah tua kemanapun pergi — hadiah dari ibunya sebelum meninggal.",
@@ -134,7 +134,7 @@ export const SUSPECTS: Suspect[] = [
     accent: "#c0392b",
     quote: "Aku tidak pernah memaafkan pengkhianatan.",
     signature: "— C.V.",
-    location: { x: 80, y: 28 },
+    location: { x: 85, y: 20 },
     depth: {
       appearance:
         "Rambut hitam bergelombang seléh bahu. Memakai parfum mawar yang kuat — aromanya bisa tercium dari jarak 2 meter. Kuku selalu dicat merah muda. Memiliki bekas luka tipis di pergelangan tangan kanan.",
@@ -193,7 +193,7 @@ export const SUSPECTS: Suspect[] = [
     accent: "#9a7b4f",
     quote: "Ada rahasia yang lebih baik kubur bersamaamanya.",
     signature: "— A.R.",
-    location: { x: 24, y: 72 },
+    location: { x: 20, y: 75 },
     depth: {
       appearance:
         "Rambut cokelat gelanggang seléh bahu, sering dikepang dua. Senyum lembut tapi mata selalu sedih. Memakai kalung salib kecil — warisan neneknya. Tangan dingin, sering memegang pergelangan tangan sendiri saat gugup.",
@@ -252,7 +252,7 @@ export const SUSPECTS: Suspect[] = [
     accent: "#7a5c8a",
     quote: "Setiap langkah sudah kuhitung. Termasuk langkahnya.",
     signature: "— F.A.",
-    location: { x: 80, y: 70 },
+    location: { x: 85, y: 70 },
     depth: {
       appearance:
         "Rambut lurus hitam seléh pinggang, jarang diikat. Kacamata baca sering tersangkut di kepala. Memakai jam tangan digital — selalu cek waktu. Kuku pendek, bersih — tangan editor video yang profesional.",
@@ -287,6 +287,192 @@ export const SUSPECTS: Suspect[] = [
         "Diam beberapa detik, lalu tersenyum tipis. 'Kau lebih pintar dari yang kukira. Tapi bukti tidak cukup. Aku selalu meninggalkan jejak yang rapi.' Matanya dingin, tanpa penyesalan.",
     },
   },
+  {
+    id: "hillary",
+    name: "Hillary Abigail",
+    memberOf: "JKT48 — Theater Company",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0d4b1eb44c8c.jpg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d6a930444d07.jpeg",
+    role: "The Whisper",
+    codename: "BAYANGAN TIRAI",
+    age: 19,
+    height: "158 cm",
+    lastSeen: "Ruang Arsip, 22:30 — mengakses dokumen lama tanpa izin.",
+    alibi:
+      "Mengaku mencari skenario lama untuk referensi. Tapi ruang arsip dikunci malam itu — siapa yang membukanya?",
+    motive:
+      "Korban menyembunyikan dokumen yang membuktikan Hillary adalah member bayaran — bukan audisi resmi. Jika terbongkar, karier hancur.",
+    evidence: [
+      "Kartu akses ruang arsip dicloning",
+      "Sidik jari di brankas dokumen",
+      "Pesan terhapus: 'kembalikan dokumen itu'",
+    ],
+    threat: 3,
+    accent: "#5a8a6a",
+    quote: "Kebenaran terkadang lebih baik disembunyikan.",
+    signature: "— H.A.",
+    location: { x: 50, y: 15 },
+    depth: {
+      appearance:
+        "Rambut pendek hitam, gaya tomboy. Selalu memakai topi hitam di luar panggung. Mata cokelat tajam yang menatap lama — tidak berkedip. Tangan kanan selalu di saku, menyembunyikan bekas luka bakar lama.",
+      habits: [
+        "Berbisik saat berbicara — sulit didengar di keramaian",
+        "Selalu duduk di pojok ruangan, punggung ke dinding",
+        "Mengunyah permen karet tanpa henti saat gugup",
+        "Memeriksa kunci pintu 3 kali sebelum pergi",
+      ],
+      personality: ["Pendiam", "Observatif", "Berhati-hati", "Misterius", "Setia pada rahasia"],
+      careerTimeline: [
+        { year: "2022", event: "Masuk JKT48 — kontrak khusus, bukan audisi terbuka" },
+        { year: "2023", event: "Diberi peran pendukung di 'Malam Sang Misteri'" },
+        { year: "2024", event: "Korban menemukan dokumen bayarannya" },
+        { year: "2025", event: "Diancam korban: keluar sukarela atau diungkap" },
+        { year: "2025", event: "Mengakses ruang arsip malam kejadian — mencari dokumen asli" },
+      ],
+      victimRelationship:
+        "Korban menemukan bahwa Hillary masuk JKT48 melalui jalur bayaran — bukan audisi. Korban menyimpan dokumen sebagai pegangan. Hillary merasa terjerat seumur hidup.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Saling tidak peduli — Hillary menghindari drama panggung" },
+        { suspectId: "catherina", relationship: "Catherina curiga Hillary ada sesuatu — sering mengikuti" },
+        { suspectId: "abigail", relationship: "Hillary memperhatikan Abigail dari jauh — tahu rahasianya" },
+        { suspectId: "fiony", relationship: "Saling bertukar info rahasia — aliansi diam-diam" },
+        { suspectId: "marsha", relationship: "Sahabat dekat — saling melindungi" },
+        { suspectId: "victoria", relationship: "Tidak percaya — menganggap Victoria terlalu naif" },
+      ],
+      darkSecret:
+        "Hillary sebenarnya dikirim oleh pihak luar untuk memata-matai Teatro. Identitas aslinya bukan member — dia agen informasi.",
+      fear: "Identitas aslinya terbongkar — bukan hanya karier, tapi nyawanya yang taruhan.",
+      alibiWitness: "Tidak ada — ruang arsip dikunci, tapi kartu aksesnya tercatat masuk.",
+      duringGap:
+        "Kartu aksesnya tercatat masuk ruang arsip 23:20 — tepat di jeda CCTV. Tapi tidak ada rekaman keluar.",
+      accusationReaction:
+        "Topinya tertutup ke bawah, menutupi mata. 'Kau tidak tahu siapa aku sebenarnya. Tapi aku tidak membunuhnya. Aku hanya mengambil apa milikku.' Suaranya datar, tanpa emosi.",
+    },
+  },
+  {
+    id: "victoria",
+    name: "Victoria Kimberly",
+    memberOf: "JKT48 — Theater Company",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6b1ca69c95bc.jpeg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1e5a2cca0469.jpeg",
+    role: "The Innocent",
+    codename: "BUMI TERATAI",
+    age: 16,
+    height: "155 cm",
+    lastSeen: "Lobi Theater, 23:00 — duduk di sofa, menangis.",
+    alibi:
+      "Mengaku tidak tahu apa-apa — dia termuda, baru bergabung. Tapi airmatanya terlalu sempurna.",
+    motive:
+      "Korban memerasnya dengan foto memalukan. Sebagai member termuda, skandal akan menghancurkan masa depannya.",
+    evidence: [
+      "Tisu basah di tempat sampah lobi",
+      "Ponselnya menampilkan foto terhapus baru-baru ini",
+      "Saksi melihatnya berbicara dengan korban 30 menit sebelum kejadian",
+    ],
+    threat: 2,
+    accent: "#6a9bd4",
+    quote: "Aku hanya ingin menjadi bintang... tanpa harus membayar harga.",
+    signature: "— V.K.",
+    location: { x: 50, y: 80 },
+    depth: {
+      appearance:
+        "Rambut pirang belang (diwarnai), ikang ekor kuda. Wajah baby-faced dengan bulu mata panjang. Selalu memakai gelang persahabatan dari Marsha. Mata besar yang mudah berair — senjata alaminya.",
+      habits: [
+        "Menggigit ujung rambut saat berpikir",
+        "Mengetuk kuku di meja berirama 'tik-tik-tik'",
+        "Selalu bawa boneka kecil kucing di tas",
+        "Menangis dalam 3 detik jika dipancing (aktif atau asli?)",
+      ],
+      personality: ["Muda", "Naif", "Manipulatif", "Pencari perhatian", "Takut sendirian"],
+      careerTimeline: [
+        { year: "2024", event: "Audisi JKT48 termuda — fenomena media" },
+        { year: "2024", event: "Dijuluki 'golden child' oleh korban" },
+        { year: "2025", event: "Korban memfoto situasi memalukan tanpa sepemahamnya" },
+        { year: "2025", event: "Diancam korban: ikuti atau foto bocor" },
+        { year: "2025", event: "Menangis di lobi malam kejadian — alasan resmi: homesick" },
+      ],
+      victimRelationship:
+        "Awalnya mengagumi korban sebagai mentor. Tapi korban mulai memanfaatkan dia — foto memalukan, tekanan emosional. Victoria merasa terjebak.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Mengagumi Oline — ingin jadi seperti dia" },
+        { suspectId: "catherina", relationship: "Takut pada Catherina — terlalu intense" },
+        { suspectId: "abigail", relationship: "Abigail jadi kakak pelindungnya" },
+        { suspectId: "fiony", relationship: "Saling bantu editing video — Fiony jadi mentor teknis" },
+        { suspectId: "hillary", relationship: "Merasa ada yang aneh dengan Hillary — tapi tidak tahu apa" },
+        { suspectId: "marsha", relationship: "Sahabat terbaik — gelang persahabatan, saling melindungi" },
+      ],
+      darkSecret:
+        "Victoria bukan sesedih yang terlihat. Dia pintar berakting — airmatanya terkontrol. Dia tahu lebih banyak dari yang dia tunjukkan.",
+      fear: "Diusir dari JKT48 — itu satu-satunya tempat dia merasa dihargai.",
+      alibiWitness: "Saksi melihatnya menangis di lobi — tapi tidak ada yang mendekati.",
+      duringGap:
+        "Di lobi, menangis. Tapi ponselnya menunjukkan aktivitas pesan terhapus selama jeda — kepada siapa?",
+      accusationReaction:
+        "Mata membesar, airmata mengalir instan. 'Aku? Aku hanya anak kecil! Aku tidak bisa... aku tidak akan!' Tapi setelah beberapa detik, tatapannya berubah dingin sebentar — sebelum kembali menangis.",
+    },
+  },
+  {
+    id: "marsha",
+    name: "Marsha Lenathea",
+    memberOf: "JKT48 — Theater Company",
+    portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5c046f46bc01.jpg",
+    portraitFallback: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/07b97d20c83c.jpg",
+    role: "The Gamer",
+    codename: "PIZZA DREAMER",
+    age: 19,
+    height: "160 cm",
+    lastSeen: "Ruang Server, 23:10 — mengakses sistem keamanan.",
+    alibi:
+      "Mengaku cek sistem keamanan atas permintaan korban. Tapi log menunjukkan dia menonaktifkan CCTV 9 menit.",
+    motive:
+      "Korban tahu Marsha adalah anggota Valkyrie48 (grup rahasia). Jika terbongkar, kontrak JKT48 batal.",
+    evidence: [
+      "Akses log server atas namanya",
+      "CCTV dimatikan dari terminal yang dia gunakan",
+      "Stiker Valkyrie48 di laptopnya",
+    ],
+    threat: 4,
+    accent: "#d46a9b",
+    quote: "Setiap game punya cheat code. Tapi hidup bukan game.",
+    signature: "— M.L.",
+    location: { x: 10, y: 50 },
+    depth: {
+      appearance:
+        "Rambut hitam panjang sering dikepang. Kacamata gaming merah-LED. Selalu bawa laptop gaming — stiker Valkyrie48 tertutup stiker pizza. Tangan cepat, jari lentik — tangan gamer sejati.",
+      habits: [
+        "Mengklik pen terus-menerus (kebiasaan gaming)",
+        "Selalu bawa 2 ponsel — satu pribadi, satu 'rahasia'",
+        "Memesan pizza setiap malam latihan (ritual sakti)",
+        "Berbicara dengan istilah game di kehidupan nyata",
+      ],
+      personality: ["Cerdas", "Strategis", "Berwibawa", "Penyimpan rahasia", "Loyal"],
+      careerTimeline: [
+        { year: "2019", event: "Audisi JKT48 Academy Class B" },
+        { year: "2020", event: "Promosi ke Class A — cepat" },
+        { year: "2021", event: "Member resmi Team Dream" },
+        { year: "2023", event: "Bergabung Valkyrie48 (grup rahasia side-project)" },
+        { year: "2025", event: "Korban menemukan keanggotaan Valkyrie48-nya" },
+      ],
+      victimRelationship:
+        "Korban menemukan Marsha adalah anggota Valkyrie48 — grup side-project yang melanggar kontrak eksklusif JKT48. Korban mengancam melaporkan. Marsha merasa terpojok.",
+      suspectRelationships: [
+        { suspectId: "oline", relationship: "Menghormati Oline — tapi tidak terlalu dekat" },
+        { suspectId: "catherina", relationship: "Catherina iri pada popularitas Marsha di media" },
+        { suspectId: "abigail", relationship: "Saling bertukar rahasia — keduanya punya beban" },
+        { suspectId: "fiony", relationship: "Saling menghormati skill teknis — aliansi diam" },
+        { suspectId: "hillary", relationship: "Sahabat dekat — saling melindungi rahasia" },
+        { suspectId: "victoria", relationship: "Sahabat terbaik — gelang persahabatan, pelindung" },
+      ],
+      darkSecret:
+        "Marsha yang menonaktifkan CCTV malam itu — atas permintaan seseorang. Tapi siapa yang memintanya? Dia tidak akan mengaku.",
+      fear: "Kontrak JKT48 batal — Valkyrie48 dan JKT48 adalah dua dunia yang tidak boleh bertabrakan.",
+      alibiWitness: "Log server menunjukkan aksesnya — tapi dia mengaku atas permintaan korban.",
+      duringGap:
+        "Di ruang server, menonaktifkan CCTV. Tapi mengaku korban yang menyuruh — apakah korban meminta dirinya dibunuh?",
+      accusationReaction:
+        "Diam lama, lalu tersenyum tipis. 'Kau pintar. Ya, aku matikan CCTV. Tapi bukan untuk membunuh. Seseorang memintanya — dan aku tidak akan mengatakan siapa.' Matanya menantang.",
+    },
+  },
 ];
 
 // Conspiracy board connections (red thread) — pairs of suspect ids with a label
@@ -298,12 +484,22 @@ export interface ThreadLink {
 }
 
 export const THREAD_LINKS: ThreadLink[] = [
+  // Original 4 suspects
   { from: "oline", to: "catherina", label: "Persaingan panggung", weight: 3 },
   { from: "catherina", to: "abigail", label: "Pertemuan rahasia", weight: 2 },
   { from: "abigail", to: "fiony", label: "Pertukaran USB", weight: 2 },
   { from: "fiony", to: "oline", label: "Pesan terhapus", weight: 2 },
   { from: "oline", to: "abigail", label: "Rahasia keluarga", weight: 1 },
   { from: "catherina", to: "fiony", label: "Aliansi senyap", weight: 2 },
+  // New 3 suspects — connections to originals
+  { from: "hillary", to: "marsha", label: "Saling melindungi", weight: 3 },
+  { from: "marsha", to: "victoria", label: "Gelang persahabatan", weight: 3 },
+  { from: "hillary", to: "fiony", label: "Aliansi info rahasia", weight: 2 },
+  { from: "victoria", to: "abigail", label: "Pelindung & dilindungi", weight: 2 },
+  { from: "marsha", to: "abigail", label: "Tukar rahasia", weight: 2 },
+  { from: "catherina", to: "marsha", label: "Iri popularitas", weight: 1 },
+  { from: "victoria", to: "oline", label: "Mengagumi", weight: 1 },
+  { from: "hillary", to: "catherina", label: "Dicurigai", weight: 1 },
 ];
 
 export interface CaseFile {

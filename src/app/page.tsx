@@ -19,6 +19,7 @@ import LoreSection from "@/components/game/lore-section";
 import CreditsSection from "@/components/game/credits-section";
 import DailyChallengeSection from "@/components/game/daily-challenge-section";
 import SuspectComparison from "@/components/game/suspect-comparison";
+import LocationExplorer from "@/components/game/three/location-explorer";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
 import Onboarding from "@/components/game/onboarding";
@@ -97,6 +98,8 @@ export default function Home() {
         <VictimProfile />
         <SectionDivider variant="evidence" label="Forensik" />
         <EvidenceLocker />
+        <SectionDivider variant="evidence" label="TKP 3D" />
+        <LocationExplorer />
         <SectionDivider variant="thread" label="Kronologi" />
         <TimelineSection />
         <SectionDivider variant="stamp" label="Putusan" />

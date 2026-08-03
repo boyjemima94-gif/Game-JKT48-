@@ -27,42 +27,42 @@ import Onboarding from "@/components/game/onboarding";
 import AudioToggle from "@/components/game/audio-toggle";
 import SectionDivider from "@/components/game/section-divider";
 
-// Magnifier cursor — client only, no SSR.
+// Client-only components — with loading fallbacks for SSR
 const MagnifierCursor = dynamic(
   () => import("@/components/game/magnifier-cursor"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const AtmosphereOverlay = dynamic(
   () => import("@/components/game/atmosphere-overlay"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const AmbientBeams = dynamic(
   () => import("@/components/game/ambient-beams"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const DetectiveNotebook = dynamic(
   () => import("@/components/game/detective-notebook"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const ProgressHud = dynamic(
   () => import("@/components/game/progress-hud"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const KeyboardHelp = dynamic(
   () => import("@/components/game/keyboard-help"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const HintSystem = dynamic(
   () => import("@/components/game/hint-system"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const Soundboard = dynamic(
   () => import("@/components/game/soundboard"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 const QuickNav = dynamic(
   () => import("@/components/game/quick-nav"),
-  { ssr: false }
+  { ssr: false, loading: () => null }
 );
 
 export default function Home() {

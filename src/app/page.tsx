@@ -1,6 +1,7 @@
-"use client";
+// Server component — NO "use client"
+// All section components are client components that get SSR'd.
+// ClientOverlays is a client component that wraps interactive overlays.
 
-import dynamic from "next/dynamic";
 import HeroSection from "@/components/game/hero-section";
 import CaseIntro from "@/components/game/case-intro";
 import DifficultySelect from "@/components/game/difficulty-select";
@@ -23,62 +24,13 @@ import LocationExplorer from "@/components/game/three/location-explorer";
 import PersonalBond from "@/components/game/personal-bond";
 import StampCta from "@/components/game/stamp-cta";
 import SiteFooter from "@/components/game/site-footer";
-import Onboarding from "@/components/game/onboarding";
-import AudioToggle from "@/components/game/audio-toggle";
 import SectionDivider from "@/components/game/section-divider";
-
-// Client-only components — with loading fallbacks for SSR
-const MagnifierCursor = dynamic(
-  () => import("@/components/game/magnifier-cursor"),
-  { ssr: false, loading: () => null }
-);
-const AtmosphereOverlay = dynamic(
-  () => import("@/components/game/atmosphere-overlay"),
-  { ssr: false, loading: () => null }
-);
-const AmbientBeams = dynamic(
-  () => import("@/components/game/ambient-beams"),
-  { ssr: false, loading: () => null }
-);
-const DetectiveNotebook = dynamic(
-  () => import("@/components/game/detective-notebook"),
-  { ssr: false, loading: () => null }
-);
-const ProgressHud = dynamic(
-  () => import("@/components/game/progress-hud"),
-  { ssr: false, loading: () => null }
-);
-const KeyboardHelp = dynamic(
-  () => import("@/components/game/keyboard-help"),
-  { ssr: false, loading: () => null }
-);
-const HintSystem = dynamic(
-  () => import("@/components/game/hint-system"),
-  { ssr: false, loading: () => null }
-);
-const Soundboard = dynamic(
-  () => import("@/components/game/soundboard"),
-  { ssr: false, loading: () => null }
-);
-const QuickNav = dynamic(
-  () => import("@/components/game/quick-nav"),
-  { ssr: false, loading: () => null }
-);
+import ClientOverlays from "@/components/game/client-overlays";
 
 export default function Home() {
   return (
     <div className="relative min-h-screen flex flex-col bg-noir-ink film-grain scene-vignette">
-      <AmbientBeams />
-      <MagnifierCursor />
-      <AtmosphereOverlay />
-      <ProgressHud />
-      <KeyboardHelp />
-      <HintSystem />
-      <Soundboard />
-      <QuickNav />
-      <Onboarding />
-      <AudioToggle />
-      <DetectiveNotebook />
+      <ClientOverlays />
 
       <main className="relative z-10 flex-1">
         <HeroSection />

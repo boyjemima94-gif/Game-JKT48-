@@ -2,6 +2,7 @@
 
 import { useRef, useMemo, useState, Suspense, useCallback } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
 // ============================================================
@@ -939,7 +940,24 @@ export default function LocationExplorer() {
                 onClueUnhover={() => setHoveredClue(null)}
                 onClueClick={handleClueClick}
               />
-              <CameraRig />
+              <OrbitControls
+                enablePan={false}
+                enableZoom={true}
+                enableRotate={true}
+                minDistance={2}
+                maxDistance={8}
+                minPolarAngle={Math.PI / 6}
+                maxPolarAngle={Math.PI / 2.1}
+                target={[0, 0.3, -2]}
+                enableDamping
+                dampingFactor={0.08}
+                rotateSpeed={0.5}
+                zoomSpeed={0.6}
+                touches={{
+                  ONE: THREE.TOUCH.ROTATE,
+                  TWO: THREE.TOUCH.DOLLY_PAN,
+                }}
+              />
             </Suspense>
           </Canvas>
 

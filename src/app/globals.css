@@ -131,15 +131,33 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground;
     background-color: var(--color-noir-ink);
     color: var(--color-noir-paper);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
     /* Respect mobile safe areas (iOS notch, gesture bar) */
     padding-left: env(safe-area-inset-left, 0px);
     padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Mobile touch targets — minimum 44px */
+  @media (max-width: 768px) {
+    button, a, [role="button"] {
+      min-height: 40px;
+      min-width: 40px;
+    }
+  }
+
+  /* Smooth scroll snapping for sections */
+  html {
+    scroll-padding-top: 80px;
   }
 
   /* Safe-area utility classes for floating elements */

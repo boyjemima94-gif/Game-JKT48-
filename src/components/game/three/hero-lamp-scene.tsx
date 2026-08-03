@@ -290,17 +290,22 @@ function FlickerController({
   onSweep: (t: number) => void;
 }) {
   const seed = useRef(Math.random() * 100);
+  const smoothIntensity = useRef(0.9);
   useFrame((state) => {
     const t = state.clock.elapsedTime + seed.current;
-    // base breathing
-    let intensity = 0.85 + Math.sin(t * 2.3) * 0.05 + Math.sin(t * 7.1) * 0.03;
-    // random dropouts — lamp flicker
+    // base breathing — smooth
+    let targetIntensity = 0.88 + Math.sin(t * 2.3) * 0.04 + Math.sin(t * 7.1) * 0.02;
+    // gentle flicker — less extreme
     const f = Math.sin(t * 13) * Math.sin(t * 5.3);
-    if (f > 0.92) intensity *= 0.25;
-    else if (f > 0.85) intensity *= 0.55;
-    // occasional hard flicker
+    if (f > 0.94) targetIntensity *= 0.5;
+    else if (f > 0.88) targetIntensity *= 0.75;
+    // rare soft dip
     const hard = Math.sin(t * 0.7);
-    if (hard > 0.99) intensity *= 0.1;
+    if (hard > 0.995) targetIntensity *= 0.3;
+
+    // Smooth interpolation — prevents jarring flicker
+    smoothIntensity.current += (targetIntensity - smoothIntensity.current) * 0.15;
+    const intensity = smoothIntensity.current;
 
     if (bulbRef.current) {
       const mat = bulbRef.current.material as THREE.MeshStandardMaterial;

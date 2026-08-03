@@ -68,13 +68,24 @@ export function getDailyChallenge(date: Date = new Date()): {
     },
   ];
 
-  // Deterministic selection of 2 modifiers
-  const idx1 = dayOfYear % ALL_MODIFIERS.length;
-  const idx2 = (dayOfYear + 3) % ALL_MODIFIERS.length;
-  const modifiers = [
-    ALL_MODIFIERS[idx1],
-    ALL_MODIFIERS[idx2 === idx1 ? (idx2 + 1) % ALL_MODIFIERS.length : idx2],
-  ];
+  // Deterministic selection using toDateString() as seed
+  // Seeded PRNG (mulberry32) for stable shuffle
+  const seedStr = date.toDateString();
+  let seed = 0;
+  for (let i = 0; i < seedStr.length; i++) {
+    seed = (seed * 31 + seedStr.charCodeAt(i)) | 0;
+  }
+  const mulberry32 = (a: number) => () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const rng = mulberry32(seed);
+
+  // Shuffle all modifiers deterministically, pick first 2
+  const shuffled = [...ALL_MODIFIERS].sort(() => rng() - 0.5);
+  const modifiers = [shuffled[0], shuffled[1]];
 
   const bonusMultiplier = 1 + modifiers.reduce((s, m) => s + m.scoreBonus, 0);
 

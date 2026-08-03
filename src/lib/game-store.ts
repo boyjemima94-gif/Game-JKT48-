@@ -513,8 +513,24 @@ export const useGame = create<GameState>()(
           ],
         })),
       hasClue: (clueId) => get().clues.some((c) => c.id === clueId),
-      toggleNotebook: (open) =>
-        set((s) => ({ notebookOpen: open ?? !s.notebookOpen })),
+      toggleNotebook: (open) => {
+        // Bug #9: Notebook blocker — if 'no-notebook' daily modifier is active, block
+        const state = get();
+        // Check if daily challenge with no-notebook modifier is active
+        try {
+          const dailyData = localStorage.getItem("teatro-daily-modifiers");
+          if (dailyData) {
+            const mods = JSON.parse(dailyData);
+            if (Array.isArray(mods) && mods.some((m: { effect: string }) => m.effect === "no-notebook")) {
+              console.warn("[Notebook Blocker] 'no-notebook' modifier is active. Notebook access blocked.");
+              return;
+            }
+          }
+        } catch {
+          /* noop */
+        }
+        set((s) => ({ notebookOpen: open ?? !s.notebookOpen }));
+      },
       makeAccusation: (suspectId) => {
         set({
           accusation: suspectId,

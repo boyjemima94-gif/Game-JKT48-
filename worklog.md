@@ -1197,3 +1197,42 @@ Task: Add immersive 3D controls, mobile responsiveness, visual polish, push to G
 - Viewport: True (mobile ready)
 - 3D: OrbitControls with touch support
 - GitHub: Pushed successfully
+
+---
+Task ID: 20
+Agent: main-orchestrator (user request: fix bugs after Babylon.js migration, optimize)
+Task: Real Babylon.js integration + flicker fix + verification.
+
+## ROOT CAUSE ANALYSIS
+LocationExplorer was STILL using Three.js:
+- Imports: `@react-three/fiber` Canvas, useFrame, useThree
+- Imports: `@react-three/drei` OrbitControls
+- Imports: `three` (THREE namespace)
+- BabylonScene component was created but NEVER imported or used
+
+## FIXES APPLIED
+
+### 1. Real Babylon.js Integration
+- Rewrote LocationExplorer to use `<BabylonScene>` component
+- Removed ALL Three.js imports from LocationExplorer (843 lines deleted)
+- LocationExplorer now imports BabylonScene from `@/components/game/babylon/babylon-scene`
+- All 3D rendering goes through Babylon.js Engine, Scene, ArcRotateCamera
+
+### 2. Flicker Fix (Hero Lamp)
+- Added smooth interpolation: `smoothIntensity.current += (target - current) * 0.15`
+- Reduced flicker intensity: 0.25→0.5, 0.55→0.75, 0.1→0.3
+- Raised thresholds: 0.92→0.94, 0.85→0.88, 0.99→0.995
+- Result: smooth atmospheric flicker, not jarring strobe
+
+### 3. Memory Optimization
+- Server requires `NODE_OPTIONS=--max-old-space-size=4096` for Babylon.js
+- Compile time: ~37 seconds (Babylon.js package is large)
+- HTML size: 405KB (up from 290KB due to Babylon.js chunks)
+
+## VERIFICATION
+- Lint: 0 errors ✅
+- Server: HTTP 200, 405KB ✅
+- Title: "Misteri Theater Berdarah" ✅
+- Babylon.js reference in HTML: True ✅
+- All sections SSR'd: ✅ (Hero, Cast, Board, Evidence, TKP 3D, Stamp, Footer)
+- GitHub: Pushed (commit 57e3359)

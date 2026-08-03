@@ -142,22 +142,61 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
-    /* Respect mobile safe areas (iOS notch, gesture bar) */
     padding-left: env(safe-area-inset-left, 0px);
     padding-right: env(safe-area-inset-right, 0px);
+    /* Subtle ambient gradient background */
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(58, 44, 32, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 100%, rgba(139, 26, 26, 0.08) 0%, transparent 50%);
+    background-attachment: fixed;
   }
 
-  /* Mobile touch targets — minimum 44px */
+  /* Mobile touch targets */
   @media (max-width: 768px) {
     button, a, [role="button"] {
-      min-height: 40px;
-      min-width: 40px;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    /* Reduce section padding on mobile */
+    section {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    /* Smaller font sizes on mobile */
+    h2 {
+      font-size: 1.75rem !important;
     }
   }
 
-  /* Smooth scroll snapping for sections */
   html {
     scroll-padding-top: 80px;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0807;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #3a2c20 0%, #211a14 100%);
+    border-radius: 4px;
+    border: 1px solid #14100d;
+  }
+
+  /* Focus visible — accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--color-noir-brass);
+    outline-offset: 2px;
+  }
+
+  /* Selection color */
+  ::selection {
+    background: rgba(201, 163, 90, 0.3);
+    color: #e8dcc0;
+  }
   }
 
   /* Safe-area utility classes for floating elements */
@@ -517,5 +556,60 @@
   .film-grain::after,
   .stamp-slam {
     animation: none !important;
+  }
+}
+
+/* ============ Section reveal animations ============ */
+@keyframes section-fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section-reveal {
+  animation: section-fade-up 0.8s ease-out forwards;
+}
+
+/* ============ Glow pulse for interactive elements ============ */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(201,163,90,0.2); }
+  50% { box-shadow: 0 0 20px rgba(201,163,90,0.5); }
+}
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ============ Blood drip effect ============ */
+@keyframes drip {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ============ Text shimmer ============ */
+@keyframes text-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(90deg, #c9a35a 0%, #ffcb7a 50%, #c9a35a 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 3s linear infinite;
+}
+
+/* ============ Mobile responsive helpers ============ */
+@media (max-width: 640px) {
+  .font-stamp {
+    letter-spacing: 0.02em !important;
+  }
+  /* Stack CTAs vertically on mobile */
+  .flex-col.sm\:flex-row {
+    gap: 0.75rem !important;
+  }
+  /* Reduce 3D canvas height on mobile */
+  .aspect-\[2\/1\] {
+    aspect-ratio: 4/3 !important;
   }
 }

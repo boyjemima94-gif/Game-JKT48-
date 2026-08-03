@@ -183,7 +183,7 @@ export default function HeroSection() {
               transition: "filter 0.1s linear",
             }}
           >
-            MISTERI THEATER
+            <span className="text-shimmer">MISTERI THEATER</span>
             <br />
             <span
               className="text-noir-crimson"
@@ -205,7 +205,7 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <a
               href="#stamp"
-              className="group relative px-8 py-3.5 font-stamp text-sm tracking-[0.2em] uppercase text-noir-ink bg-noir-brass hover:bg-noir-tungsten transition-all shadow-[0_8px_24px_rgba(201,163,90,0.45),0_0_0_1px_rgba(201,163,90,0.6)] hover:shadow-[0_12px_32px_rgba(255,203,122,0.6),0_0_0_2px_rgba(255,203,122,0.8)] hover:-translate-y-0.5"
+              className="group relative px-8 py-3.5 font-stamp text-sm tracking-[0.2em] uppercase text-noir-ink bg-noir-brass hover:bg-noir-tungsten transition-all shadow-[0_8px_24px_rgba(201,163,90,0.45),0_0_0_1px_rgba(201,163,90,0.6)] hover:shadow-[0_12px_32px_rgba(255,203,122,0.6),0_0_0_2px_rgba(255,203,122,0.8)] hover:-translate-y-0.5 glow-pulse"
               style={{
                 boxShadow: `0 8px 24px rgba(201,163,90,${0.3 + flicker * 0.25})`,
               }}

@@ -1,24 +1,21 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-  Engine,
-  Scene,
-  ArcRotateCamera,
-  Vector3,
-  Color3,
-  Color4,
-  DirectionalLight,
-  PointLight,
-  HemisphericLight,
-  MeshBuilder,
-  PBRMaterial,
-  StandardMaterial,
-  ParticleSystem,
-  Texture,
-  GlowLayer,
-  ShadowGenerator,
-} from "@babylonjs/core";
+// Import only needed modules to reduce bundle size
+import { Engine } from "@babylonjs/core/Engines/engine";
+import { Scene } from "@babylonjs/core/scene";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { Vector3, Color3, Color4 } from "@babylonjs/core/Maths/math";
+import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
+import { PointLight } from "@babylonjs/core/Lights/pointLight";
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
+import { PBRMaterial } from "@babylonjs/core/Materials/PBR/pbrMaterial";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem";
+import { Texture } from "@babylonjs/core/Materials/Textures/texture";
+import { GlowLayer } from "@babylonjs/core/Layers/glowLayer";
+import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 
 interface BabylonRoomOptions {
   fogColor: string;

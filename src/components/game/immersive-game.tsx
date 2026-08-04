@@ -1,595 +1,619 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
-// Load Babylon.js from CDN — avoids Turbopack compile issues
-const BABYLON_CDN = "https://cdn.babylonjs.com/babylon.js";
-
+// ============================================================
+// GAME DATA — 8 Suspects (dipertahankan dari versi sebelumnya)
+// ============================================================
 const SUSPECTS = [
-  { id: "oline", name: "Oline Manuel", codename: "BURUNG MERAK", color: "#e0a83c", room: "stage", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2b3454ce4879.jpg" },
-  { id: "catherina", name: "Catherina Valencia", codename: "MERAH MUDA", color: "#c0392b", room: "dressing", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9ea50407c914.jpg" },
-  { id: "abigail", name: "Abigail Rachel", codename: "ANGSA PUTIH", color: "#9a7b4f", room: "cafe", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/25175d128e83.jpg" },
-  { id: "fiony", name: "Fiony Alveria", codename: "BAYANG MALAM", color: "#7a5c8a", room: "studio", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/070d4143804a.jpg" },
-  { id: "hillary", name: "Hillary Abigail", codename: "BAYANGAN TIRAI", color: "#5a8a6a", room: "archive", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5a2d1c0d1f99.jpg" },
-  { id: "victoria", name: "Victoria Kimberly", codename: "BUMI TERATAI", color: "#6a9bd4", room: "lobby", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ebd9572a3092.jpg" },
-  { id: "marsha", name: "Marsha Lenathea", codename: "PIZZA DREAMER", color: "#d46a9b", room: "server", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b509794743f0.jpg" },
-  { id: "adeline", name: "Adeline Wijaya", codename: "MATA SENJA", color: "#8a7ad4", room: "stage", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c2f8cd60fbb1.jpg" },
+  { id: "oline", name: "Oline Manuel", codename: "BURUNG MERAK", color: "#e0a83c", room: "stage", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2b3454ce4879.jpg", role: "The Lead Star", quote: "Panggung ini milikku. Selalu milikku." },
+  { id: "catherina", name: "Catherina Valencia", codename: "MERAH MUDA", color: "#c0392b", room: "dressing", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9ea50407c914.jpg", role: "The Rival", quote: "Aku tidak pernah memaafkan pengkhianatan." },
+  { id: "abigail", name: "Abigail Rachel", codename: "ANGSA PUTIH", color: "#9a7b4f", room: "cafe", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/25175d128e83.jpg", role: "The Confidante", quote: "Ada rahasia yang lebih baik kubur." },
+  { id: "fiony", name: "Fiony Alveria", codename: "BAYANG MALAM", color: "#7a5c8a", room: "studio", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/070d4143804a.jpg", role: "The Strategist", quote: "Setiap langkah sudah kuhitung." },
+  { id: "hillary", name: "Hillary Abigail", codename: "BAYANGAN TIRAI", color: "#5a8a6a", room: "archive", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5a2d1c0d1f99.jpg", role: "The Whisper", quote: "Kebenaran terkadang lebih baik disembunyikan." },
+  { id: "victoria", name: "Victoria Kimberly", codename: "BUMI TERATAI", color: "#6a9bd4", room: "lobby", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ebd9572a3092.jpg", role: "The Innocent", quote: "Aku hanya ingin menjadi bintang." },
+  { id: "marsha", name: "Marsha Lenathea", codename: "PIZZA DREAMER", color: "#d46a9b", room: "server", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b509794743f0.jpg", role: "The Gamer", quote: "Setiap game punya cheat code." },
+  { id: "adeline", name: "Adeline Wijaya", codename: "MATA SENJA", color: "#8a7ad4", room: "stage", portrait: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c2f8cd60fbb1.jpg", role: "The Witness", quote: "Setiap orang punya bayangan." },
 ];
 
 const ROOMS = [
-  { id: "lobby", name: "Lobi Theater", color: "#2a2218", accent: "#ffd9a0", x: 0, z: 0 },
-  { id: "stage", name: "Panggung Utama", color: "#2a1810", accent: "#ffcb7a", x: 0, z: -15 },
-  { id: "dressing", name: "Ruang Ganti", color: "#1a2818", accent: "#ffb347", x: -12, z: -8 },
-  { id: "cafe", name: "Kafe Lobi", color: "#282818", accent: "#ffd9a0", x: 12, z: -8 },
-  { id: "studio", name: "Studio Rekaman", color: "#0d1828", accent: "#4a9be8", x: -12, z: -15 },
-  { id: "archive", name: "Ruang Arsip", color: "#1a1a10", accent: "#c9a35a", x: 12, z: -15 },
-  { id: "server", name: "Ruang Server", color: "#0d180d", accent: "#00ff66", x: 0, z: -25 },
+  { id: "lobby", name: "Lobi Theater", bg: "#1a1410", accent: "#ffd9a0", icon: "🏛️", desc: "Lobi utama theater. Meja resepsionis, poster pertunjukan. Victoria duduk di sini." },
+  { id: "stage", name: "Panggung Utama", bg: "#1a0d0a", accent: "#ffcb7a", icon: "🎭", desc: "Panggung dengan tirai beludru merah. Korban ditemukan di sini. Oline dan Adeline berada di sini." },
+  { id: "dressing", name: "Ruang Ganti", bg: "#0d1a0d", accent: "#ffb347", icon: "🪞", desc: "Cermin dengan lampu bohlam. Meja rias penuh kosmetik. Catherina di sini." },
+  { id: "cafe", name: "Kafe Lobi", bg: "#1a1a0d", accent: "#ffd9a0", icon: "☕", desc: "Kafe kecil dengan meja bundar. Aroma kopi. Abigail duduk sendirian." },
+  { id: "studio", name: "Studio Rekaman", bg: "#0a0d1a", accent: "#4a9be8", icon: "🎥", desc: "Monitor biru dingin, meja editing. Fiony bekerja di sini." },
+  { id: "archive", name: "Ruang Arsip", bg: "#0d0d0d", accent: "#c9a35a", icon: "📂", desc: "Rak buku tinggi, brankas baja. Hillary menyusup ke sini." },
+  { id: "server", name: "Ruang Server", bg: "#0d1a0d", accent: "#00ff66", icon: "🖥️", desc: "Rack server dengan LED hijau. Terminal CCTV. Marsha di sini." },
 ];
 
 const CLUES = [
-  { id: "clue_shoe", room: "stage", label: "Bekas Sepatu", detail: "Bekas sepatu ukuran 42 di belakang tirai — bukan milik korban.", pos: [-1, 0.3, -3] },
-  { id: "clue_perfume", room: "dressing", label: "Botol Parfum", detail: "Parfum mawar setengah kosong — baru dipakai malam itu.", pos: [-1, 0.8, -1] },
-  { id: "clue_usb", room: "studio", label: "Drive USB", detail: "USB dengan sidik jari Fiony. File terenkripsi.", pos: [0, 0.5, -2] },
-  { id: "clue_tissue", room: "cafe", label: "Tisu Bekas", detail: "Tisu dengan lipstik pink — bukan milik Abigail.", pos: [1, 0.9, 0] },
-  { id: "clue_safe", room: "archive", label: "Brankas Terbuka", detail: "Brankas terbuka — dokumen kontrak Hillary hilang.", pos: [2, 0.5, -3] },
-  { id: "clue_cctv", room: "server", label: "Log CCTV", detail: "CCTV dimatikan 23:17-23:26. 9 menit kegelapan.", pos: [0, 1.2, -3] },
-  { id: "clue_curtain", room: "stage", label: "Tirai Robek", detail: "Tirai beludru robek — tanda perjuangan.", pos: [2, 2, -4] },
-  { id: "clue_note", room: "dressing", label: "Note Tersembunyi", detail: "Note: 'Aku tahu apa kau lakukan.'", pos: [1, 0.5, -3] },
+  { id: "c1", room: "stage", label: "Bekas Sepatu", detail: "Bekas sepatu ukuran 42 di belakang tirai — bukan milik korban.", x: 30, y: 60 },
+  { id: "c2", room: "stage", label: "Tirai Robek", detail: "Tirai beludru robek di bagian bawah — tanda perjuangan.", x: 70, y: 40 },
+  { id: "c3", room: "dressing", label: "Botol Parfum", detail: "Parfum mawar setengah kosong — baru dipakai malam itu.", x: 25, y: 55 },
+  { id: "c4", room: "dressing", label: "Note Tersembunyi", detail: "Note: 'Aku tahu apa kau lakukan.'", x: 75, y: 65 },
+  { id: "c5", room: "studio", label: "Drive USB", detail: "USB dengan sidik jari Fiony. File terenkripsi.", x: 50, y: 50 },
+  { id: "c6", room: "cafe", label: "Tisu Bekas", detail: "Tisu dengan lipstik pink — bukan milik Abigail.", x: 60, y: 60 },
+  { id: "c7", room: "archive", label: "Brankas Terbuka", detail: "Brankas terbuka — dokumen kontrak Hillary hilang.", x: 70, y: 55 },
+  { id: "c8", room: "server", label: "Log CCTV", detail: "CCTV dimatikan 23:17-23:26. 9 menit kegelapan.", x: 50, y: 45 },
 ];
-
-function loadScript(src: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if ((window as any).BABYLON) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error(`Failed to load ${src}`));
-    document.head.appendChild(script);
-  });
-}
 
 export default function ImmersiveGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fps, setFps] = useState(60);
-  const [roomLabel, setRoomLabel] = useState("Lobi Theater");
-  const [cluesFound, setCluesFound] = useState(0);
+  const [currentRoom, setCurrentRoom] = useState("lobby");
+  const [examinedClues, setExaminedClues] = useState<Set<string>>(new Set());
+  const [interrogated, setInterrogated] = useState<Set<string>>(new Set());
   const [cluePopup, setCluePopup] = useState<{ label: string; detail: string } | null>(null);
   const [suspectPopup, setSuspectPopup] = useState<typeof SUSPECTS[0] | null>(null);
-  const [interrogated, setInterrogated] = useState<Set<string>>(new Set());
+  const [showMap, setShowMap] = useState(false);
+  const [showNotebook, setShowNotebook] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const animFrame = useRef<number>(0);
 
+  const room = ROOMS.find((r) => r.id === currentRoom)!;
+  const roomSuspects = SUSPECTS.filter((s) => s.room === currentRoom);
+  const roomClues = CLUES.filter((c) => c.room === currentRoom);
+
+  // Canvas rendering — pseudo-3D room with perspective
   useEffect(() => {
-    if (!canvasRef.current) return;
-    let disposed = false;
-    let engine: any = null;
-    let scene: any = null;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    loadScript(BABYLON_CDN)
-      .then(() => {
-        if (disposed || !canvasRef.current) return;
-        const B = (window as any).BABYLON;
+    const resize = () => {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
-        // === ENGINE ===
-        engine = new B.Engine(canvasRef.current, true, {
-          antialias: true,
-          powerPreference: "high-performance",
-          preserveDrawingBuffer: false,
-          stencil: false,
-        });
+    let t = 0;
+    const render = () => {
+      t += 0.016;
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
 
-        // === SCENE ===
-        scene = new B.Scene(engine);
-        scene.clearColor = new B.Color4(0.03, 0.02, 0.02, 1);
-        scene.fogMode = B.Scene.FOGMODE_EXP2;
-        scene.fogDensity = 0.015;
-        scene.fogColor = new B.Color3(0.03, 0.02, 0.02);
+      // Clear
+      ctx.fillStyle = room.bg;
+      ctx.fillRect(0, 0, w, h);
 
-        // === CAMERA ===
-        const camera = new B.ArcRotateCamera("cam", -Math.PI / 2, Math.PI / 2.8, 8, new B.Vector3(0, 1, 0), canvasRef.current);
-        camera.attachControl(canvasRef.current, true);
-        camera.lowerRadiusLimit = 3;
-        camera.upperRadiusLimit = 15;
-        camera.lowerBetaLimit = Math.PI / 6;
-        camera.upperBetaLimit = Math.PI / 2.1;
-        camera.wheelDeltaPercentage = 0.01;
-        camera.pinchDeltaPercentage = 0.01;
+      // Floor with perspective grid
+      const horizon = h * 0.35;
+      const floorH = h - horizon;
+      ctx.fillStyle = room.bg;
+      ctx.fillRect(0, horizon, w, floorH);
 
-        // === LIGHTS ===
-        const hemi = new B.HemisphericLight("hemi", new B.Vector3(0, 1, 0), scene);
-        hemi.intensity = 0.5;
-        hemi.diffuse = new B.Color3(0.6, 0.5, 0.4);
-        hemi.groundColor = new B.Color3(0.1, 0.08, 0.06);
+      // Perspective floor lines
+      ctx.strokeStyle = `${room.accent}15`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 10; i++) {
+        const fx = (i / 10) * w;
+        ctx.beginPath();
+        ctx.moveTo(fx, h);
+        ctx.lineTo(cx + (fx - cx) * 0.3, horizon);
+        ctx.stroke();
+      }
+      // Horizontal floor lines (perspective)
+      for (let i = 1; i <= 5; i++) {
+        const fy = horizon + (floorH * (i / 5) * (i / 5));
+        ctx.beginPath();
+        ctx.moveTo(0, fy);
+        ctx.lineTo(w, fy);
+        ctx.stroke();
+      }
 
-        const dirLight = new B.DirectionalLight("dir", new B.Vector3(-0.3, -1, 0.2), scene);
-        dirLight.position = new B.Vector3(5, 10, 5);
-        dirLight.intensity = 0.4;
+      // Back wall
+      const wallH = horizon;
+      const wallGrad = ctx.createLinearGradient(0, 0, 0, wallH);
+      wallGrad.addColorStop(0, room.bg);
+      wallGrad.addColorStop(1, `${room.accent}10`);
+      ctx.fillStyle = wallGrad;
+      ctx.fillRect(0, 0, w, wallH);
 
-        const shadowGen = new B.ShadowGenerator(512, dirLight);
-        shadowGen.useBlurExponentialShadowMap = true;
-        shadowGen.blurKernel = 8;
+      // Spotlight from top
+      const breath = 0.85 + Math.sin(t * 0.8) * 0.1 + Math.sin(t * 2.1) * 0.05;
+      const spotGrad = ctx.createRadialGradient(cx, 0, 0, cx, h * 0.5, h * 0.6);
+      spotGrad.addColorStop(0, `${room.accent}${Math.round(breath * 30).toString(16).padStart(2, "0")}`);
+      spotGrad.addColorStop(0.5, `${room.accent}08`);
+      spotGrad.addColorStop(1, "transparent");
+      ctx.fillStyle = spotGrad;
+      ctx.fillRect(0, 0, w, h);
 
-        const glow = new B.GlowLayer("glow", scene);
-        glow.intensity = 0.6;
+      // Ceiling light fixture
+      ctx.fillStyle = room.accent;
+      ctx.globalAlpha = breath;
+      ctx.beginPath();
+      ctx.arc(cx, 20, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath();
+      ctx.arc(cx, 20, 16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
 
-        // === BUILD ROOMS ===
-        ROOMS.forEach((room) => {
-          const floorMat = new B.StandardMaterial(`fm_${room.id}`, scene);
-          floorMat.diffuseColor = B.Color3.FromHexString(room.color);
-          floorMat.specularColor = new B.Color3(0.05, 0.05, 0.05);
+      // Light cone (volumetric)
+      ctx.fillStyle = `${room.accent}08`;
+      ctx.beginPath();
+      ctx.moveTo(cx - 5, 20);
+      ctx.lineTo(cx - 80, h * 0.7);
+      ctx.lineTo(cx + 80, h * 0.7);
+      ctx.lineTo(cx + 5, 20);
+      ctx.closePath();
+      ctx.fill();
 
-          const floor = B.MeshBuilder.CreateGround(`f_${room.id}`, { width: 10, height: 10 }, scene);
-          floor.position.set(room.x, 0, room.z);
-          floor.material = floorMat;
-          floor.receiveShadows = true;
+      // Room props (simple 2D representations)
+      ctx.save();
+      if (currentRoom === "stage") {
+        // Curtain
+        ctx.fillStyle = "#3a1010";
+        ctx.fillRect(0, 0, w, wallH * 0.7);
+        // Curtain folds
+        for (let i = 0; i < 8; i++) {
+          ctx.fillStyle = i % 2 === 0 ? "#4a1515" : "#2a0808";
+          ctx.fillRect((i / 8) * w, 0, w / 8, wallH * 0.7);
+        }
+        // Stage platform
+        ctx.fillStyle = "#2a1810";
+        ctx.fillRect(0, horizon - 10, w, 20);
+        ctx.fillStyle = "#3a2218";
+        ctx.fillRect(0, horizon - 10, w, 5);
+      }
 
-          const wallMat = new B.StandardMaterial(`wm_${room.id}`, scene);
-          const wc = B.Color3.FromHexString(room.color);
-          wallMat.diffuseColor = new B.Color3(wc.r + 0.05, wc.g + 0.05, wc.b + 0.05);
-          wallMat.specularColor = new B.Color3(0.02, 0.02, 0.02);
-
-          const back = B.MeshBuilder.CreateGround(`bw_${room.id}`, { width: 10, height: 5 }, scene);
-          back.rotation.x = Math.PI / 2;
-          back.position.set(room.x, 2.5, room.z - 5);
-          back.material = wallMat;
-          back.receiveShadows = true;
-
-          const left = B.MeshBuilder.CreateGround(`lw_${room.id}`, { width: 10, height: 5 }, scene);
-          left.rotation.z = Math.PI / 2;
-          left.position.set(room.x - 5, 2.5, room.z);
-          left.material = wallMat;
-          left.receiveShadows = true;
-
-          const right = left.clone(`rw_${room.id}`);
-          right.position.x = room.x + 5;
-          right.rotation.z = -Math.PI / 2;
-
-          // Room light
-          const rl = new B.PointLight(`rl_${room.id}`, new B.Vector3(room.x, 4, room.z), scene);
-          rl.diffuse = B.Color3.FromHexString(room.accent);
-          rl.intensity = 20;
-          rl.range = 14;
-
-          // Ceiling light fixture (glowing sphere)
-          const fixture = B.MeshBuilder.CreateSphere(`fix_${room.id}`, { diameter: 0.3 }, scene);
-          fixture.position.set(room.x, 4.5, room.z);
-          const fixMat = new B.StandardMaterial(`fixM_${room.id}`, scene);
-          fixMat.emissiveColor = B.Color3.FromHexString(room.accent);
-          fixMat.disableLighting = true;
-          fixture.material = fixMat;
-
-          // Room-specific props
-          if (room.id === "stage") {
-            const curtain = B.MeshBuilder.CreateGround("curtain", { width: 8, height: 4 }, scene);
-            curtain.rotation.x = Math.PI / 2;
-            curtain.position.set(room.x, 3, room.z - 4.8);
-            const cm = new B.StandardMaterial("cm", scene);
-            cm.diffuseColor = new B.Color3(0.35, 0.1, 0.1);
-            curtain.material = cm;
-
-            const stage = B.MeshBuilder.CreateBox("stage_plat", { width: 8, height: 0.5, depth: 4 }, scene);
-            stage.position.set(room.x, 0.25, room.z - 1);
-            stage.material = floorMat;
-            shadowGen.addShadowCaster(stage);
-          }
-
-          if (room.id === "server") {
-            [-2, 0, 2].forEach((xOff, i) => {
-              const rack = B.MeshBuilder.CreateBox(`rack_${i}`, { width: 0.8, height: 3, depth: 0.6 }, scene);
-              rack.position.set(room.x + xOff, 1.5, room.z - 4);
-              const rm = new B.StandardMaterial(`rm_${i}`, scene);
-              rm.diffuseColor = new B.Color3(0.05, 0.1, 0.05);
-              rm.emissiveColor = new B.Color3(0, 0.15, 0.05);
-              rack.material = rm;
-              shadowGen.addShadowCaster(rack);
-            });
-          }
-
-          if (room.id === "cafe") {
-            const table = B.MeshBuilder.CreateCylinder("ctable", { height: 0.1, diameter: 1.5 }, scene);
-            table.position.set(room.x, 0.8, room.z);
-            const tm = new B.StandardMaterial("tm", scene);
-            tm.diffuseColor = new B.Color3(0.2, 0.15, 0.1);
-            table.material = tm;
-            shadowGen.addShadowCaster(table);
-
-            const leg = B.MeshBuilder.CreateCylinder("cleg", { height: 0.8, diameter: 0.1 }, scene);
-            leg.position.set(room.x, 0.4, room.z);
-            leg.material = tm;
-          }
-
-          if (room.id === "archive") {
-            [-2, 0, 2].forEach((xOff, i) => {
-              const shelf = B.MeshBuilder.CreateBox(`shelf_${i}`, { width: 2, height: 3, depth: 0.5 }, scene);
-              shelf.position.set(room.x + xOff, 1.5, room.z - 4.5);
-              const sm = new B.StandardMaterial(`sm_${i}`, scene);
-              sm.diffuseColor = new B.Color3(0.2, 0.15, 0.08);
-              shelf.material = sm;
-              shadowGen.addShadowCaster(shelf);
-            });
-
-            const safe = B.MeshBuilder.CreateBox("safe", { width: 1, height: 1.4, depth: 0.8 }, scene);
-            safe.position.set(room.x + 3, 0.7, room.z - 4);
-            const safM = new B.StandardMaterial("safM", scene);
-            safM.diffuseColor = new B.Color3(0.1, 0.1, 0.1);
-            safe.material = safM;
-            shadowGen.addShadowCaster(safe);
-          }
-
-          if (room.id === "studio") {
-            [-1, 0, 1].forEach((xOff) => {
-              const mon = B.MeshBuilder.CreateBox(`mon_${xOff}`, { width: 0.8, height: 0.5, depth: 0.05 }, scene);
-              mon.position.set(room.x + xOff, 1.2, room.z - 4.8);
-              const mm = new B.StandardMaterial(`mm_${xOff}`, scene);
-              mm.emissiveColor = new B.Color3(0.1, 0.2, 0.4);
-              mm.disableLighting = true;
-              mon.material = mm;
-            });
-
-            const desk = B.MeshBuilder.CreateBox("sdesk", { width: 3, height: 0.1, depth: 1 }, scene);
-            desk.position.set(room.x, 0.8, room.z - 4.5);
-            const dm = new B.StandardMaterial("dm", scene);
-            dm.diffuseColor = new B.Color3(0.1, 0.1, 0.15);
-            desk.material = dm;
-            shadowGen.addShadowCaster(desk);
-          }
-
-          if (room.id === "dressing") {
-            const mirror = B.MeshBuilder.CreateGround("mirror", { width: 2, height: 1.5 }, scene);
-            mirror.rotation.x = Math.PI / 2;
-            mirror.position.set(room.x, 1.5, room.z - 4.8);
-            const mm = new B.StandardMaterial("mirM", scene);
-            mm.diffuseColor = new B.Color3(0.1, 0.1, 0.15);
-            mm.specularColor = new B.Color3(0.8, 0.8, 0.8);
-            mirror.material = mm;
-
-            const dt = B.MeshBuilder.CreateBox("dtable", { width: 3, height: 0.1, depth: 0.8 }, scene);
-            dt.position.set(room.x, 0.8, room.z - 4.5);
-            const dtm = new B.StandardMaterial("dtm", scene);
-            dtm.diffuseColor = new B.Color3(0.2, 0.15, 0.1);
-            dt.material = dtm;
-            shadowGen.addShadowCaster(dt);
-
-            for (let i = 0; i < 6; i++) {
-              const bulb = B.MeshBuilder.CreateSphere(`bulb_${i}`, { diameter: 0.12 }, scene);
-              const angle = (i / 6) * Math.PI * 2;
-              bulb.position.set(room.x + Math.cos(angle) * 1.2, 1.5 + Math.sin(angle) * 0.8, room.z - 4.6);
-              const bm = new B.StandardMaterial(`bm_${i}`, scene);
-              bm.emissiveColor = new B.Color3(1, 0.7, 0.3);
-              bm.disableLighting = true;
-              bulb.material = bm;
-            }
-          }
-
-          if (room.id === "lobby") {
-            const desk = B.MeshBuilder.CreateBox("lobby_desk", { width: 2, height: 1, depth: 0.8 }, scene);
-            desk.position.set(room.x, 0.5, room.z - 3);
-            const dm = new B.StandardMaterial("ldm", scene);
-            dm.diffuseColor = new B.Color3(0.2, 0.18, 0.12);
-            desk.material = dm;
-            shadowGen.addShadowCaster(desk);
-          }
-        });
-
-        // === HALLWAYS ===
-        const hallMat = new B.StandardMaterial("hallMat", scene);
-        hallMat.diffuseColor = new B.Color3(0.08, 0.06, 0.04);
-        hallMat.specularColor = new B.Color3(0.01, 0.01, 0.01);
-
-        const halls = [
-          { w: 4, h: 5, x: 0, z: -7.5 },
-          { w: 5, h: 4, x: -6, z: -4 },
-          { w: 5, h: 4, x: 6, z: -4 },
-          { w: 4, h: 5, x: 0, z: -20 },
-          { w: 5, h: 4, x: -6, z: -12 },
-          { w: 5, h: 4, x: 6, z: -12 },
-        ];
-        halls.forEach((h, i) => {
-          const hall = B.MeshBuilder.CreateGround(`hall_${i}`, { width: h.w, height: h.h }, scene);
-          hall.position.set(h.x, 0, h.z);
-          hall.material = hallMat;
-          hall.receiveShadows = true;
-        });
-
-        // === CHARACTER NPCs ===
-        SUSPECTS.forEach((suspect) => {
-          const room = ROOMS.find((r) => r.id === suspect.room);
-          if (!room) return;
-
-          const px = room.x + (Math.random() - 0.5) * 3;
-          const pz = room.z + (Math.random() - 0.5) * 3;
-
-          const body = B.MeshBuilder.CreateCapsule(`b_${suspect.id}`, { height: 1.6, radius: 0.25 }, scene);
-          body.position.set(px, 0.8, pz);
-          const bm = new B.StandardMaterial(`bm_${suspect.id}`, scene);
-          bm.diffuseColor = B.Color3.FromHexString(suspect.color);
-          bm.emissiveColor = B.Color3.FromHexString(suspect.color).scale(0.12);
-          body.material = bm;
-          shadowGen.addShadowCaster(body);
-          body.metadata = { type: "suspect", id: suspect.id };
-
-          const head = B.MeshBuilder.CreateSphere(`h_${suspect.id}`, { diameter: 0.4 }, scene);
-          head.position.set(px, 1.8, pz);
-          const hm = new B.StandardMaterial(`hm_${suspect.id}`, scene);
-          hm.diffuseColor = new B.Color3(0.83, 0.66, 0.5);
-          head.material = hm;
-          shadowGen.addShadowCaster(head);
-          head.metadata = { type: "suspect", id: suspect.id };
-
-          const cl = new B.PointLight(`cl_${suspect.id}`, new B.Vector3(px, 1, pz), scene);
-          cl.diffuse = B.Color3.FromHexString(suspect.color);
-          cl.intensity = 2.5;
-          cl.range = 3;
-
-          let t = Math.random() * 10;
-          scene.onBeforeRenderObservable.add(() => {
-            if (disposed) return;
-            t += engine.getDeltaTime() / 1000;
-            body.position.y = 0.8 + Math.sin(t * 1.2) * 0.03;
-            body.rotation.y = Math.sin(t * 0.3) * 0.3;
-            head.position.y = body.position.y + 1;
-            head.rotation.y = body.rotation.y;
-          });
-        });
-
-        // === CLUE ORBS ===
-        CLUES.forEach((clue) => {
-          const room = ROOMS.find((r) => r.id === clue.room);
-          if (!room) return;
-
-          const orb = B.MeshBuilder.CreateSphere(`clue_${clue.id}`, { diameter: 0.3 }, scene);
-          orb.position.set(room.x + clue.pos[0], clue.pos[1], room.z + clue.pos[2]);
-          const om = new B.StandardMaterial(`clm_${clue.id}`, scene);
-          om.emissiveColor = new B.Color3(1, 0.8, 0.3);
-          om.disableLighting = true;
-          orb.material = om;
-          orb.metadata = { type: "clue", id: clue.id, label: clue.label, detail: clue.detail };
-
-          const ol = new B.PointLight(`ol_${clue.id}`, orb.position.clone(), scene);
-          ol.diffuse = new B.Color3(1, 0.8, 0.3);
-          ol.intensity = 2;
-          ol.range = 2.5;
-
-          let t = Math.random() * 5;
-          scene.onBeforeRenderObservable.add(() => {
-            if (disposed) return;
-            t += engine.getDeltaTime() / 1000;
-            orb.position.y = clue.pos[1] + Math.sin(t * 2) * 0.1;
-            orb.rotation.y = t * 0.5;
-            orb.scaling.setAll(1 + Math.sin(t * 3) * 0.12);
-          });
-        });
-
-        // === CLICK HANDLER ===
-        scene.onPointerObservable.add((info: any) => {
-          if (disposed) return;
-          if (info.type === 1) {
-            const pick = info.pickInfo;
-            if (pick && pick.hit && pick.pickedMesh && pick.pickedMesh.metadata) {
-              const meta = pick.pickedMesh.metadata;
-              if (meta.type === "clue") {
-                setCluePopup({ label: meta.label, detail: meta.detail });
-                setCluesFound((c) => c + 1);
-              } else if (meta.type === "suspect") {
-                const s = SUSPECTS.find((x) => x.id === meta.id);
-                if (s) setSuspectPopup(s);
-              }
+      if (currentRoom === "server") {
+        // Server racks
+        [-1, 0, 1].forEach((xOff) => {
+          const rx = cx + xOff * 80;
+          ctx.fillStyle = "#0a1a0a";
+          ctx.fillRect(rx - 25, horizon - 100, 50, 100);
+          // LEDs
+          for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 3; j++) {
+              const blink = Math.sin(t * 3 + i + j) > 0.3;
+              ctx.fillStyle = blink ? "#00ff44" : "#005522";
+              ctx.fillRect(rx - 18 + j * 12, horizon - 95 + i * 10, 6, 4);
             }
           }
         });
+      }
 
-        // === ROOM DETECTION ===
-        let lastRoom = "lobby";
-        scene.onBeforeRenderObservable.add(() => {
-          if (disposed) return;
-          const cp = camera.target;
-          let nearest: any = null;
-          let minDist = 999;
-          ROOMS.forEach((r) => {
-            const d = Math.sqrt((cp.x - r.x) ** 2 + (cp.z - r.z) ** 2);
-            if (d < minDist && d < 6) {
-              minDist = d;
-              nearest = r;
-            }
-          });
-          if (nearest && nearest.id !== lastRoom) {
-            lastRoom = nearest.id;
-            setRoomLabel(nearest.name);
+      if (currentRoom === "dressing") {
+        // Mirror
+        ctx.fillStyle = "#1a1a2a";
+        ctx.fillRect(cx - 60, horizon - 80, 120, 70);
+        ctx.strokeStyle = "#c9a35a";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(cx - 60, horizon - 80, 120, 70);
+        // Light bulbs
+        for (let i = 0; i < 8; i++) {
+          const angle = (i / 8) * Math.PI * 2;
+          const bx = cx + Math.cos(angle) * 65;
+          const by = horizon - 45 + Math.sin(angle) * 40;
+          const glow = 0.7 + Math.sin(t * 4 + i) * 0.3;
+          ctx.fillStyle = `rgba(255, 180, 70, ${glow})`;
+          ctx.beginPath();
+          ctx.arc(bx, by, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      if (currentRoom === "cafe") {
+        // Table
+        ctx.fillStyle = "#2a1a10";
+        ctx.beginPath();
+        ctx.ellipse(cx, h * 0.65, 50, 15, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillRect(cx - 3, h * 0.65, 6, 40);
+        // Coffee cup
+        ctx.fillStyle = "#e8dcc0";
+        ctx.beginPath();
+        ctx.arc(cx + 15, h * 0.62, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#2a1a10";
+        ctx.beginPath();
+        ctx.arc(cx + 15, h * 0.62, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (currentRoom === "studio") {
+        // Monitors
+        [-1, 0, 1].forEach((xOff) => {
+          const mx = cx + xOff * 60;
+          ctx.fillStyle = "#0a1525";
+          ctx.fillRect(mx - 25, horizon - 70, 50, 35);
+          ctx.fillStyle = `rgba(74, 155, 232, ${0.3 + Math.sin(t * 2 + xOff) * 0.1})`;
+          ctx.fillRect(mx - 22, horizon - 67, 44, 29);
+        });
+        // Desk
+        ctx.fillStyle = "#0d0d18";
+        ctx.fillRect(cx - 80, horizon - 10, 160, 8);
+      }
+
+      if (currentRoom === "archive") {
+        // Shelves
+        [-1, 0, 1].forEach((xOff) => {
+          const sx = cx + xOff * 70;
+          ctx.fillStyle = "#1a1408";
+          ctx.fillRect(sx - 30, horizon - 90, 60, 90);
+          // Books
+          const colors = ["#5a1a1a", "#1a3a5a", "#5a5a1a", "#3a1a3a"];
+          for (let i = 0; i < 6; i++) {
+            ctx.fillStyle = colors[i % 4];
+            ctx.fillRect(sx - 25, horizon - 85 + i * 13, 50, 10);
           }
         });
+        // Safe
+        ctx.fillStyle = "#1a1a1a";
+        ctx.fillRect(cx + 100, h * 0.55, 40, 50);
+        ctx.fillStyle = "#c9a35a";
+        ctx.beginPath();
+        ctx.arc(cx + 120, h * 0.7, 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-        // === FPS MONITOR ===
-        let lowCount = 0;
-        let qualityReduced = false;
-        const fpsTimer = setInterval(() => {
-          if (disposed) return;
-          const f = engine.getFps();
-          setFps(Math.round(f));
-          if (f < 30 && !qualityReduced) {
-            lowCount++;
-            if (lowCount >= 3) {
-              engine.setHardwareScalingLevel(1.5);
-              shadowGen.mapSize = 256;
-              qualityReduced = true;
-            }
-          } else {
-            lowCount = 0;
-          }
-        }, 1000);
+      if (currentRoom === "lobby") {
+        // Reception desk
+        ctx.fillStyle = "#2a2018";
+        ctx.fillRect(cx - 50, h * 0.6, 100, 30);
+        ctx.fillStyle = "#3a3028";
+        ctx.fillRect(cx - 50, h * 0.6, 100, 5);
+        // Welcome sign
+        ctx.fillStyle = `${room.accent}40`;
+        ctx.fillRect(cx - 40, horizon - 50, 80, 25);
+      }
 
-        // === RESIZE ===
-        const ro = new ResizeObserver(() => {
-          if (!disposed) engine.resize();
-        });
-        ro.observe(canvasRef.current);
+      ctx.restore();
 
-        // === RENDER LOOP ===
-        engine.runRenderLoop(() => {
-          if (!disposed) scene.render();
-        });
+      // Dust particles
+      for (let i = 0; i < 20; i++) {
+        const px = ((i * 73 + t * 20) % w);
+        const py = ((i * 37 + t * 15) % h);
+        const alpha = (Math.sin(t + i) + 1) * 0.15;
+        ctx.fillStyle = `${room.accent}${Math.round(alpha * 255).toString(16).padStart(2, "0")}`;
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Babylon load error:", err);
-        setError("Gagal memuat Babylon.js. Periksa koneksi internet.");
-        setLoading(false);
+      // Character silhouettes
+      roomSuspects.forEach((s, i) => {
+        const sx = cx + (i - roomSuspects.length / 2 + 0.5) * 120;
+        const sy = h * 0.62;
+        const breathe = Math.sin(t * 1.5 + i) * 2;
+
+        // Glow
+        const glowGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 60);
+        glowGrad.addColorStop(0, `${s.color}30`);
+        glowGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = glowGrad;
+        ctx.fillRect(sx - 60, sy - 60, 120, 120);
+
+        // Body
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = 0.8;
+        ctx.beginPath();
+        ctx.ellipse(sx, sy + breathe, 12, 35, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Head
+        ctx.beginPath();
+        ctx.arc(sx, sy - 35 + breathe, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        // Label
+        ctx.fillStyle = s.color;
+        ctx.font = "10px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(s.name.split(" ")[0], sx, sy + 55);
       });
 
-    return () => {
-      disposed = true;
-      if (engine) {
-        engine.stopRenderLoop();
-        if (scene) scene.dispose();
-        engine.dispose();
-      }
+      // Clue orbs
+      roomClues.forEach((clue) => {
+        const examined = examinedClues.has(clue.id);
+        const ox = (clue.x / 100) * w;
+        const oy = (clue.y / 100) * h;
+        const pulse = 1 + Math.sin(t * 3) * 0.15;
+        const float = Math.sin(t * 2) * 5;
+
+        // Glow
+        const orbGrad = ctx.createRadialGradient(ox, oy + float, 0, ox, oy + float, 30 * pulse);
+        orbGrad.addColorStop(0, examined ? "rgba(0, 255, 100, 0.4)" : "rgba(255, 200, 50, 0.5)");
+        orbGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = orbGrad;
+        ctx.fillRect(ox - 30, oy - 30 + float, 60, 60);
+
+        // Orb
+        ctx.fillStyle = examined ? "#00ff66" : "#ffc832";
+        ctx.beginPath();
+        ctx.arc(ox, oy + float, 8 * pulse, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ring
+        ctx.strokeStyle = examined ? "#00ff6650" : "#ffc83250";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(ox, oy + float, 15 * pulse, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      // Vignette
+      const vigGrad = ctx.createRadialGradient(cx, cy, h * 0.3, cx, cy, h * 0.8);
+      vigGrad.addColorStop(0, "transparent");
+      vigGrad.addColorStop(1, "rgba(0,0,0,0.6)");
+      ctx.fillStyle = vigGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      animFrame.current = requestAnimationFrame(render);
     };
-  }, []);
+    render();
+
+    return () => {
+      cancelAnimationFrame(animFrame.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, [currentRoom, room, roomSuspects, roomClues, examinedClues]);
+
+  // Click handler
+  const onCanvasClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    // Check clue clicks
+    roomClues.forEach((clue) => {
+      const dx = x - clue.x;
+      const dy = y - clue.y;
+      if (Math.sqrt(dx * dx + dy * dy) < 8) {
+        setCluePopup({ label: clue.label, detail: clue.detail });
+        setExaminedClues((prev) => new Set(prev).add(clue.id));
+      }
+    });
+  }, [roomClues]);
 
   return (
-    <div className="fixed inset-0 bg-black overflow-hidden">
+    <div className="fixed inset-0 bg-black overflow-hidden select-none">
+      {/* Canvas — pseudo-3D room */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full block"
-        style={{ touchAction: "none", outline: "none" }}
+        onClick={onCanvasClick}
+        className="w-full h-full block cursor-pointer"
+        style={{ touchAction: "manipulation" }}
       />
 
-      {/* Loading */}
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black z-50">
-          <div className="text-center">
-            <div className="text-5xl mb-4 animate-pulse">🎭</div>
-            <p className="font-mono text-sm text-amber-400 tracking-wider">
-              MEMUAT MISTERI THEATER BERDARAH...
-            </p>
-            <div className="mt-4 w-48 h-1 bg-gray-800 rounded-full overflow-hidden mx-auto">
-              <div className="h-full bg-amber-500 animate-pulse" style={{ width: "60%" }} />
-            </div>
-          </div>
+      {/* Top HUD */}
+      <div className="absolute top-0 inset-x-0 p-3 flex items-center justify-between pointer-events-none z-30">
+        <div className="px-3 py-1.5 bg-black/70 backdrop-blur border border-amber-600/30 rounded-lg">
+          <p className="font-mono text-sm font-bold text-amber-400">
+            📍 {room.icon} {room.name}
+          </p>
+        </div>
+        <div className="flex gap-2 pointer-events-auto">
+          <button
+            onClick={() => setShowMap(true)}
+            className="px-3 py-1.5 bg-black/70 backdrop-blur border border-amber-600/30 rounded-lg hover:border-amber-500 transition-colors"
+          >
+            <span className="font-mono text-xs text-amber-400">🗺️ MAP</span>
+          </button>
+          <button
+            onClick={() => setShowNotebook(true)}
+            className="px-3 py-1.5 bg-black/70 backdrop-blur border border-amber-600/30 rounded-lg hover:border-amber-500 transition-colors"
+          >
+            <span className="font-mono text-xs text-amber-400">📓 {examinedClues.size}/8</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Room description */}
+      <div className="absolute bottom-20 inset-x-0 text-center pointer-events-none z-20">
+        <p className="font-mono text-xs text-white/50 max-w-md mx-auto px-4">
+          {room.desc}
+        </p>
+      </div>
+
+      {/* Suspect interaction buttons */}
+      {roomSuspects.length > 0 && (
+        <div className="absolute bottom-4 inset-x-0 flex justify-center gap-2 z-30">
+          {roomSuspects.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => setSuspectPopup(s)}
+              className="px-3 py-2 bg-black/70 backdrop-blur border rounded-lg hover:scale-105 transition-transform"
+              style={{ borderColor: s.color }}
+            >
+              <span className="font-mono text-xs font-bold" style={{ color: s.color }}>
+                {s.name.split(" ")[0]}
+              </span>
+              {interrogated.has(s.id) && (
+                <span className="ml-1 text-green-400 text-xs">✓</span>
+              )}
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Error */}
-      {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black z-50">
-          <div className="text-center p-8">
-            <div className="text-4xl mb-4">⚠️</div>
-            <p className="font-mono text-sm text-red-400">{error}</p>
+      {/* Clue popup */}
+      {cluePopup && (
+        <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black via-black/90 to-transparent z-40">
+          <div className="max-w-md mx-auto bg-gray-900/95 border border-amber-600/40 rounded-lg p-4">
+            <p className="font-mono text-xs text-amber-400 font-bold uppercase mb-1">
+              🔍 {cluePopup.label}
+            </p>
+            <p className="font-mono text-sm text-white/90 italic mb-3">
+              {cluePopup.detail}
+            </p>
             <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-amber-600 text-black font-mono text-xs uppercase rounded"
+              onClick={() => setCluePopup(null)}
+              className="font-mono text-xs text-red-400 hover:text-red-300 underline"
             >
-              Coba Lagi
+              tutup
             </button>
           </div>
         </div>
       )}
 
-      {/* HUD */}
-      {!loading && !error && (
-        <>
-          <div className="absolute top-0 inset-x-0 p-3 flex items-center justify-between pointer-events-none z-30">
-            <div className="px-3 py-1.5 bg-black/70 backdrop-blur border border-amber-600/30 rounded">
-              <p className="font-mono text-sm font-bold text-amber-400">📍 {roomLabel}</p>
+      {/* Suspect popup */}
+      {suspectPopup && (
+        <div className="absolute inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur z-40">
+          <div
+            className="max-w-xs w-full bg-gray-900 border-2 rounded-lg overflow-hidden"
+            style={{ borderColor: suspectPopup.color }}
+          >
+            <div className="relative h-48 overflow-hidden">
+              <img
+                src={suspectPopup.portrait}
+                alt={suspectPopup.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
+              <button
+                onClick={() => setSuspectPopup(null)}
+                className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/80 rounded-full text-white hover:text-red-400"
+              >
+                ✕
+              </button>
             </div>
-            <div className="flex gap-2">
-              <div className="px-3 py-1.5 bg-black/70 backdrop-blur border border-amber-600/30 rounded">
-                <p className="font-mono text-xs text-amber-400">🔍 {cluesFound}/8</p>
-              </div>
-              <div className="px-2 py-1.5 bg-black/70 backdrop-blur border border-amber-600/30 rounded">
-                <p
-                  className="font-mono text-xs font-bold"
-                  style={{ color: fps >= 50 ? "#0f0" : fps >= 30 ? "#fa0" : "#f00" }}
-                >
-                  {fps}
+            <div className="p-4">
+              <p
+                className="font-mono text-[10px] tracking-widest uppercase font-bold"
+                style={{ color: suspectPopup.color }}
+              >
+                {suspectPopup.codename} · {suspectPopup.role}
+              </p>
+              <h3 className="font-mono text-lg font-black text-white">
+                {suspectPopup.name}
+              </h3>
+              <p className="font-mono text-xs text-white/60 italic mt-2">
+                &ldquo;{suspectPopup.quote}&rdquo;
+              </p>
+              <button
+                onClick={() => {
+                  setInterrogated((prev) => new Set(prev).add(suspectPopup.id));
+                  setSuspectPopup(null);
+                }}
+                className="mt-3 w-full py-2 font-mono text-xs uppercase tracking-wider text-black rounded font-bold"
+                style={{ background: suspectPopup.color }}
+              >
+                🗣️ Interogasi
+              </button>
+              {interrogated.has(suspectPopup.id) && (
+                <p className="font-mono text-[10px] text-green-400 mt-2 text-center">
+                  ✓ Sudah diinterogasi
                 </p>
-              </div>
+              )}
             </div>
           </div>
+        </div>
+      )}
 
-          {!cluePopup && !suspectPopup && (
-            <div className="absolute bottom-4 inset-x-0 text-center pointer-events-none z-30">
-              <p className="font-mono text-[10px] text-white/40 tracking-wider uppercase">
-                Drag rotate · Pinch zoom · Klik orb kuning/karakter berwarna
-              </p>
-            </div>
-          )}
-
-          {cluePopup && (
-            <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black to-transparent z-40">
-              <div className="max-w-md mx-auto bg-gray-900/95 border border-amber-600/40 rounded-lg p-4">
-                <p className="font-mono text-xs text-amber-400 font-bold uppercase mb-1">
-                  🔍 {cluePopup.label}
-                </p>
-                <p className="font-mono text-sm text-white/90 italic mb-3">
-                  {cluePopup.detail}
-                </p>
-                <button
-                  onClick={() => setCluePopup(null)}
-                  className="font-mono text-xs text-red-400 hover:text-red-300 underline"
-                >
-                  tutup
-                </button>
-              </div>
-            </div>
-          )}
-
-          {suspectPopup && (
-            <div className="absolute inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur z-40">
-              <div
-                className="max-w-xs w-full bg-gray-900 border-2 rounded-lg overflow-hidden"
-                style={{ borderColor: suspectPopup.color }}
-              >
-                <div className="relative h-40 overflow-hidden">
-                  <img
-                    src={suspectPopup.portrait}
-                    alt={suspectPopup.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
+      {/* Map overlay */}
+      {showMap && (
+        <div className="absolute inset-0 bg-black/90 backdrop-blur z-50 flex items-center justify-center p-4">
+          <div className="max-w-md w-full">
+            <h2 className="font-mono text-lg font-bold text-amber-400 mb-4 text-center">
+              🗺️ PETA THEATER
+            </h2>
+            <div className="grid grid-cols-2 gap-3">
+              {ROOMS.map((r) => {
+                const isActive = r.id === currentRoom;
+                const suspectsInRoom = SUSPECTS.filter((s) => s.room === r.id);
+                const cluesInRoom = CLUES.filter((c) => c.room === r.id);
+                const examinedInRoom = cluesInRoom.filter((c) => examinedClues.has(c.id)).length;
+                return (
                   <button
-                    onClick={() => setSuspectPopup(null)}
-                    className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/80 rounded-full text-white hover:text-red-400"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="p-4">
-                  <p
-                    className="font-mono text-[10px] tracking-widest uppercase font-bold"
-                    style={{ color: suspectPopup.color }}
-                  >
-                    {suspectPopup.codename}
-                  </p>
-                  <h3 className="font-mono text-lg font-black text-white">
-                    {suspectPopup.name}
-                  </h3>
-                  <p className="font-mono text-xs text-white/60 mt-2">
-                    Tersangka malam pembunuhan.
-                  </p>
-                  <button
+                    key={r.id}
                     onClick={() => {
-                      setInterrogated((prev) => new Set(prev).add(suspectPopup.id));
-                      setSuspectPopup(null);
+                      setCurrentRoom(r.id);
+                      setShowMap(false);
                     }}
-                    className="mt-3 w-full py-2 font-mono text-xs uppercase tracking-wider text-black rounded font-bold"
-                    style={{ background: suspectPopup.color }}
+                    className={`p-3 border-2 rounded-lg text-left transition-all ${
+                      isActive
+                        ? "border-amber-500 bg-amber-500/10"
+                        : "border-gray-700 hover:border-amber-600/50"
+                    }`}
                   >
-                    🗣️ Interogasi
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-lg">{r.icon}</span>
+                      <span className={`font-mono text-xs font-bold ${isActive ? "text-amber-400" : "text-white/70"}`}>
+                        {r.name}
+                      </span>
+                    </div>
+                    <div className="flex gap-2 text-[10px] font-mono text-white/40">
+                      <span>🧍{suspectsInRoom.length}</span>
+                      <span>🔍{examinedInRoom}/{cluesInRoom.length}</span>
+                    </div>
                   </button>
-                  {interrogated.has(suspectPopup.id) && (
-                    <p className="font-mono text-[10px] text-green-400 mt-2 text-center">
-                      ✓ Sudah diinterogasi
+                );
+              })}
+            </div>
+            <button
+              onClick={() => setShowMap(false)}
+              className="mt-4 w-full py-2 font-mono text-xs text-white/60 hover:text-white border border-gray-700 rounded"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Notebook overlay */}
+      {showNotebook && (
+        <div className="absolute inset-0 bg-black/90 backdrop-blur z-50 flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-gray-900 border border-amber-600/30 rounded-lg p-4">
+            <h2 className="font-mono text-lg font-bold text-amber-400 mb-3">
+              📓 BUKU CATATAN
+            </h2>
+            <div className="space-y-2 max-h-80 overflow-y-auto">
+              {CLUES.map((clue) => {
+                const examined = examinedClues.has(clue.id);
+                const roomName = ROOMS.find((r) => r.id === clue.room)?.name;
+                return (
+                  <div
+                    key={clue.id}
+                    className={`p-2 border rounded ${examined ? "border-green-600/40 bg-green-900/10" : "border-gray-700 opacity-40"}`}
+                  >
+                    <p className="font-mono text-xs font-bold text-amber-400">
+                      {examined ? `✓ ${clue.label}` : "🔒 ???"}
                     </p>
-                  )}
-                </div>
+                    {examined && (
+                      <p className="font-mono text-[10px] text-white/60 mt-1">
+                        {clue.detail}
+                      </p>
+                    )}
+                    <p className="font-mono text-[9px] text-white/30 mt-1">
+                      📍 {roomName}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-3 pt-3 border-t border-gray-700">
+              <p className="font-mono text-xs text-white/60">
+                Tersangka diinterogasi: {interrogated.size}/8
+              </p>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {SUSPECTS.map((s) => (
+                  <span
+                    key={s.id}
+                    className={`font-mono text-[9px] px-1.5 py-0.5 rounded ${interrogated.has(s.id) ? "text-green-400" : "text-white/30"}`}
+                    style={{ background: interrogated.has(s.id) ? `${s.color}20` : "transparent" }}
+                  >
+                    {s.name.split(" ")[0]}
+                  </span>
+                ))}
               </div>
             </div>
-          )}
-        </>
+            <button
+              onClick={() => setShowNotebook(false)}
+              className="mt-3 w-full py-2 font-mono text-xs text-white/60 hover:text-white border border-gray-700 rounded"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
